@@ -9,7 +9,7 @@ TYPOGRAPHY
 
 COLOUR
   Background: #FF8DC7
-  Text: #7ED7FF
+  Text: #000080
   Accent: #FFE566
   The accent is used for links, borders and button fills, and also for: decorative stars, floating shapes, sparkles, hover highlights, prompt labels, stickers, doodles, section dividers, and animated details
 
