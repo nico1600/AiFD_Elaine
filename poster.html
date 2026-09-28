@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hatsune Miku Expo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #FF8DC7;
+      color: #000080;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Moving background animation */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #FF8DC7, #ffacd6, #FF8DC7, #ffa1d1);
+      background-size: 300% 300%;
+      animation: colorShift 9s ease infinite;
+      z-index: -2;
+    }
+
+    @keyframes colorShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating retro shapes */
+    .shape {
+      position: fixed;
+      color: #FFE566;
+      opacity: 0.75;
+      z-index: -1;
+      pointer-events: none;
+      animation: floatUp 12s linear infinite;
+    }
+
+    .shape.star { font-size: 2.2rem; }
+    .shape.circle { font-size: 1.8rem; }
+    .shape.square { font-size: 1.6rem; }
+    .shape.sparkle { font-size: 2rem; }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(105vh) rotate(0deg) scale(0.8);
+      }
+      50% {
+        transform: translateY(50vh) rotate(180deg) scale(1.1);
+      }
+      100% {
+        transform: translateY(-20vh) rotate(360deg) scale(0.8);
+      }
+    }
+
+    /* Full-width hero */
+    .hero-container {
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+      border-bottom: 6px solid #FFE566;
+      background: #FFE566;
+      position: relative;
+    }
+
+    .hero-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Header zone: Name top-left above project title */
+    .header-zone {
+      text-align: left;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .creator-name {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #000080;
+      background: #FFE566;
+      padding: 4px 12px;
+      border: 3px solid #000080;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #FFE566;
+      text-shadow: 3px 3px 0 #000080;
+      letter-spacing: 0.04em;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.5rem 0 3rem;
+      color: #FFE566;
+      font-size: 1.25rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 4px;
+      background: #FFE566;
+      border-radius: 2px;
+    }
+
+    /* Centered single poster wrapper */
+    .showcase-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Rectangular framed card preserving full poster dimensions without cropping */
+    .poster-frame {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.22);
+      border: 8px solid #FFE566;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 12px 24px rgba(0, 0, 128, 0.14);
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .poster-frame:hover {
+      transform: translateY(-8px) rotate(-0.5deg) scale(1.01);
+      box-shadow: 0 0 0 4px rgba(255, 229, 102, 0.5), 0 24px 36px rgba(0, 0, 128, 0.22);
+    }
+
+    .poster-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 4px solid #FFE566;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .poster-frame {
+        max-width: 400px;
+        padding: 8px;
+        border-width: 6px;
+      }
+      .poster-frame img {
+        border-width: 3px;
+      }
+      .project-title {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating animated background elements -->
+  <div class="shape star" style="left: 6%; animation-delay: 0s;">✦</div>
+  <div class="shape circle" style="left: 22%; animation-delay: 3s;">●</div>
+  <div class="shape square" style="left: 45%; animation-delay: 7s;">■</div>
+  <div class="shape sparkle" style="left: 70%; animation-delay: 1.5s;">★</div>
+  <div class="shape star" style="left: 88%; animation-delay: 4.5s;">✦</div>
+
+  <!-- Full-width hero -->
+  <header class="hero-container">
+    <img src="hero.jpg" alt="Hero Banner">
+  </header>
+
+  <main class="container">
+    <div class="header-zone">
+      <div class="creator-name">Portfolio Work</div>
+      <h1 class="project-title">HATSUNE MIKU EXPO</h1>
+    </div>
+
+    <div class="divider">★ ✦ ★</div>
+
+    <!-- Centered uncropped poster frame with border -->
+    <div class="showcase-wrapper">
+      <div class="poster-frame">
+        <img src="poster.jpg" alt="Hatsune Miku Expo Poster">
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
