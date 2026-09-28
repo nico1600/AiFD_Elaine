@@ -23,7 +23,6 @@
       position: relative;
     }
 
-    /* Moving background animation */
     body::before {
       content: '';
       position: fixed;
@@ -40,7 +39,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Floating retro shapes */
     .shape {
       position: fixed;
       color: #FFE566;
@@ -67,7 +65,6 @@
       }
     }
 
-    /* Full-width hero */
     .hero-container {
       width: 100%;
       height: 60vh;
@@ -90,7 +87,6 @@
       padding: 2.5rem 1.5rem 4rem;
     }
 
-    /* Header zone: Name top-left above project title */
     .header-zone {
       text-align: left;
       margin-bottom: 2.5rem;
@@ -138,7 +134,6 @@
       border-radius: 2px;
     }
 
-    /* Centered single poster wrapper */
     .showcase-wrapper {
       display: flex;
       justify-content: center;
@@ -146,7 +141,6 @@
       width: 100%;
     }
 
-    /* Rectangular framed card preserving full poster dimensions without cropping */
     .poster-frame {
       display: inline-block;
       background: rgba(255, 255, 255, 0.22);
@@ -189,14 +183,12 @@
 </head>
 <body>
 
-  <!-- Floating animated background elements -->
   <div class="shape star" style="left: 6%; animation-delay: 0s;">✦</div>
   <div class="shape circle" style="left: 22%; animation-delay: 3s;">●</div>
   <div class="shape square" style="left: 45%; animation-delay: 7s;">■</div>
   <div class="shape sparkle" style="left: 70%; animation-delay: 1.5s;">★</div>
   <div class="shape star" style="left: 88%; animation-delay: 4.5s;">✦</div>
 
-  <!-- Full-width hero -->
   <header class="hero-container">
     <img src="hero.jpg" alt="Hero Banner">
   </header>
@@ -209,10 +201,9 @@
 
     <div class="divider">★ ✦ ★</div>
 
-    <!-- Centered uncropped poster frame with border -->
     <div class="showcase-wrapper">
       <div class="poster-frame">
-        <img src="poster.jpg" alt="Hatsune Miku Expo Poster">
+        <img src="poster/poster.jpg" alt="Hatsune Miku Expo Poster">
       </div>
     </div>
   </main>
