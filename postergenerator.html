@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David Rudnick / Making Time Synthesizer v9.0</title>
+
+  <!-- Typography Stack: Tomorrow, EB Garamond, Barlow Condensed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;1,400&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'Cooper Hewitt';
+      src: local('Cooper Hewitt Bold Italic'), local('CooperHewitt-BoldItalic'), local('Arial Black');
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    :root {
+      --bg-dark: #070709;
+      --panel-bg: #111116;
+      --border-color: #23232f;
+      --text-muted: #9494a6;
+      --accent-red: #e11d2b;
+      --accent-blue: #00bfff;
+      --accent-orange: #ffa454;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e5e7eb;
+      font-family: 'Tomorrow', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Left Control Sidebar */
+    .sidebar {
+      width: 420px;
+      min-width: 370px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-header h1 {
+      font-size: 13.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .sidebar-header h1 span {
+      color: var(--accent-blue);
+    }
+
+    .sidebar-header p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .sidebar-content {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-group label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-group input[type="text"],
+    .control-group textarea,
+    .control-group select {
+      background: #09090c;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: #ffffff;
+      padding: 9px 12px;
+      font-family: 'Tomorrow', sans-serif;
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .control-group input[type="text"]:focus,
+    .control-group textarea:focus,
+    .control-group select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .control-group textarea {
+      height: 90px;
+      resize: vertical;
+      line-height: 1.4;
+      font-family: 'EB Garamond', serif;
+      font-size: 13.5px;
+    }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-wrap input[type="range"] {
+      flex: 1;
+      height: 6px;
+      accent-color: var(--accent-red);
+      cursor: pointer;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      background: #191922;
+      color: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      font-family: 'Tomorrow', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .btn-primary {
+      background: var(--accent-red);
+      border-color: #ff4352;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #ff3344;
+      color: #ffffff;
+      border-color: #ff3344;
+    }
+
+    .btn-blue {
+      background: #00bfff;
+      border-color: #38bdf8;
+      color: #070709;
+      font-weight: 700;
+    }
+
+    .btn-blue:hover {
+      background: #38bdf8;
+    }
+
+    /* Right Preview Stage */
+    .viewport {
+      flex: 1;
+      background: #040406;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: auto;
+      padding: 30px;
+    }
+
+    #poster-frame {
+      width: 720px;
+      height: 1080px;
+      position: relative;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95);
+      border: 1px solid #1a1a24;
+      flex-shrink: 0;
+      transition: background-color 0.2s ease;
+    }
+
+    svg#poster-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Typography styles in SVG */
+    .font-tomorrow {
+      font-family: 'Tomorrow', sans-serif;
+      font-weight: 400;
+    }
+
+    .font-garamond {
+      font-family: 'EB Garamond', serif;
+      font-weight: 400;
+    }
+
+    .font-cooper {
+      font-family: 'Cooper Hewitt', sans-serif;
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    .font-barlow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Controls -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>ValenTime <span>Synthesizer</span></h1>
+      <p>Generative Labyrinth Motion v9.0</p>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="btn-row">
+        <button class="btn btn-primary" id="generate-btn">⚡ Mutate Sequence</button>
+        <button class="btn btn-blue" id="export-png-btn">Export PNG</button>
+      </div>
+
+      <div class="control-group">
+        <label>Canvas Ground Color</label>
+        <select id="canvas-bg-select">
+          <option value="black">Deep Night Black (#070709)</option>
+          <option value="white">Pristine Gallery White (#F8F9FA)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Pattern Seed <span id="seed-val">1024</span></label>
+        <div class="btn-row">
+          <input type="text" id="seed-input" value="1024" style="width: 110px;">
+          <button class="btn" id="random-seed-btn">🎲 Roll Dice</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Color Palette Flavor</label>
+        <select id="palette-select">
+          <option value="rudnick-warm">Rudnick Classic (Neon Magenta, Vermilion, Solar Orange, Tangerine, Cream)</option>
+          <option value="cyber-rave">Acid Rave (Toxic Mint, Capri Blue, Neon Pink, Solar Orange, Chrome)</option>
+          <option value="violet-dusk">Nocturnal Dusk (Electric Violet, Radiant Coral, Magenta, Deep Peach)</option>
+          <option value="solarpunk">Solar Radiance (Amber, Marigold, Crimson Red, Capri Blue, Champagne)</option>
+          <option value="monochrome-pop">Monochrome Pop (Greyscale Halftones, Pure White, Capri Blue & Vermilion)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Labyrinth Bundles (Max 6) <span id="density-val">4.50 Bands</span></label>
+        <div class="range-wrap">
+          <input type="range" id="maze-density" min="1.0" max="6.0" step="0.05" value="4.5">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Labyrinth Topology Flow <span id="topology-val">Mode 1</span></label>
+        <div class="range-wrap">
+          <input type="range" id="motion-topology" min="0" max="3" step="0.01" value="0.8">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Circuit Evolution / Step Shift <span id="step-shift-val">0.50</span></label>
+        <div class="range-wrap">
+          <input type="range" id="motion-shift" min="0" max="1" step="0.005" value="0.5">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Meander Complexity <span id="turn-style-val">Level 5.0</span></label>
+        <div class="range-wrap">
+          <input type="range" id="maze-variation" min="1.0" max="10.0" step="0.1" value="5.0">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Display Headline 1 (Top-Right)</label>
+        <input type="text" id="h1-top" value="TWO HEARTS">
+      </div>
+
+      <div class="control-group">
+        <label>Display Headline 2 (Bottom-Left)</label>
+        <input type="text" id="h1-bottom" value="ONE BEAT">
+      </div>
+
+      <div class="control-group">
+        <label>Secondary Subheadings</label>
+        <input type="text" id="h2-top" value="MakingTime" style="margin-bottom: 6px;">
+        <input type="text" id="h2-bottom" value="ValenTime">
+      </div>
+
+      <div class="control-group">
+        <label>Event Roster (EB Garamond)</label>
+        <textarea id="lineup-input">Dave P &...
+Sammy Slice
+Dave Pak
+Russ Alexander
+Steve Vena
+Snkpk
+Broadzilla
+Adam Sparkles
+Tony Modica</textarea>
+      </div>
+
+      <div class="control-group">
+        <label>Metadata / Badges</label>
+        <input type="text" id="venue-input" value="Voyeur  1221 St. James st." style="margin-bottom: 6px;">
+        <input type="text" id="admission-input" value="$10" style="margin-bottom: 6px;">
+        <input type="text" id="date-input" value="FEB 14 2014">
+      </div>
+    </div>
+  </aside>
+
+  <!-- Viewport Preview -->
+  <main class="viewport">
+    <div id="poster-frame">
+      <svg id="poster-svg" viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
+        <defs id="svg-defs">
+          <!-- Metallic Chrome Gradients -->
+          <linearGradient id="chrome-h" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#34D399" />
+            <stop offset="25%" stop-color="#4B5563" />
+            <stop offset="70%" stop-color="#E5E7EB" />
+            <stop offset="100%" stop-color="#FFFFFF" />
+          </linearGradient>
+
+          <linearGradient id="chrome-v" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#FFFFFF" />
+            <stop offset="35%" stop-color="#D1D5DB" />
+            <stop offset="70%" stop-color="#4B5563" />
+            <stop offset="100%" stop-color="#00BFFF" />
+          </linearGradient>
+
+          <!-- Heavy Brutalist Arrow Sigil -->
+          <g id="heavy-arrow-a">
+            <line x1="0" y1="-26" x2="0" y2="28" stroke="currentColor" stroke-width="9" stroke-linecap="square" />
+            <line x1="0" y1="-24" x2="0" y2="26" stroke="#FFFFFF" stroke-width="2.5" />
+            <polygon points="0,-39 -13,-22 13,-22" fill="currentColor" />
+            <polygon points="0,-33 -6,-23 6,-23" fill="#FFFFFF" />
+            <circle cx="0" cy="0" r="5" fill="#00BFFF" />
+            <circle cx="0" cy="0" r="2.2" fill="#FFFFFF" />
+            <polygon points="0,28 -11,39 11,39" fill="currentColor" />
+          </g>
+        </defs>
+
+        <!-- Base Canvas Ground -->
+        <rect id="svg-bg-rect" width="800" height="1200" fill="#070709" />
+
+        <!-- Dynamic Labyrinth Circuit Tracks Layer -->
+        <g id="circuit-layer"></g>
+
+        <!-- Dynamic Intersecting Overpass Ribbon Layer -->
+        <g id="overpass-layer"></g>
+
+        <!-- Top-Left Dedicated Box with Diagonal Eye Talisman -->
+        <g id="talisman-layer"></g>
+
+        <!-- Pure Typography Placed Freely with Zero Box Overlays -->
+        <g id="type-layer"></g>
+      </svg>
+    </div>
+  </main>
+
+  <script>
+    const PALETTES = {
+      'rudnick-warm': ['#E11D2B', '#E82B7D', '#FF5B00', '#FFA454', '#F6C8B8', '#00BFFF'],
+      'cyber-rave': ['#34D399', '#00BFFF', '#E82B7D', '#FF5B00', '#FFFFFF', '#00BFFF'],
+      'violet-dusk': ['#8B5CF6', '#EC4899', '#F97316', '#FDBA74', '#EDE9FE', '#00BFFF'],
+      'solarpunk': ['#FFB703', '#FB8500', '#D90429', '#FFE4B5', '#FFFFFF', '#00BFFF'],
+      'monochrome-pop': ['#1E293B', '#475569', '#94A3B8', '#CBD5E1', '#E11D2B', '#00BFFF']
+    };
+
+    let currentSeed = 1024;
+    function pseudoRandom() {
+      currentSeed = (currentSeed * 9301 + 49297) % 233280;
+      return currentSeed / 233280;
+    }
+
+    function renderPoster() {
+      const densityFloat = parseFloat(document.getElementById('maze-density').value);
+      const densityCount = Math.round(densityFloat);
+      const topology = parseFloat(document.getElementById('motion-topology').value);
+      const stepShift = parseFloat(document.getElementById('motion-shift').value);
+      const freedom = parseFloat(document.getElementById('maze-variation').value);
+
+      const paletteKey = document.getElementById('palette-select').value;
+      const bgChoice = document.getElementById('canvas-bg-select').value;
+      const isWhiteBg = (bgChoice === 'white');
+
+      const bgColor = isWhiteBg ? '#F8F9FA' : '#070709';
+      document.getElementById('svg-bg-rect').setAttribute('fill', bgColor);
+      document.getElementById('poster-frame').style.backgroundColor = bgColor;
+
+      let palette = [...PALETTES[paletteKey]];
+      if (isWhiteBg && paletteKey === 'monochrome-pop') {
+        palette = ['#0F172A', '#334155', '#64748B', '#94A3B8', '#E11D2B', '#00BFFF'];
+      }
+
+      const primaryTextColor = isWhiteBg ? '#0A0A0E' : palette[0];
+      const secondaryTextColor = isWhiteBg ? '#C2410C' : palette[3];
+      const detailTextColor = isWhiteBg ? '#1E293B' : palette[3];
+
+      const h1Top = document.getElementById('h1-top').value || 'TWO HEARTS';
+      const h1Bottom = document.getElementById('h1-bottom').value || 'ONE BEAT';
+      const h2Top = document.getElementById('h2-top').value || 'MakingTime';
+      const h2Bottom = document.getElementById('h2-bottom').value || 'ValenTime';
+      const lineup = document.getElementById('lineup-input').value.split('\n').filter(Boolean);
+      const venue = document.getElementById('venue-input').value || 'Voyeur  1221 St. James st.';
+      const admission = document.getElementById('admission-input').value || '$10';
+      const dateVal = document.getElementById('date-input').value || 'FEB 14 2014';
+
+      // 1. TOP-LEFT TALISMAN: COMPACT DEDICATED BOX WITH DIAGONAL CYBER EYE
+      const boxX = 36, boxY = 36, boxW = 180, boxH = 180;
+      const talismanGroup = document.getElementById('talisman-layer');
+
+      talismanGroup.innerHTML = `
+        <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" fill="${bgColor}" stroke="${palette[0]}" stroke-width="4.5" />
+        <rect x="${boxX + 5}" y="${boxY + 5}" width="${boxW - 10}" height="${boxH - 10}" fill="none" stroke="${palette[3]}" stroke-width="1.2" stroke-dasharray="6 3" />
+
+        <g transform="translate(${boxX + boxW/2}, ${boxY + boxH/2})">
+          <g transform="rotate(45)">
+            <path d="M 0 18 C -26 0 -32 -22 0 -40 C 32 -22 26 0 0 18 Z" 
+                  fill="none" stroke="${palette[1]}" stroke-width="4" />
+            <path d="M -50 0 C -26 -32 26 -32 50 0 C 26 32 -26 32 -50 0 Z" 
+                  fill="${bgColor}" stroke="${palette[3]}" stroke-width="3.5" />
+            <ellipse cx="0" cy="0" rx="20" ry="20" fill="none" stroke="${palette[0]}" stroke-width="4" />
+            <circle cx="0" cy="0" r="13" fill="${palette[1]}" stroke="#00BFFF" stroke-width="2.5" />
+            <circle cx="0" cy="0" r="7.5" fill="#000000" />
+            <circle cx="-3" cy="-3" r="2.8" fill="#FFFFFF" />
+          </g>
+
+          <g transform="rotate(-45)">
+            <line x1="-50" y1="0" x2="45" y2="0" stroke="${palette[0]}" stroke-width="10" stroke-linecap="square" />
+            <line x1="-48" y1="0" x2="43" y2="0" stroke="#FFFFFF" stroke-width="2.5" />
+            <polygon points="62,0 40,-15 40,15" fill="${palette[0]}" />
+            <polygon points="53,0 42,-8 42,8" fill="#FFFFFF" />
+            <circle cx="0" cy="0" r="17" fill="none" stroke="#00BFFF" stroke-width="2.5" stroke-dasharray="4 3" />
+            <polygon points="-50,0 -64,-15 -56,0 -64,15" fill="#00BFFF" />
+            <line x1="-44" y1="-8" x2="-36" y2="8" stroke="${palette[3]}" stroke-width="3.5" />
+          </g>
+        </g>
+      `;
+
+      // 2. OMNI-DIRECTIONAL LABYRINTH ENGINE
+      const circuitGroup = document.getElementById('circuit-layer');
+      const overpassGroup = document.getElementById('overpass-layer');
+      circuitGroup.innerHTML = '';
+      overpassGroup.innerHTML = '';
+
+      let tracks = [];
+      const mode = Math.floor(topology);
+      const frac = topology - mode;
+
+      let sVal = currentSeed;
+      function sRand() {
+        sVal = (sVal * 9301 + 49297) % 233280;
+        return sVal / 233280;
+      }
+
+      // Group A: Upper Corridors
+      const upperRuns = Math.min(4, densityCount);
+      for (let i = 0; i < upperRuns; i++) {
+        const yTop = 186 + (i * 14) + (stepShift * 18);
+        const col = palette[(i + 1) % (palette.length - 1)];
+        const strokeW = (i % 2 === 1) ? 3.5 : 11;
+
+        let p = '';
+        if (mode === 0) {
+          const turnX = 540 - (i * 24) + (frac * 40);
+          const dropY = 360 + (i * 18) + (sRand() * 30);
+          p = `M 226 ${yTop} H ${turnX} V ${dropY} H 754 V ${dropY + 45} H 630`;
+        } else if (mode === 1) {
+          const stepX1 = 480 + (i * 16);
+          const stepY1 = 310 + (i * 14);
+          p = `M 226 ${yTop} H ${stepX1} V ${stepY1} H 754 V ${460 + (i * 14)} H 610`;
+        } else {
+          const x1 = 380 + (i * 20);
+          const y1 = 280 + (i * 15);
+          p = `M 226 ${yTop} H ${x1} V ${y1} H 560 V ${410 + (i * 16)} H 754`;
+        }
+
+        tracks.push({
+          d: p,
+          color: col,
+          w: strokeW,
+          capri: (i === 1) ? { d: `M 320 ${yTop} H 430`, w: 3.5 } : null,
+          chrome: (i === 0) ? { d: `M 520 ${yTop} H 680`, w: 4.5, stroke: "url(#chrome-h)" } : null
+        });
+      }
+
+      // Group B: Lineup Wrap-Around Corridor
+      for (let s = 0; s < densityCount; s++) {
+        const chanX = 224 + (s * 11) + (stepShift * 14);
+        const hookY = 684 + (s * 12) + (frac * 20);
+        const strokeW = (s % 2 === 1) ? 3.5 : 11;
+        const col = palette[s % (palette.length - 1)];
+
+        let p = '';
+        if (mode === 0 || mode === 2) {
+          p = `M ${chanX} 246 V ${hookY} H 36 V ${hookY + 40}`;
+        } else {
+          const midStepX = 250 + (s * 10);
+          p = `M ${chanX} 246 V 490 H ${midStepX} V ${hookY} H 36 V ${hookY + 40}`;
+        }
+
+        tracks.push({
+          d: p,
+          color: col,
+          w: strokeW,
+          capri: (s === 1) ? { d: `M ${chanX} 370 V 460`, w: 3.5 } : null
+        });
+      }
+
+      // Group C: Central Dynamic Meander (Strictly clears PURE™)
+      for (let s = 0; s < densityCount; s++) {
+        const startX = 276 + (s * 12);
+        const busY = 310 + (s * 14) + (stepShift * 20);
+        const strokeW = (s % 2 === 0) ? 11 : 3.5;
+        const col = palette[(s + 2) % (palette.length - 1)];
+
+        const leftBranchX = 340 + (s * 8) + (sRand() * 20);
+        const rightBranchX = 475 + (s * 14) + (frac * 30);
+        const drop1 = 480 + (s * 18);
+        const drop2 = 700 + (s * 16);
+        const drop3 = 830 + (s * 12);
+
+        let p = '';
+        if (mode === 0) {
+          p = `M ${startX} ${busY} H ${leftBranchX} V ${drop1} H ${rightBranchX} V ${drop2} H 620 V ${drop3} H 754`;
+        } else if (mode === 1) {
+          p = `M ${startX} ${busY} V ${drop1 - 50} H ${leftBranchX} V ${drop1} H ${rightBranchX} V ${drop2} H 754`;
+        } else {
+          const stairX = 520 + (s * 12);
+          p = `M ${startX} ${busY} H ${leftBranchX} V ${drop1} H ${stairX} V ${drop2 - 40} H 630 V ${drop3} H 754`;
+        }
+
+        tracks.push({
+          d: p,
+          color: col,
+          w: strokeW,
+          capri: (s === 2) ? { d: `M ${rightBranchX} ${drop2} H ${rightBranchX + 70}`, w: 3.5 } : null,
+          chrome: (s === 1) ? { d: `M ${leftBranchX} ${drop1 - 40} V ${drop1}`, w: 4.5, stroke: "url(#chrome-v)" } : null
+        });
+      }
+
+      // Group D: Interlocking Hairpin Bridge
+      const hairpinX = 315 + (stepShift * 35);
+      tracks.push({
+        d: `M 510 186 V 360 H ${hairpinX} V 640 H ${hairpinX + 65}`,
+        color: palette[0],
+        w: 11
+      });
+      tracks.push({
+        d: `M 524 186 V 346 H ${hairpinX - 14} V 654 H ${hairpinX + 65}`,
+        color: palette[3],
+        w: 3.5
+      });
+
+      // Group E: Lower Corridor (Strictly clears ONE BEAT, ValenTime, Date & Sponsors)
+      const lowerRuns = Math.min(4, densityCount);
+      for (let i = 0; i < lowerRuns; i++) {
+        const yLow = 894 + (i * 13) + (stepShift * 16);
+        const strokeW = (i % 2 === 1) ? 3.5 : 11;
+        const slotX = 486 + (i * 8);
+
+        let p = '';
+        if (mode === 0 || mode === 1) {
+          p = `M 240 ${yLow} H ${slotX} V 1150 H 754`;
+        } else {
+          const midJogY = 940 + (i * 10);
+          p = `M 240 ${yLow} H 380 V ${midJogY} H ${slotX} V 1150 H 754`;
+        }
+
+        tracks.push({
+          d: p,
+          color: palette[(i + 3) % (palette.length - 1)],
+          w: strokeW,
+          capri: (i === 0) ? { d: `M 290 ${yLow} H 390`, w: 3.5 } : null
+        });
+      }
+
+      // Render Tracks
+      let svgTrackMarkup = '';
+      tracks.forEach(t => {
+        svgTrackMarkup += `<path d="${t.d}" stroke="${t.color}" stroke-width="${t.w}" fill="none" stroke-linecap="square" stroke-linejoin="miter" />`;
+        if (t.capri) {
+          svgTrackMarkup += `<path d="${t.capri.d}" stroke="#00BFFF" stroke-width="${t.capri.w}" fill="none" stroke-linecap="square" />`;
+        }
+        if (t.chrome) {
+          svgTrackMarkup += `<path d="${t.chrome.d}" stroke="${t.chrome.stroke}" stroke-width="${t.chrome.w}" fill="none" stroke-linecap="square" />`;
+        }
+      });
+      circuitGroup.innerHTML = svgTrackMarkup;
+
+      // Overpass Layer
+      overpassGroup.innerHTML = `
+        <path d="M 510 186 V 360 H ${hairpinX} V 640 H ${hairpinX + 65}" stroke="${palette[0]}" stroke-width="11" fill="none" stroke-linecap="square" />
+        <path d="M 524 186 V 346 H ${hairpinX - 14} V 654 H ${hairpinX + 65}" stroke="#00BFFF" stroke-width="3.5" fill="none" stroke-linecap="square" />
+      `;
+
+      // 3. FULLY EDITABLE TYPOGRAPHY
+      const typeGroup = document.getElementById('type-layer');
+
+      function buildEditableHeadline(text, startX, baselineY, fontSize, textColor, sigilColor, anchor, prefixId) {
+        let tspanMarkup = '';
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          if (char === 'A' || char === 'a') {
+            tspanMarkup += `<tspan id="${prefixId}-a-${i}" fill="${sigilColor}">${char}</tspan>`;
+          } else {
+            tspanMarkup += char;
+          }
+        }
+        return `<text id="${prefixId}-text" x="${startX}" y="${baselineY}" text-anchor="${anchor}" class="font-tomorrow" font-size="${fontSize}" fill="${textColor}">${tspanMarkup}</text>`;
+      }
+
+      let lineupRows = '';
+      lineup.forEach((item, index) => {
+        lineupRows += `<text x="36" y="${450 + (index * 23)}">${item}</text>`;
+      });
+
+      let dateParts = dateVal.split(' ');
+      let dateP1 = dateParts[0] || 'FEB';
+      let dateP2 = dateParts[1] || '14';
+      let dateP3 = dateParts[2] || '2014';
+
+      typeGroup.innerHTML = `
+        <!-- H1: TWO HEARTS -->
+        <g id="h1-top-group">
+          ${buildEditableHeadline(h1Top, 754, 136, 80, primaryTextColor, secondaryTextColor, 'end', 'h1-top')}
+        </g>
+        <text x="754" y="270" text-anchor="end" class="font-tomorrow" font-size="42" fill="${secondaryTextColor}">
+          ${h2Top}
+        </text>
+        <g class="font-garamond" font-size="20.5" fill="${detailTextColor}">
+          ${lineupRows}
+        </g>
+        <g transform="translate(300, 710) rotate(48)">
+          <text x="0" y="0" class="font-garamond" font-size="42" fill="${secondaryTextColor}">${admission}</text>
+        </g>
+        <g transform="translate(686, 730) rotate(-90)">
+          <text x="0" y="0" class="font-garamond" font-size="22" fill="${detailTextColor}" letter-spacing="1.5">
+            ${venue}
+          </text>
+        </g>
+        <!-- PURE™ BITBY.TV (Clean Rotated Typographic Lockup - ZERO OVERLAP) -->
+        <g transform="translate(426, 600) rotate(-90)">
+          <text x="0" y="0" class="font-cooper" font-size="26" fill="${primaryTextColor}">PURE™</text>
+          <text x="86" y="0" class="font-barlow" font-size="21" fill="${secondaryTextColor}">BITBY.TV</text>
+        </g>
+        <text x="36" y="860" class="font-tomorrow" font-size="42" fill="${secondaryTextColor}">
+          ${h2Bottom}
+        </text>
+        <!-- H1: ONE BEAT -->
+        <g id="h1-bottom-group">
+          ${buildEditableHeadline(h1Bottom, 36, 1084, 90, primaryTextColor, secondaryTextColor, 'start', 'h1-bottom')}
+        </g>
+        <g class="font-garamond" font-size="28" fill="${primaryTextColor}">
+          <text x="530" y="1022">${dateP1}</text>
+          <text x="530" y="1056">${dateP2}</text>
+          <text x="530" y="1090">${dateP3}</text>
+        </g>
+        <g transform="translate(616, 912)" fill="${primaryTextColor}" stroke="${primaryTextColor}">
+          <circle cx="20" cy="-24" r="16" fill="none" stroke-width="2" />
+          <text x="11" y="-18" class="font-tomorrow" font-size="11" stroke="none">MT</text>
+          <text x="-32" y="16" class="font-tomorrow" font-size="12" stroke="none">Dr. Martens</text>
+          <text x="64" y="16" font-family="sans-serif" font-size="16" stroke="none">★</text>
+          <text x="52" y="30" class="font-tomorrow" font-size="9" stroke="none">Heineken</text>
+        </g>
+      `;
+
+      // 4. PRECISE DEAD-CENTER ARROW ATTACHMENT
+      setTimeout(() => {
+        try {
+          const svg = document.getElementById('poster-svg');
+
+          for (let i = 0; i < h1Top.length; i++) {
+            const tspanA = document.getElementById(`h1-top-a-${i}`);
+            if (tspanA && svg) {
+              const bbox = tspanA.getBBox();
+              const centerX = bbox.x + (bbox.width / 2);
+              const centerY = bbox.y + (bbox.height * 0.54);
+
+              const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+              useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#heavy-arrow-a');
+              useEl.setAttribute('x', centerX);
+              useEl.setAttribute('y', centerY);
+              useEl.setAttribute('style', `color: ${secondaryTextColor};`);
+              document.getElementById('h1-top-group').appendChild(useEl);
+            }
+          }
+
+          for (let i = 0; i < h1Bottom.length; i++) {
+            const tspanA = document.getElementById(`h1-bottom-a-${i}`);
+            if (tspanA && svg) {
+              const bbox = tspanA.getBBox();
+              const centerX = bbox.x + (bbox.width / 2);
+              const centerY = bbox.y + (bbox.height * 0.54);
+
+              const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+              useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#heavy-arrow-a');
+              useEl.setAttribute('x', centerX);
+              useEl.setAttribute('y', centerY);
+              useEl.setAttribute('style', `color: ${secondaryTextColor};`);
+              document.getElementById('h1-bottom-group').appendChild(useEl);
+            }
+          }
+        } catch (e) {
+          console.warn('Glyph center alignment fallback active', e);
+        }
+      }, 50);
+    }
+
+    // UI Event Listeners
+    document.getElementById('maze-density').addEventListener('input', (e) => {
+      document.getElementById('density-val').textContent = `${parseFloat(e.target.value).toFixed(2)} Bands`;
+      renderPoster();
+    });
+
+    document.getElementById('motion-topology').addEventListener('input', (e) => {
+      document.getElementById('topology-val').textContent = `Mode ${(parseFloat(e.target.value) + 1).toFixed(2)}`;
+      renderPoster();
+    });
+
+    document.getElementById('motion-shift').addEventListener('input', (e) => {
+      document.getElementById('step-shift-val').textContent = `${parseFloat(e.target.value).toFixed(2)}`;
+      renderPoster();
+    });
+
+    document.getElementById('maze-variation').addEventListener('input', (e) => {
+      document.getElementById('turn-style-val').textContent = `Level ${parseFloat(e.target.value).toFixed(1)}`;
+      renderPoster();
+    });
+
+    document.getElementById('palette-select').addEventListener('change', renderPoster);
+    document.getElementById('canvas-bg-select').addEventListener('change', renderPoster);
+
+    ['h1-top', 'h1-bottom', 'h2-top', 'h2-bottom', 'venue-input', 'admission-input', 'date-input'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderPoster);
+    });
+
+    document.getElementById('lineup-input').addEventListener('input', renderPoster);
+
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      currentSeed = Math.floor(Math.random() * 90000) + 1000;
+      document.getElementById('seed-val').textContent = currentSeed;
+      document.getElementById('seed-input').value = currentSeed;
+      document.getElementById('motion-topology').value = (Math.random() * 2.8).toFixed(2);
+      document.getElementById('topology-val').textContent = `Mode ${(parseFloat(document.getElementById('motion-topology').value) + 1).toFixed(2)}`;
+      document.getElementById('motion-shift').value = Math.random().toFixed(2);
+      document.getElementById('step-shift-val').textContent = document.getElementById('motion-shift').value;
+      renderPoster();
+    });
+
+    document.getElementById('random-seed-btn').addEventListener('click', () => {
+      currentSeed = Math.floor(Math.random() * 90000) + 1000;
+      document.getElementById('seed-val').textContent = currentSeed;
+      document.getElementById('seed-input').value = currentSeed;
+      document.getElementById('motion-topology').value = (Math.random() * 2.8).toFixed(2);
+      document.getElementById('topology-val').textContent = `Mode ${(parseFloat(document.getElementById('motion-topology').value) + 1).toFixed(2)}`;
+      document.getElementById('motion-shift').value = Math.random().toFixed(2);
+      document.getElementById('step-shift-val').textContent = document.getElementById('motion-shift').value;
+      renderPoster();
+    });
+
+    document.getElementById('seed-input').addEventListener('change', (e) => {
+      currentSeed = parseInt(e.target.value, 10) || 1024;
+      document.getElementById('seed-val').textContent = currentSeed;
+      renderPoster();
+    });
+
+    // 2x Retina PNG Canvas Exporter (1600 x 2400)
+    document.getElementById('export-png-btn').addEventListener('click', () => {
+      const svg = document.getElementById('poster-svg');
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      const scale = 2;
+      canvas.width = 800 * scale;
+      canvas.height = 1200 * scale;
+      const ctx = canvas.getContext('2d');
+      
+      const img = new Image();
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        const bg = document.getElementById('canvas-bg-select').value;
+        a.download = `valentime-labyrinth-${bg}-${currentSeed}.png`;
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+      };
+      img.src = url;
+    });
+
+    // Initial Execution
+    renderPoster();
+  </script>
+</body>
+</html>
