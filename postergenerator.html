@@ -3,29 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>David Rudnick / Making Time Synthesizer v9.0</title>
+  <title>Poster Generator</title>
 
-  <!-- Typography Stack: Tomorrow, EB Garamond, Barlow Condensed -->
+  <!-- Typography Stack: Fredoka, Space Grotesk, Tomorrow, EB Garamond, Barlow Condensed -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;1,400&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN for fluid utility helpers -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    @font-face {
-      font-family: 'Cooper Hewitt';
-      src: local('Cooper Hewitt Bold Italic'), local('CooperHewitt-BoldItalic'), local('Arial Black');
-      font-weight: 700;
-      font-style: italic;
-    }
-
     :root {
-      --bg-dark: #070709;
-      --panel-bg: #111116;
-      --border-color: #23232f;
-      --text-muted: #9494a6;
-      --accent-red: #e11d2b;
-      --accent-blue: #00bfff;
-      --accent-orange: #ffa454;
+      --commute-pink: #FF8DC7;
+      --commute-pink-light: #ffd1e3;
+      --commute-yellow: #FFE566;
+      --commute-navy: #000080;
+      --commute-white-glass: rgba(255, 255, 255, 0.28);
+      --commute-card-glass: rgba(255, 255, 255, 0.2);
     }
 
     * {
@@ -35,782 +30,1237 @@
     }
 
     body {
-      background-color: var(--bg-dark);
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--commute-pink);
+      color: var(--commute-navy);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient animated pastel gradient from commute.html */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(-45deg, #FF8DC7, #ffd1e3, #FF8DC7, #ffc4dc);
+      background-size: 400% 400%;
+      animation: bgAnimation 14s ease infinite;
+      z-index: -2;
+    }
+
+    @keyframes bgAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating shapes from commute.html */
+    .shape {
+      position: fixed;
+      color: var(--commute-yellow);
+      opacity: 0.75;
+      z-index: -1;
+      animation: float 20s linear infinite;
+      font-size: 2.2rem;
+      user-select: none;
+      pointer-events: none;
+      text-shadow: 0 2px 8px rgba(0, 0, 128, 0.12);
+    }
+
+    @keyframes float {
+      from { transform: translateY(110vh) rotate(0deg); }
+      to { transform: translateY(-120vh) rotate(360deg); }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .font-fredoka { font-family: 'Fredoka', cursive, sans-serif; }
+    .font-space { font-family: 'Space Grotesk', sans-serif; }
+    .font-tomorrow { font-family: 'Tomorrow', sans-serif; }
+    .font-garamond { font-family: 'EB Garamond', serif; }
+    .font-barlow { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; }
+    .font-cooper { font-family: 'Arial Black', sans-serif; font-weight: 900; font-style: italic; }
+
+    /* Frosted glass commute container styles */
+    .glass-panel {
+      background: var(--commute-card-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 5px solid var(--commute-yellow);
+      border-radius: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 128, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Unified sample card container ensuring identical sizes across both rows */
+    .sample-card {
+      background: rgba(255, 255, 255, 0.24);
+      border: 4.5px solid var(--commute-yellow);
+      border-radius: 22px;
+      box-shadow: 0 8px 20px rgba(0, 0, 128, 0.1);
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .sample-card:hover {
+      transform: translateY(-8px) rotate(-1.5deg) scale(1.03);
+      box-shadow: 0 0 0 4px rgba(255, 229, 102, 0.6), 0 18px 30px rgba(0, 0, 128, 0.22);
+    }
+
+    .sample-card:nth-child(even):hover {
+      transform: translateY(-8px) rotate(1.5deg) scale(1.03);
+    }
+
+    /* Custom Scrollbar for generator controls */
+    .styled-scrollbar::-webkit-scrollbar {
+      width: 7px;
+    }
+    .styled-scrollbar::-webkit-scrollbar-track {
+      background: #101017;
+      border-radius: 4px;
+    }
+    .styled-scrollbar::-webkit-scrollbar-thumb {
+      background: #2a2a3a;
+      border-radius: 4px;
+    }
+    .styled-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: var(--commute-yellow);
+    }
+
+    /* Generator embedded specific styles */
+    .gen-sidebar {
+      background: #0d0d12;
       color: #e5e7eb;
-      font-family: 'Tomorrow', sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
     }
-
-    /* Left Control Sidebar */
-    .sidebar {
-      width: 420px;
-      min-width: 370px;
-      background: var(--panel-bg);
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      z-index: 20;
+    .gen-control-box {
+      background: #14141d;
+      border: 1px solid #232333;
+      border-radius: 8px;
+      padding: 10px;
     }
-
-    .sidebar-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .sidebar-header h1 {
-      font-size: 13.5px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #ffffff;
-    }
-
-    .sidebar-header h1 span {
-      color: var(--accent-blue);
-    }
-
-    .sidebar-header p {
+    .gen-control-box summary {
+      color: #FFE566;
       font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      letter-spacing: 0.04em;
-    }
-
-    .sidebar-content {
-      padding: 20px;
-      overflow-y: auto;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .control-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .control-group label {
-      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--text-muted);
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
       display: flex;
       justify-content: space-between;
-    }
-
-    .control-group input[type="text"],
-    .control-group textarea,
-    .control-group select {
-      background: #09090c;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      color: #ffffff;
-      padding: 9px 12px;
-      font-family: 'Tomorrow', sans-serif;
-      font-size: 12px;
-      outline: none;
-      transition: border-color 0.15s ease;
-    }
-
-    .control-group input[type="text"]:focus,
-    .control-group textarea:focus,
-    .control-group select:focus {
-      border-color: var(--accent-blue);
-    }
-
-    .control-group textarea {
-      height: 90px;
-      resize: vertical;
-      line-height: 1.4;
-      font-family: 'EB Garamond', serif;
-      font-size: 13.5px;
-    }
-
-    .range-wrap {
-      display: flex;
       align-items: center;
-      gap: 12px;
     }
-
-    .range-wrap input[type="range"] {
-      flex: 1;
-      height: 6px;
-      accent-color: var(--accent-red);
-      cursor: pointer;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      background: #191922;
-      color: #ffffff;
-      border: 1px solid var(--border-color);
-      padding: 10px 14px;
-      font-family: 'Tomorrow', sans-serif;
+    .gen-control-box summary::after {
+      content: '▾';
       font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border-radius: 4px;
-      cursor: pointer;
-      flex: 1;
-      text-align: center;
-      transition: all 0.15s ease;
+      color: #9494a6;
     }
-
-    .btn:hover {
-      border-color: var(--accent-blue);
-      color: var(--accent-blue);
-    }
-
-    .btn-primary {
-      background: var(--accent-red);
-      border-color: #ff4352;
-      color: #ffffff;
-      font-weight: 700;
-    }
-
-    .btn-primary:hover {
-      background: #ff3344;
-      color: #ffffff;
-      border-color: #ff3344;
-    }
-
-    .btn-blue {
-      background: #00bfff;
-      border-color: #38bdf8;
-      color: #070709;
-      font-weight: 700;
-    }
-
-    .btn-blue:hover {
-      background: #38bdf8;
-    }
-
-    /* Right Preview Stage */
-    .viewport {
-      flex: 1;
-      background: #040406;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: auto;
-      padding: 30px;
-    }
-
-    #poster-frame {
-      width: 720px;
-      height: 1080px;
-      position: relative;
-      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95);
-      border: 1px solid #1a1a24;
-      flex-shrink: 0;
-      transition: background-color 0.2s ease;
-    }
-
-    svg#poster-svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    /* Typography styles in SVG */
-    .font-tomorrow {
-      font-family: 'Tomorrow', sans-serif;
-      font-weight: 400;
-    }
-
-    .font-garamond {
-      font-family: 'EB Garamond', serif;
-      font-weight: 400;
-    }
-
-    .font-cooper {
-      font-family: 'Cooper Hewitt', sans-serif;
-      font-weight: 700;
-      font-style: italic;
-    }
-
-    .font-barlow {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 900;
+    details[open] .gen-control-box summary::after {
+      content: '▴';
     }
   </style>
 </head>
-<body>
+<body class="p-3 md:p-6 lg:p-8">
 
-  <!-- Sidebar Controls -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h1>ValenTime <span>Synthesizer</span></h1>
-      <p>Generative Labyrinth Motion v9.0</p>
+  <!-- Floating Ambient Shapes from commute.html -->
+  <div class="shape" style="left: 4%; animation-duration: 17s; animation-delay: 0s;">✦</div>
+  <div class="shape" style="left: 18%; animation-duration: 22s; animation-delay: 3s;">●</div>
+  <div class="shape" style="left: 36%; animation-duration: 19s; animation-delay: 1s;">■</div>
+  <div class="shape" style="left: 55%; animation-duration: 25s; animation-delay: 4s;">✦</div>
+  <div class="shape" style="left: 74%; animation-duration: 18s; animation-delay: 2s;">●</div>
+  <div class="shape" style="left: 90%; animation-duration: 23s; animation-delay: 5s;">▲</div>
+
+  <header class="max-w-[1760px] mx-auto mb-6">
+    <div class="glass-panel p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-[#FFE566] border-4 border-[#000080] flex items-center justify-center text-2xl font-bold shadow-md">
+          ⚡
+        </div>
+        <div>
+          <h1 class="font-fredoka text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#FFE566] tracking-wide" style="-webkit-text-stroke: 1.5px #000080; text-shadow: 3px 3px 0 #000080;">
+            Poster Generator
+          </h1>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="bg-[#FFE566] text-[#000080] border-2 border-[#000080] rounded-full px-4 py-1.5 font-fredoka font-semibold text-sm shadow-sm flex items-center gap-1.5">
+          <span>✨</span> 5 Sample Presets
+        </div>
+        <button id="header-dice-btn" class="bg-[#000080] text-[#FFE566] border-2 border-[#FFE566] hover:bg-[#FFE566] hover:text-[#000080] rounded-full px-5 py-2 font-fredoka font-bold text-sm transition-all duration-200 shadow-md flex items-center gap-2 active:scale-95">
+          <span>🎲</span> Roll Random Poster
+        </button>
+      </div>
     </div>
+  </header>
 
-    <div class="sidebar-content">
-      <div class="btn-row">
-        <button class="btn btn-primary" id="generate-btn">⚡ Mutate Sequence</button>
-        <button class="btn btn-blue" id="export-png-btn">Export PNG</button>
-      </div>
+  <main class="max-w-[1760px] mx-auto grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
 
-      <div class="control-group">
-        <label>Canvas Ground Color</label>
-        <select id="canvas-bg-select">
-          <option value="black">Deep Night Black (#070709)</option>
-          <option value="white">Pristine Gallery White (#F8F9FA)</option>
-        </select>
-      </div>
-
-      <div class="control-group">
-        <label>Pattern Seed <span id="seed-val">1024</span></label>
-        <div class="btn-row">
-          <input type="text" id="seed-input" value="1024" style="width: 110px;">
-          <button class="btn" id="random-seed-btn">🎲 Roll Dice</button>
+    <!-- LEFT COLUMN: GENERATOR CONTAINER -->
+    <section class="xl:col-span-6 2xl:col-span-6 flex flex-col gap-4">
+      <div class="glass-panel p-4 sm:p-5">
+        <div class="flex items-center justify-between border-b-4 border-[#FFE566] pb-3 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-4 h-4 rounded-full bg-[#000080]"></span>
+            <h2 class="font-fredoka text-2xl sm:text-3xl text-[#FFE566]" style="-webkit-text-stroke: 1px #000080; text-shadow: 2px 2px 0 #000080;">
+              Poster Generator
+            </h2>
+          </div>
+          <span class="text-xs font-bold text-[#000080] bg-[#FFE566] px-3 py-1 rounded-full uppercase tracking-wider">
+            Live Synthesizer
+          </span>
         </div>
-      </div>
 
-      <div class="control-group">
-        <label>Color Palette Flavor</label>
-        <select id="palette-select">
-          <option value="rudnick-warm">Rudnick Classic (Neon Magenta, Vermilion, Solar Orange, Tangerine, Cream)</option>
-          <option value="cyber-rave">Acid Rave (Toxic Mint, Capri Blue, Neon Pink, Solar Orange, Chrome)</option>
-          <option value="violet-dusk">Nocturnal Dusk (Electric Violet, Radiant Coral, Magenta, Deep Peach)</option>
-          <option value="solarpunk">Solar Radiance (Amber, Marigold, Crimson Red, Capri Blue, Champagne)</option>
-          <option value="monochrome-pop">Monochrome Pop (Greyscale Halftones, Pure White, Capri Blue & Vermilion)</option>
-        </select>
-      </div>
+        <!-- Embedded Generator Workspace: Sidebar + Live Canvas Preview -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 rounded-2xl overflow-hidden border-4 border-[#000080] bg-[#07070a] shadow-2xl">
+          
+          <!-- Generator Sub-Sidebar (Controls) -->
+          <div class="lg:col-span-6 gen-sidebar p-4 flex flex-col gap-3 max-h-[760px] overflow-y-auto styled-scrollbar text-xs font-tomorrow">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-[#232333]">
+              <div>
+                <h3 class="text-white text-xs uppercase tracking-widest font-bold">SYNTHESIZER <span class="text-[#FFE566]">v4.2</span></h3>
+                <p class="text-gray-400 text-[10px]">Talisman, Vectors & Typography</p>
+              </div>
+              <span id="active-preset-tag" class="bg-[#242436] text-[#FFE566] px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">
+                Preset: Custom
+              </span>
+            </div>
 
-      <div class="control-group">
-        <label>Labyrinth Bundles (Max 6) <span id="density-val">4.50 Bands</span></label>
-        <div class="range-wrap">
-          <input type="range" id="maze-density" min="1.0" max="6.0" step="0.05" value="4.5">
-        </div>
-      </div>
+            <!-- Primary Buttons -->
+            <div class="grid grid-cols-2 gap-2">
+              <button id="gen-roll-dice-btn" class="bg-[#FFE566] text-[#000080] font-fredoka font-bold py-2.5 px-3 rounded-lg hover:bg-yellow-300 transition duration-150 flex items-center justify-center gap-1.5 shadow text-sm">
+                🎲 Roll Dice
+              </button>
+              <button id="gen-export-png-btn" class="bg-[#000080] text-[#FFE566] border border-[#FFE566] font-fredoka font-bold py-2.5 px-3 rounded-lg hover:bg-[#1a1a9e] transition duration-150 flex items-center justify-center gap-1 text-sm shadow">
+                💾 Export PNG
+              </button>
+            </div>
 
-      <div class="control-group">
-        <label>Labyrinth Topology Flow <span id="topology-val">Mode 1</span></label>
-        <div class="range-wrap">
-          <input type="range" id="motion-topology" min="0" max="3" step="0.01" value="0.8">
-        </div>
-      </div>
+            <!-- Canvas Ground Color -->
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Canvas Ground Color</label>
+              <select id="canvas-bg-select" class="bg-[#12121a] text-white border border-[#2b2b3d] rounded p-2 outline-none focus:border-[#FFE566] text-xs">
+                <option value="black">Deep Night Black (#070709)</option>
+                <option value="white">Pristine Gallery White (#F8F9FA)</option>
+              </select>
+            </div>
 
-      <div class="control-group">
-        <label>Circuit Evolution / Step Shift <span id="step-shift-val">0.50</span></label>
-        <div class="range-wrap">
-          <input type="range" id="motion-shift" min="0" max="1" step="0.005" value="0.5">
-        </div>
-      </div>
+            <!-- Palette Selection -->
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Palette Profile</label>
+              <select id="palette-select" class="bg-[#12121a] text-white border border-[#2b2b3d] rounded p-2 outline-none focus:border-[#FFE566] text-xs">
+                <option value="rudnick-warm">Rudnick Classic (Neon Magenta, Vermilion, Orange)</option>
+                <option value="cyber-rave">Acid Rave (Capri Blue, Toxic Mint, Neon Pink)</option>
+                <option value="violet-dusk">Nocturnal Dusk (Violet, Radiant Coral, Deep Peach)</option>
+                <option value="solarpunk">Solar Radiance (Amber, Marigold, Crimson Red)</option>
+                <option value="monochrome-pop">Monochrome Pop (Capri Blue, Vermilion, Slate)</option>
+              </select>
+            </div>
 
-      <div class="control-group">
-        <label>Meander Complexity <span id="turn-style-val">Level 5.0</span></label>
-        <div class="range-wrap">
-          <input type="range" id="maze-variation" min="1.0" max="10.0" step="0.1" value="5.0">
-        </div>
-      </div>
+            <!-- Sigil Selection -->
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Sigil / Talisman Emblem</label>
+              <select id="icon-variant-select" class="bg-[#12121a] text-white border border-[#2b2b3d] rounded p-2 outline-none focus:border-[#FFE566] text-xs">
+                <option value="random">🎲 Random Iconic Emblem</option>
+                <option value="eye">Cyber Optical Eye</option>
+                <option value="radar">Segmented Tactical Radar</option>
+                <option value="crosshair">Brutalist Crosshair Seal</option>
+                <option value="prism">Nested Diamond Prism</option>
+                <option value="compass">Concentric Orbit Compass</option>
+                <option value="hex">Quantum Hex Array</option>
+                <option value="monolith">Solar Gate Monolith</option>
+                <option value="reticle">Cyber Reticle Cross</option>
+              </select>
+            </div>
 
-      <div class="control-group">
-        <label>Display Headline 1 (Top-Right)</label>
-        <input type="text" id="h1-top" value="TWO HEARTS">
-      </div>
+            <!-- Stripe Trajectory Controls -->
+            <div class="gen-control-box">
+              <summary>⚡ Stripe Trajectory Controls</summary>
+              <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-[#232333]">
+                <div class="flex flex-col gap-1">
+                  <label class="text-[10px] text-gray-400 uppercase">Focus Track</label>
+                  <select id="active-track-select" class="bg-[#0b0b10] border border-[#272738] rounded p-1 text-[11px] text-white">
+                    <option value="all">Global (All Stripes Together)</option>
+                    <option value="0">Stripe Band 1</option>
+                    <option value="1">Stripe Band 2</option>
+                    <option value="2">Stripe Band 3</option>
+                    <option value="3">Stripe Band 4</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[10px] text-gray-400 mb-1">
+                    <span>Stripe Shift X</span>
+                    <span id="pos-shift-x-val" class="text-[#FFE566]">0.0</span>
+                  </div>
+                  <input type="range" id="stripe-shift-x" min="-260" max="260" step="5" value="0" class="w-full accent-yellow-400 cursor-pointer">
+                </div>
+                <div>
+                  <div class="flex justify-between text-[10px] text-gray-400 mb-1">
+                    <span>Stripe Shift Y</span>
+                    <span id="pos-shift-y-val" class="text-[#FFE566]">0.0</span>
+                  </div>
+                  <input type="range" id="stripe-shift-y" min="-300" max="300" step="5" value="0" class="w-full accent-yellow-400 cursor-pointer">
+                </div>
+                <div>
+                  <div class="flex justify-between text-[10px] text-gray-400 mb-1">
+                    <span>Labyrinth Bundles</span>
+                    <span id="density-val" class="text-[#FFE566]">4 Bands</span>
+                  </div>
+                  <input type="range" id="maze-density" min="1" max="7" step="1" value="4" class="w-full accent-yellow-400 cursor-pointer">
+                </div>
+              </div>
+            </div>
 
-      <div class="control-group">
-        <label>Display Headline 2 (Bottom-Left)</label>
-        <input type="text" id="h1-bottom" value="ONE BEAT">
-      </div>
+            <!-- Headline 1 -->
+            <details class="gen-control-box" open>
+              <summary>Headline 1 (Primary)</summary>
+              <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-[#232333]">
+                <input type="text" id="h1-top" value="TWO HEARTS" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs uppercase">
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="text-[9px] text-gray-400 block mb-0.5">X: <span id="h1-top-x-val">0</span></label>
+                    <input type="range" id="h1-top-x" min="-200" max="200" step="5" value="0" class="w-full accent-yellow-400">
+                  </div>
+                  <div>
+                    <label class="text-[9px] text-gray-400 block mb-0.5">Y: <span id="h1-top-y-val">0</span></label>
+                    <input type="range" id="h1-top-y" min="-200" max="200" step="5" value="0" class="w-full accent-yellow-400">
+                  </div>
+                </div>
+              </div>
+            </details>
 
-      <div class="control-group">
-        <label>Secondary Subheadings</label>
-        <input type="text" id="h2-top" value="MakingTime" style="margin-bottom: 6px;">
-        <input type="text" id="h2-bottom" value="ValenTime">
-      </div>
+            <!-- Headline 2 -->
+            <details class="gen-control-box" open>
+              <summary>Headline 2 (Secondary)</summary>
+              <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-[#232333]">
+                <input type="text" id="h1-bottom" value="ONE BEAT" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs uppercase">
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="text-[9px] text-gray-400 block mb-0.5">X: <span id="h1-bottom-x-val">0</span></label>
+                    <input type="range" id="h1-bottom-x" min="-200" max="200" step="5" value="0" class="w-full accent-yellow-400">
+                  </div>
+                  <div>
+                    <label class="text-[9px] text-gray-400 block mb-0.5">Y: <span id="h1-bottom-y-val">0</span></label>
+                    <input type="range" id="h1-bottom-y" min="-200" max="200" step="5" value="0" class="w-full accent-yellow-400">
+                  </div>
+                </div>
+              </div>
+            </details>
 
-      <div class="control-group">
-        <label>Event Roster (EB Garamond)</label>
-        <textarea id="lineup-input">Dave P &...
+            <!-- Subheadings & Badge -->
+            <details class="gen-control-box">
+              <summary>Subheadings & Badge</summary>
+              <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-[#232333]">
+                <input type="text" id="h2-top" value="MakingTime" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                <input type="text" id="h2-bottom" value="ValenTime" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                  <input type="text" id="badge-brand-input" value="PURE™" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                  <input type="text" id="badge-sub-input" value="BITBY.TV" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                </div>
+              </div>
+            </details>
+
+            <!-- Event Roster & Logistics -->
+            <details class="gen-control-box">
+              <summary>Roster & Venue Details</summary>
+              <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-[#232333]">
+                <textarea id="lineup-input" rows="4" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white font-garamond text-xs leading-tight">Dave P &...
 Sammy Slice
 Dave Pak
 Russ Alexander
 Steve Vena
 Snkpk
-Broadzilla
-Adam Sparkles
-Tony Modica</textarea>
+Broadzilla</textarea>
+                <input type="text" id="venue-input" value="Voyeur 1221 St. James st." class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                  <input type="text" id="date-input" value="FEB 14 2026" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                  <input type="text" id="admission-input" value="$10" class="bg-[#09090e] border border-[#282839] rounded p-1.5 text-white text-xs">
+                </div>
+              </div>
+            </details>
+
+          </div>
+
+          <!-- Live SVG Canvas Stage -->
+          <div class="lg:col-span-6 bg-[#040406] flex items-center justify-center p-3 sm:p-5 relative min-h-[500px]">
+            <div id="poster-frame" class="w-full max-w-[390px] aspect-[800/1200] shadow-[0_20px_50px_rgba(0,0,0,0.85)] border-2 border-[#1c1c28] rounded-lg overflow-hidden transition-colors duration-200">
+              <svg id="poster-svg" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" class="w-full h-full block">
+                <defs id="svg-defs">
+                  <!-- Proportional Center-Piercing Arrow Glyphs -->
+                  <g id="heavy-arrow-a">
+                    <line x1="0" y1="-26" x2="0" y2="28" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" />
+                    <polygon points="0,-36 -7,-22 7,-22" fill="currentColor" />
+                    <circle cx="0" cy="0" r="3" fill="#FFE566" />
+                    <circle cx="0" cy="0" r="1.3" fill="#FFFFFF" />
+                    <polygon points="0,28 -6,37 6,37" fill="currentColor" />
+                  </g>
+
+                  <linearGradient id="grad-track-1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#34D399" />
+                    <stop offset="100%" stop-color="#E82B7D" />
+                  </linearGradient>
+
+                  <linearGradient id="grad-track-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#00BFFF" />
+                    <stop offset="100%" stop-color="#FF5B00" />
+                  </linearGradient>
+                </defs>
+
+                <rect id="svg-bg-rect" width="800" height="1200" fill="#070709" />
+                <g id="circuit-layer"></g>
+                <g id="talisman-layer"></g>
+                <g id="type-layer"></g>
+              </svg>
+            </div>
+          </div>
+
+        </div>
       </div>
+    </section>
 
-      <div class="control-group">
-        <label>Metadata / Badges</label>
-        <input type="text" id="venue-input" value="Voyeur  1221 St. James st." style="margin-bottom: 6px;">
-        <input type="text" id="admission-input" value="$10" style="margin-bottom: 6px;">
-        <input type="text" id="date-input" value="FEB 14 2014">
+    <!-- RIGHT COLUMN: 5 SAMPLE POSTERS (EQUAL SIZE: 3 on Top, 2 Centered on Bottom) -->
+    <section class="xl:col-span-6 2xl:col-span-6 flex flex-col gap-4">
+      <div class="glass-panel p-4 sm:p-5">
+        <div class="flex items-center justify-between border-b-4 border-[#FFE566] pb-3 mb-5">
+          <div>
+            <h2 class="font-fredoka text-2xl sm:text-3xl text-[#FFE566]" style="-webkit-text-stroke: 1px #000080; text-shadow: 2px 2px 0 #000080;">
+              Sample Posters
+            </h2>
+          </div>
+          <div class="hidden sm:flex items-center gap-1 text-xs font-bold text-[#000080] bg-[#FFE566] px-3 py-1 rounded-full uppercase">
+            <span>5 Editions</span>
+          </div>
+        </div>
+
+        <!-- 3-Column Base Grid Architecture: Top 3 occupy 1 column each -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          
+          <!-- POSTER 1 -->
+          <div class="sample-card p-2 flex flex-col items-center group" onclick="loadSamplePreset(0)" title="Click to load preset into generator">
+            <div class="w-full aspect-[800/1200] rounded-2xl overflow-hidden border-4 border-[#FFE566] shadow-md bg-[#070709] relative flex items-center justify-center">
+              <img src="gen_posters/poster1.png" alt="Sample poster 1" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <div class="fallback-placeholder hidden w-full h-full" id="fallback-wrap-0">
+                <svg id="sample-svg-0" viewBox="0 0 800 1200" class="w-full h-full block pointer-events-none"></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- POSTER 2 -->
+          <div class="sample-card p-2 flex flex-col items-center group" onclick="loadSamplePreset(1)" title="Click to load preset into generator">
+            <div class="w-full aspect-[800/1200] rounded-2xl overflow-hidden border-4 border-[#FFE566] shadow-md bg-[#070709] relative flex items-center justify-center">
+              <img src="gen_posters/poster2.png" alt="Sample poster 2" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <div class="fallback-placeholder hidden w-full h-full" id="fallback-wrap-1">
+                <svg id="sample-svg-1" viewBox="0 0 800 1200" class="w-full h-full block pointer-events-none"></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- POSTER 3 -->
+          <div class="sample-card p-2 flex flex-col items-center group" onclick="loadSamplePreset(2)" title="Click to load preset into generator">
+            <div class="w-full aspect-[800/1200] rounded-2xl overflow-hidden border-4 border-[#FFE566] shadow-md bg-[#F8F9FA] relative flex items-center justify-center">
+              <img src="gen_posters/poster3.png" alt="Sample poster 3" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <div class="fallback-placeholder hidden w-full h-full" id="fallback-wrap-2">
+                <svg id="sample-svg-2" viewBox="0 0 800 1200" class="w-full h-full block pointer-events-none"></svg>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Row: 2 Posters centered, sized at exactly 2/3 width of the 3-column container so their widths match the top 3 cards identically -->
+        <div class="flex justify-center">
+          <div class="w-full sm:w-[66.666%] grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- POSTER 4 -->
+            <div class="sample-card p-2 flex flex-col items-center group" onclick="loadSamplePreset(3)" title="Click to load preset into generator">
+              <div class="w-full aspect-[800/1200] rounded-2xl overflow-hidden border-4 border-[#FFE566] shadow-md bg-[#070709] relative flex items-center justify-center">
+                <img src="gen_posters/poster4.png" alt="Sample poster 4" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="fallback-placeholder hidden w-full h-full" id="fallback-wrap-3">
+                  <svg id="sample-svg-3" viewBox="0 0 800 1200" class="w-full h-full block pointer-events-none"></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- POSTER 5 -->
+            <div class="sample-card p-2 flex flex-col items-center group" onclick="loadSamplePreset(4)" title="Click to load preset into generator">
+              <div class="w-full aspect-[800/1200] rounded-2xl overflow-hidden border-4 border-[#FFE566] shadow-md bg-[#070709] relative flex items-center justify-center">
+                <img src="gen_posters/poster5.png" alt="Sample poster 5" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="fallback-placeholder hidden w-full h-full" id="fallback-wrap-4">
+                  <svg id="sample-svg-4" viewBox="0 0 800 1200" class="w-full h-full block pointer-events-none"></svg>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
-    </div>
-  </aside>
+    </section>
 
-  <!-- Viewport Preview -->
-  <main class="viewport">
-    <div id="poster-frame">
-      <svg id="poster-svg" viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
-        <defs id="svg-defs">
-          <!-- Metallic Chrome Gradients -->
-          <linearGradient id="chrome-h" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#34D399" />
-            <stop offset="25%" stop-color="#4B5563" />
-            <stop offset="70%" stop-color="#E5E7EB" />
-            <stop offset="100%" stop-color="#FFFFFF" />
-          </linearGradient>
-
-          <linearGradient id="chrome-v" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#FFFFFF" />
-            <stop offset="35%" stop-color="#D1D5DB" />
-            <stop offset="70%" stop-color="#4B5563" />
-            <stop offset="100%" stop-color="#00BFFF" />
-          </linearGradient>
-
-          <!-- Heavy Brutalist Arrow Sigil -->
-          <g id="heavy-arrow-a">
-            <line x1="0" y1="-26" x2="0" y2="28" stroke="currentColor" stroke-width="9" stroke-linecap="square" />
-            <line x1="0" y1="-24" x2="0" y2="26" stroke="#FFFFFF" stroke-width="2.5" />
-            <polygon points="0,-39 -13,-22 13,-22" fill="currentColor" />
-            <polygon points="0,-33 -6,-23 6,-23" fill="#FFFFFF" />
-            <circle cx="0" cy="0" r="5" fill="#00BFFF" />
-            <circle cx="0" cy="0" r="2.2" fill="#FFFFFF" />
-            <polygon points="0,28 -11,39 11,39" fill="currentColor" />
-          </g>
-        </defs>
-
-        <!-- Base Canvas Ground -->
-        <rect id="svg-bg-rect" width="800" height="1200" fill="#070709" />
-
-        <!-- Dynamic Labyrinth Circuit Tracks Layer -->
-        <g id="circuit-layer"></g>
-
-        <!-- Dynamic Intersecting Overpass Ribbon Layer -->
-        <g id="overpass-layer"></g>
-
-        <!-- Top-Left Dedicated Box with Diagonal Eye Talisman -->
-        <g id="talisman-layer"></g>
-
-        <!-- Pure Typography Placed Freely with Zero Box Overlays -->
-        <g id="type-layer"></g>
-      </svg>
-    </div>
   </main>
 
   <script>
+    /* Palette Definitions from generator.html */
     const PALETTES = {
-      'rudnick-warm': ['#E11D2B', '#E82B7D', '#FF5B00', '#FFA454', '#F6C8B8', '#00BFFF'],
-      'cyber-rave': ['#34D399', '#00BFFF', '#E82B7D', '#FF5B00', '#FFFFFF', '#00BFFF'],
-      'violet-dusk': ['#8B5CF6', '#EC4899', '#F97316', '#FDBA74', '#EDE9FE', '#00BFFF'],
+      'rudnick-warm': ['#E11D2B', '#E82B7D', '#FF5B00', '#FFA454', '#FFE8D6', '#00BFFF'],
+      'cyber-rave': ['#34D399', '#00BFFF', '#E82B7D', '#FF5B00', '#F8FAFC', '#00BFFF'],
+      'violet-dusk': ['#A78BFA', '#EC4899', '#F97316', '#FDBA74', '#FFFFFF', '#00BFFF'],
       'solarpunk': ['#FFB703', '#FB8500', '#D90429', '#FFE4B5', '#FFFFFF', '#00BFFF'],
-      'monochrome-pop': ['#1E293B', '#475569', '#94A3B8', '#CBD5E1', '#E11D2B', '#00BFFF']
+      'monochrome-pop': ['#F1F5F9', '#CBD5E1', '#94A3B8', '#E11D2B', '#00BFFF', '#FFFFFF']
     };
 
-    let currentSeed = 1024;
-    function pseudoRandom() {
-      currentSeed = (currentSeed * 9301 + 49297) % 233280;
-      return currentSeed / 233280;
+    const HEADLINE_POOLS = [
+      ['TWO HEARTS', 'ONE BEAT', 'MakingTime', 'ValenTime'],
+      ['HYPER OBJECT', 'DEEP FUTURE', 'SoundSystem', 'Temporal Drift'],
+      ['SIGNAL LOSS', 'NULL SPACE', 'Synthesizer', 'Phase Variant'],
+      ['TOTAL ECHO', 'STATIC PULSE', 'Audio Visual', 'Harmonics'],
+      ['PARALLEL AXIS', 'ZERO HORIZON', 'OmniDirection', 'Circuit Labyrinth'],
+      ['CYBER KINETIC', 'PURE FREQUENCY', 'Vector Sound', 'Dark Matter'],
+      ['WARP METRIC', 'BLACK BODY', 'Quantum Wave', 'Radiation'],
+      ['OPTIC GLYPH', 'CHRONO LOGIC', 'Form Language', 'Artifact']
+    ];
+
+    // Presets for the 5 sample posters
+    const SAMPLE_PRESETS = [
+      {
+        id: 'poster1',
+        name: 'poster1',
+        bg: 'black',
+        palette: 'rudnick-warm',
+        icon: 'eye',
+        h1Top: 'TWO HEARTS',
+        h1Bottom: 'ONE BEAT',
+        h2Top: 'MakingTime',
+        h2Bottom: 'ValenTime',
+        badgeBrand: 'PURE™',
+        badgeSub: 'BITBY.TV',
+        density: 4,
+        layoutVariant: 0,
+        metaScatterMode: 0,
+        venue: 'Voyeur 1221 St. James st.',
+        date: 'FEB 14 2026',
+        admission: '$10',
+        lineup: 'Dave P &\nSammy Slice\nDave Pak\nRuss Alexander\nSteve Vena\nSnkpk\nBroadzilla'
+      },
+      {
+        id: 'poster2',
+        name: 'poster2',
+        bg: 'black',
+        palette: 'cyber-rave',
+        icon: 'radar',
+        h1Top: 'HYPER OBJECT',
+        h1Bottom: 'DEEP FUTURE',
+        h2Top: 'SoundSystem',
+        h2Bottom: 'Temporal Drift',
+        badgeBrand: 'RAVE™',
+        badgeSub: 'OCTAVE.NET',
+        density: 5,
+        layoutVariant: 1,
+        metaScatterMode: 1,
+        venue: 'Berghain Panorama St.',
+        date: 'MAR 21 2026',
+        admission: '€15',
+        lineup: 'Marcel Dettmann\nBen Klock\nHelena Hauff\nObjekt\nDVS1\nSteffi'
+      },
+      {
+        id: 'poster3',
+        name: 'poster3',
+        bg: 'white',
+        palette: 'violet-dusk',
+        icon: 'prism',
+        h1Top: 'OPTIC GLYPH',
+        h1Bottom: 'CHRONO LOGIC',
+        h2Top: 'Form Language',
+        h2Bottom: 'Artifact Space',
+        badgeBrand: 'ARCH™',
+        badgeSub: 'TOKYO.LAB',
+        density: 3,
+        layoutVariant: 2,
+        metaScatterMode: 0,
+        venue: 'Museum of Contemporary Sound',
+        date: 'APR 09 2026',
+        admission: '¥2500',
+        lineup: 'Ryuichi Sakamoto\nOneohtrix Point Never\nTim Hecker\nFloating Points\nKaitlyn Aurelia Smith'
+      },
+      {
+        id: 'poster4',
+        name: 'poster4',
+        bg: 'black',
+        palette: 'solarpunk',
+        icon: 'compass',
+        h1Top: 'PARALLEL AXIS',
+        h1Bottom: 'ZERO HORIZON',
+        h2Top: 'OmniDirection',
+        h2Bottom: 'Circuit Labyrinth',
+        badgeBrand: 'SOLAR™',
+        badgeSub: 'KINETIC.SYS',
+        density: 6,
+        layoutVariant: 0,
+        metaScatterMode: 2,
+        venue: 'Red Rocks Amphitheater',
+        date: 'JUN 18 2026',
+        admission: '$45',
+        lineup: 'Tycho Live\nBonobo Quintet\nJon Hopkins\nFour Tet\nModerat'
+      },
+      {
+        id: 'poster5',
+        name: 'poster5',
+        bg: 'black',
+        palette: 'monochrome-pop',
+        icon: 'reticle',
+        h1Top: 'SIGNAL LOSS',
+        h1Bottom: 'NULL SPACE',
+        h2Top: 'Synthesizer',
+        h2Bottom: 'Phase Variant',
+        badgeBrand: 'METRIC™',
+        badgeSub: 'SUB-VOID',
+        density: 4,
+        layoutVariant: 1,
+        metaScatterMode: 1,
+        venue: 'Underground Vault 09',
+        date: 'NOV 03 2026',
+        admission: 'FREE RSVP',
+        lineup: 'Aphex Twin Curates\nSquarepusher\nAutechre\nBoards of Canada'
+      }
+    ];
+
+    // Live state tracking
+    let textOffsets = {
+      'h1-top': { x: 0, y: 0 },
+      'h1-bottom': { x: 0, y: 0 },
+      'h2': { x: 0, y: 0 },
+      'badge': { x: 0, y: 0 },
+      'lineup': { x: 0, y: 0 },
+      'venue': { x: 0, y: 0 },
+      'date': { x: 0, y: 0 },
+      'admission': { x: 0, y: 0 }
+    };
+
+    let stripeOffsets = [
+      { x: 0, y: 0, dir: 'h' },
+      { x: 0, y: 0, dir: 'v' },
+      { x: 0, y: 0, dir: 's' },
+      { x: 0, y: 0, dir: 'h' },
+      { x: 0, y: 0, dir: 'v' },
+      { x: 0, y: 0, dir: 's' },
+      { x: 0, y: 0, dir: 'h' },
+      { x: 0, y: 0, dir: 'v' }
+    ];
+
+    let state = {
+      iconVariant: 'eye',
+      iconPosition: 'TL',
+      colorShuffle: [0, 1, 2, 3, 4, 5],
+      layoutVariant: 0,
+      metaScatterMode: 0
+    };
+
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function shuffleArray(arr) {
+      let a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function getTalismanInner(iconType, palette, bgColor, highlightColor) {
+      if (iconType === 'eye') {
+        return `
+          <g transform="rotate(45)">
+            <path d="M 0 16 C -20 0 -26 -16 0 -32 C 26 -16 20 0 0 16 Z" fill="none" stroke="${palette[1]}" stroke-width="3" />
+            <path d="M -40 0 C -20 -25 20 -25 40 0 C 20 25 -20 25 -40 0 Z" fill="${bgColor}" stroke="${palette[3]}" stroke-width="2.5" />
+            <ellipse cx="0" cy="0" rx="15" ry="15" fill="none" stroke="${palette[0]}" stroke-width="3" />
+            <circle cx="0" cy="0" r="9" fill="${palette[1]}" stroke="${highlightColor}" stroke-width="2" />
+            <circle cx="0" cy="0" r="5" fill="#000000" />
+            <circle cx="-2" cy="-2" r="1.8" fill="#FFFFFF" />
+          </g>
+          <g transform="rotate(-45)">
+            <line x1="-38" y1="0" x2="34" y2="0" stroke="${palette[0]}" stroke-width="3" stroke-linecap="square" />
+            <polygon points="45,0 30,-8 30,8" fill="${palette[0]}" />
+            <circle cx="0" cy="0" r="12" fill="none" stroke="${highlightColor}" stroke-width="1.8" stroke-dasharray="3 3" />
+          </g>
+        `;
+      } else if (iconType === 'radar') {
+        return `
+          <circle cx="0" cy="0" r="48" fill="none" stroke="${palette[0]}" stroke-width="2.5" stroke-dasharray="5 3" />
+          <circle cx="0" cy="0" r="34" fill="none" stroke="${palette[3]}" stroke-width="1.8" />
+          <line x1="-54" y1="0" x2="54" y2="0" stroke="${palette[2]}" stroke-width="1.8" />
+          <line x1="0" y1="-54" x2="0" y2="54" stroke="${palette[2]}" stroke-width="1.8" />
+          <path d="M 0 0 L 24 -24 A 34 34 0 0 1 34 0 Z" fill="${palette[0]}" opacity="0.6" />
+          <circle cx="0" cy="0" r="5" fill="${highlightColor}" />
+        `;
+      } else if (iconType === 'crosshair') {
+        return `
+          <rect x="-38" y="-38" width="76" height="76" fill="none" stroke="${palette[0]}" stroke-width="2.8" />
+          <line x1="-48" y1="0" x2="48" y2="0" stroke="${palette[1]}" stroke-width="3" />
+          <line x1="0" y1="-48" x2="0" y2="48" stroke="${palette[1]}" stroke-width="3" />
+          <circle cx="0" cy="0" r="22" fill="none" stroke="${highlightColor}" stroke-width="2.5" stroke-dasharray="4 4" />
+          <rect x="-10" y="-10" width="20" height="20" fill="${palette[2]}" />
+        `;
+      } else if (iconType === 'prism') {
+        return `
+          <polygon points="0,-44 44,0 0,44 -44,0" fill="none" stroke="${palette[0]}" stroke-width="3.5" />
+          <polygon points="0,-30 30,0 0,30 -30,0" fill="none" stroke="${palette[2]}" stroke-width="2" stroke-dasharray="4 3" />
+          <polygon points="0,-16 16,0 0,16 -16,0" fill="${palette[1]}" />
+          <circle cx="0" cy="0" r="5" fill="#FFFFFF" />
+        `;
+      } else if (iconType === 'compass') {
+        return `
+          <circle cx="0" cy="0" r="46" fill="none" stroke="${palette[0]}" stroke-width="2.5" />
+          <circle cx="0" cy="0" r="26" fill="none" stroke="${palette[2]}" stroke-width="2" stroke-dasharray="3 3" />
+          <polygon points="0,-46 8,-12 46,0 12,8 0,46 -8,12 -46,0 -12,-8" fill="${palette[1]}" />
+          <circle cx="0" cy="0" r="4" fill="#FFFFFF" />
+        `;
+      } else if (iconType === 'hex') {
+        return `
+          <polygon points="0,-45 39,-22.5 39,22.5 0,45 -39,22.5 -39,-22.5" fill="none" stroke="${palette[0]}" stroke-width="3" />
+          <polygon points="0,-28 24,-14 24,14 0,28 -24,14 -24,-14" fill="${palette[2]}" opacity="0.7" />
+          <circle cx="0" cy="0" r="8" fill="${highlightColor}" />
+          <line x1="-48" y1="0" x2="48" y2="0" stroke="${palette[3]}" stroke-width="2" />
+        `;
+      } else if (iconType === 'monolith') {
+        return `
+          <rect x="-24" y="-48" width="48" height="96" fill="${bgColor}" stroke="${palette[0]}" stroke-width="3.5" />
+          <line x1="-24" y1="-16" x2="24" y2="-16" stroke="${palette[1]}" stroke-width="2.5" />
+          <line x1="-24" y1="16" x2="24" y2="16" stroke="${palette[1]}" stroke-width="2.5" />
+          <circle cx="0" cy="0" r="10" fill="${palette[2]}" />
+          <circle cx="0" cy="0" r="4" fill="#FFFFFF" />
+        `;
+      } else {
+        return `
+          <circle cx="0" cy="0" r="42" fill="none" stroke="${palette[0]}" stroke-width="3" />
+          <path d="M -30 -30 L -18 -30 V -18" fill="none" stroke="${highlightColor}" stroke-width="2.5" />
+          <path d="M 30 -30 L 18 -30 V -18" fill="none" stroke="${highlightColor}" stroke-width="2.5" />
+          <path d="M -30 30 L -18 30 V 18" fill="none" stroke="${highlightColor}" stroke-width="2.5" />
+          <path d="M 30 30 L 18 30 V 18" fill="none" stroke="${highlightColor}" stroke-width="2.5" />
+          <line x1="-12" y1="0" x2="12" y2="0" stroke="${palette[1]}" stroke-width="3" />
+          <line x1="0" y1="-12" x2="0" y2="12" stroke="${palette[1]}" stroke-width="3" />
+        `;
+      }
     }
 
     function renderPoster() {
-      const densityFloat = parseFloat(document.getElementById('maze-density').value);
-      const densityCount = Math.round(densityFloat);
-      const topology = parseFloat(document.getElementById('motion-topology').value);
-      const stepShift = parseFloat(document.getElementById('motion-shift').value);
-      const freedom = parseFloat(document.getElementById('maze-variation').value);
-
       const paletteKey = document.getElementById('palette-select').value;
       const bgChoice = document.getElementById('canvas-bg-select').value;
       const isWhiteBg = (bgChoice === 'white');
-
       const bgColor = isWhiteBg ? '#F8F9FA' : '#070709';
+
       document.getElementById('svg-bg-rect').setAttribute('fill', bgColor);
       document.getElementById('poster-frame').style.backgroundColor = bgColor;
 
-      let palette = [...PALETTES[paletteKey]];
+      let basePalette = [...PALETTES[paletteKey]];
       if (isWhiteBg && paletteKey === 'monochrome-pop') {
-        palette = ['#0F172A', '#334155', '#64748B', '#94A3B8', '#E11D2B', '#00BFFF'];
+        basePalette = ['#0F172A', '#334155', '#475569', '#E11D2B', '#00BFFF', '#0A0A0E'];
       }
 
-      const primaryTextColor = isWhiteBg ? '#0A0A0E' : palette[0];
-      const secondaryTextColor = isWhiteBg ? '#C2410C' : palette[3];
-      const detailTextColor = isWhiteBg ? '#1E293B' : palette[3];
+      const palette = state.colorShuffle.map(idx => basePalette[idx % basePalette.length]);
+      
+      const primaryTextColor = isWhiteBg ? '#0A0A0E' : '#FFFFFF';
+      const secondaryTextColor = isWhiteBg ? '#C2410C' : (palette[0] === '#070709' ? '#FFA454' : palette[0]);
+      const detailTextColor = isWhiteBg ? '#1E293B' : '#E2E8F0';
+      const highlightColor = palette[5] || '#00BFFF';
+
+      const g1 = document.getElementById('grad-track-1');
+      const g2 = document.getElementById('grad-track-2');
+      if (g1 && g2) {
+        g1.children[0].setAttribute('stop-color', palette[1]);
+        g1.children[1].setAttribute('stop-color', palette[2]);
+        g2.children[0].setAttribute('stop-color', highlightColor);
+        g2.children[1].setAttribute('stop-color', palette[0]);
+      }
 
       const h1Top = document.getElementById('h1-top').value || 'TWO HEARTS';
       const h1Bottom = document.getElementById('h1-bottom').value || 'ONE BEAT';
       const h2Top = document.getElementById('h2-top').value || 'MakingTime';
       const h2Bottom = document.getElementById('h2-bottom').value || 'ValenTime';
+      const badgeBrand = document.getElementById('badge-brand-input').value || 'PURE™';
+      const badgeSub = document.getElementById('badge-sub-input').value || 'BITBY.TV';
       const lineup = document.getElementById('lineup-input').value.split('\n').filter(Boolean);
-      const venue = document.getElementById('venue-input').value || 'Voyeur  1221 St. James st.';
+      const venue = document.getElementById('venue-input').value || 'Voyeur 1221 St. James st.';
       const admission = document.getElementById('admission-input').value || '$10';
-      const dateVal = document.getElementById('date-input').value || 'FEB 14 2014';
+      const dateVal = document.getElementById('date-input').value || 'FEB 14 2026';
+      const density = parseInt(document.getElementById('maze-density').value, 10);
 
-      // 1. TOP-LEFT TALISMAN: COMPACT DEDICATED BOX WITH DIAGONAL CYBER EYE
-      const boxX = 36, boxY = 36, boxW = 180, boxH = 180;
+      const activeIcon = document.getElementById('icon-variant-select').value === 'random' 
+        ? state.iconVariant 
+        : document.getElementById('icon-variant-select').value;
+
+      // 1. TALISMAN EMBLEM LAYER
       const talismanGroup = document.getElementById('talisman-layer');
+      const boxSize = 136;
+      let talismanX = 36, talismanY = 36;
+
+      if (state.layoutVariant === 0) {
+        talismanX = (state.iconPosition === 'TR') ? 628 : 36;
+        talismanY = 36;
+      } else if (state.layoutVariant === 1) {
+        talismanX = 628; 
+        talismanY = 36;
+      } else {
+        talismanX = 36; 
+        talismanY = 36;
+      }
+
+      const iconInner = getTalismanInner(activeIcon, palette, bgColor, highlightColor);
 
       talismanGroup.innerHTML = `
-        <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" fill="${bgColor}" stroke="${palette[0]}" stroke-width="4.5" />
-        <rect x="${boxX + 5}" y="${boxY + 5}" width="${boxW - 10}" height="${boxH - 10}" fill="none" stroke="${palette[3]}" stroke-width="1.2" stroke-dasharray="6 3" />
-
-        <g transform="translate(${boxX + boxW/2}, ${boxY + boxH/2})">
-          <g transform="rotate(45)">
-            <path d="M 0 18 C -26 0 -32 -22 0 -40 C 32 -22 26 0 0 18 Z" 
-                  fill="none" stroke="${palette[1]}" stroke-width="4" />
-            <path d="M -50 0 C -26 -32 26 -32 50 0 C 26 32 -26 32 -50 0 Z" 
-                  fill="${bgColor}" stroke="${palette[3]}" stroke-width="3.5" />
-            <ellipse cx="0" cy="0" rx="20" ry="20" fill="none" stroke="${palette[0]}" stroke-width="4" />
-            <circle cx="0" cy="0" r="13" fill="${palette[1]}" stroke="#00BFFF" stroke-width="2.5" />
-            <circle cx="0" cy="0" r="7.5" fill="#000000" />
-            <circle cx="-3" cy="-3" r="2.8" fill="#FFFFFF" />
-          </g>
-
-          <g transform="rotate(-45)">
-            <line x1="-50" y1="0" x2="45" y2="0" stroke="${palette[0]}" stroke-width="10" stroke-linecap="square" />
-            <line x1="-48" y1="0" x2="43" y2="0" stroke="#FFFFFF" stroke-width="2.5" />
-            <polygon points="62,0 40,-15 40,15" fill="${palette[0]}" />
-            <polygon points="53,0 42,-8 42,8" fill="#FFFFFF" />
-            <circle cx="0" cy="0" r="17" fill="none" stroke="#00BFFF" stroke-width="2.5" stroke-dasharray="4 3" />
-            <polygon points="-50,0 -64,-15 -56,0 -64,15" fill="#00BFFF" />
-            <line x1="-44" y1="-8" x2="-36" y2="8" stroke="${palette[3]}" stroke-width="3.5" />
-          </g>
+        <rect x="${talismanX}" y="${talismanY}" width="${boxSize}" height="${boxSize}" fill="${bgColor}" stroke="${palette[0]}" stroke-width="3.5" />
+        <rect x="${talismanX + 4}" y="${talismanY + 4}" width="${boxSize - 8}" height="${boxSize - 8}" fill="none" stroke="${detailTextColor}" stroke-width="1" stroke-dasharray="5 3" />
+        <g transform="translate(${talismanX + boxSize/2}, ${talismanY + boxSize/2})">
+          ${iconInner}
         </g>
       `;
 
-      // 2. OMNI-DIRECTIONAL LABYRINTH ENGINE
-      const circuitGroup = document.getElementById('circuit-layer');
-      const overpassGroup = document.getElementById('overpass-layer');
-      circuitGroup.innerHTML = '';
-      overpassGroup.innerHTML = '';
-
-      let tracks = [];
-      const mode = Math.floor(topology);
-      const frac = topology - mode;
-
-      let sVal = currentSeed;
-      function sRand() {
-        sVal = (sVal * 9301 + 49297) % 233280;
-        return sVal / 233280;
-      }
-
-      // Group A: Upper Corridors
-      const upperRuns = Math.min(4, densityCount);
-      for (let i = 0; i < upperRuns; i++) {
-        const yTop = 186 + (i * 14) + (stepShift * 18);
-        const col = palette[(i + 1) % (palette.length - 1)];
-        const strokeW = (i % 2 === 1) ? 3.5 : 11;
-
-        let p = '';
-        if (mode === 0) {
-          const turnX = 540 - (i * 24) + (frac * 40);
-          const dropY = 360 + (i * 18) + (sRand() * 30);
-          p = `M 226 ${yTop} H ${turnX} V ${dropY} H 754 V ${dropY + 45} H 630`;
-        } else if (mode === 1) {
-          const stepX1 = 480 + (i * 16);
-          const stepY1 = 310 + (i * 14);
-          p = `M 226 ${yTop} H ${stepX1} V ${stepY1} H 754 V ${460 + (i * 14)} H 610`;
-        } else {
-          const x1 = 380 + (i * 20);
-          const y1 = 280 + (i * 15);
-          p = `M 226 ${yTop} H ${x1} V ${y1} H 560 V ${410 + (i * 16)} H 754`;
-        }
-
-        tracks.push({
-          d: p,
-          color: col,
-          w: strokeW,
-          capri: (i === 1) ? { d: `M 320 ${yTop} H 430`, w: 3.5 } : null,
-          chrome: (i === 0) ? { d: `M 520 ${yTop} H 680`, w: 4.5, stroke: "url(#chrome-h)" } : null
-        });
-      }
-
-      // Group B: Lineup Wrap-Around Corridor
-      for (let s = 0; s < densityCount; s++) {
-        const chanX = 224 + (s * 11) + (stepShift * 14);
-        const hookY = 684 + (s * 12) + (frac * 20);
-        const strokeW = (s % 2 === 1) ? 3.5 : 11;
-        const col = palette[s % (palette.length - 1)];
-
-        let p = '';
-        if (mode === 0 || mode === 2) {
-          p = `M ${chanX} 246 V ${hookY} H 36 V ${hookY + 40}`;
-        } else {
-          const midStepX = 250 + (s * 10);
-          p = `M ${chanX} 246 V 490 H ${midStepX} V ${hookY} H 36 V ${hookY + 40}`;
-        }
-
-        tracks.push({
-          d: p,
-          color: col,
-          w: strokeW,
-          capri: (s === 1) ? { d: `M ${chanX} 370 V 460`, w: 3.5 } : null
-        });
-      }
-
-      // Group C: Central Dynamic Meander (Strictly clears PURE™)
-      for (let s = 0; s < densityCount; s++) {
-        const startX = 276 + (s * 12);
-        const busY = 310 + (s * 14) + (stepShift * 20);
-        const strokeW = (s % 2 === 0) ? 11 : 3.5;
-        const col = palette[(s + 2) % (palette.length - 1)];
-
-        const leftBranchX = 340 + (s * 8) + (sRand() * 20);
-        const rightBranchX = 475 + (s * 14) + (frac * 30);
-        const drop1 = 480 + (s * 18);
-        const drop2 = 700 + (s * 16);
-        const drop3 = 830 + (s * 12);
-
-        let p = '';
-        if (mode === 0) {
-          p = `M ${startX} ${busY} H ${leftBranchX} V ${drop1} H ${rightBranchX} V ${drop2} H 620 V ${drop3} H 754`;
-        } else if (mode === 1) {
-          p = `M ${startX} ${busY} V ${drop1 - 50} H ${leftBranchX} V ${drop1} H ${rightBranchX} V ${drop2} H 754`;
-        } else {
-          const stairX = 520 + (s * 12);
-          p = `M ${startX} ${busY} H ${leftBranchX} V ${drop1} H ${stairX} V ${drop2 - 40} H 630 V ${drop3} H 754`;
-        }
-
-        tracks.push({
-          d: p,
-          color: col,
-          w: strokeW,
-          capri: (s === 2) ? { d: `M ${rightBranchX} ${drop2} H ${rightBranchX + 70}`, w: 3.5 } : null,
-          chrome: (s === 1) ? { d: `M ${leftBranchX} ${drop1 - 40} V ${drop1}`, w: 4.5, stroke: "url(#chrome-v)" } : null
-        });
-      }
-
-      // Group D: Interlocking Hairpin Bridge
-      const hairpinX = 315 + (stepShift * 35);
-      tracks.push({
-        d: `M 510 186 V 360 H ${hairpinX} V 640 H ${hairpinX + 65}`,
-        color: palette[0],
-        w: 11
-      });
-      tracks.push({
-        d: `M 524 186 V 346 H ${hairpinX - 14} V 654 H ${hairpinX + 65}`,
-        color: palette[3],
-        w: 3.5
-      });
-
-      // Group E: Lower Corridor (Strictly clears ONE BEAT, ValenTime, Date & Sponsors)
-      const lowerRuns = Math.min(4, densityCount);
-      for (let i = 0; i < lowerRuns; i++) {
-        const yLow = 894 + (i * 13) + (stepShift * 16);
-        const strokeW = (i % 2 === 1) ? 3.5 : 11;
-        const slotX = 486 + (i * 8);
-
-        let p = '';
-        if (mode === 0 || mode === 1) {
-          p = `M 240 ${yLow} H ${slotX} V 1150 H 754`;
-        } else {
-          const midJogY = 940 + (i * 10);
-          p = `M 240 ${yLow} H 380 V ${midJogY} H ${slotX} V 1150 H 754`;
-        }
-
-        tracks.push({
-          d: p,
-          color: palette[(i + 3) % (palette.length - 1)],
-          w: strokeW,
-          capri: (i === 0) ? { d: `M 290 ${yLow} H 390`, w: 3.5 } : null
-        });
-      }
-
-      // Render Tracks
-      let svgTrackMarkup = '';
-      tracks.forEach(t => {
-        svgTrackMarkup += `<path d="${t.d}" stroke="${t.color}" stroke-width="${t.w}" fill="none" stroke-linecap="square" stroke-linejoin="miter" />`;
-        if (t.capri) {
-          svgTrackMarkup += `<path d="${t.capri.d}" stroke="#00BFFF" stroke-width="${t.capri.w}" fill="none" stroke-linecap="square" />`;
-        }
-        if (t.chrome) {
-          svgTrackMarkup += `<path d="${t.chrome.d}" stroke="${t.chrome.stroke}" stroke-width="${t.chrome.w}" fill="none" stroke-linecap="square" />`;
-        }
-      });
-      circuitGroup.innerHTML = svgTrackMarkup;
-
-      // Overpass Layer
-      overpassGroup.innerHTML = `
-        <path d="M 510 186 V 360 H ${hairpinX} V 640 H ${hairpinX + 65}" stroke="${palette[0]}" stroke-width="11" fill="none" stroke-linecap="square" />
-        <path d="M 524 186 V 346 H ${hairpinX - 14} V 654 H ${hairpinX + 65}" stroke="#00BFFF" stroke-width="3.5" fill="none" stroke-linecap="square" />
-      `;
-
-      // 3. FULLY EDITABLE TYPOGRAPHY
+      // 2. TYPOGRAPHY LAYER
       const typeGroup = document.getElementById('type-layer');
+      let typeMarkup = '';
 
-      function buildEditableHeadline(text, startX, baselineY, fontSize, textColor, sigilColor, anchor, prefixId) {
-        let tspanMarkup = '';
+      function renderHeadlineSpan(text, idPrefix, colA, colB) {
+        let out = '';
         for (let i = 0; i < text.length; i++) {
-          const char = text[i];
-          if (char === 'A' || char === 'a') {
-            tspanMarkup += `<tspan id="${prefixId}-a-${i}" fill="${sigilColor}">${char}</tspan>`;
+          const ch = text[i];
+          if (ch === 'A' || ch === 'a') {
+            out += `<tspan id="${idPrefix}-a-${i}" fill="${colB}">${ch}</tspan>`;
           } else {
-            tspanMarkup += char;
+            out += ch;
           }
         }
-        return `<text id="${prefixId}-text" x="${startX}" y="${baselineY}" text-anchor="${anchor}" class="font-tomorrow" font-size="${fontSize}" fill="${textColor}">${tspanMarkup}</text>`;
+        return out;
       }
 
       let lineupRows = '';
-      lineup.forEach((item, index) => {
-        lineupRows += `<text x="36" y="${450 + (index * 23)}">${item}</text>`;
+      lineup.forEach((item, idx) => {
+        lineupRows += `<text x="0" y="${idx * 23}">${item}</text>`;
       });
 
-      let dateParts = dateVal.split(' ');
-      let dateP1 = dateParts[0] || 'FEB';
-      let dateP2 = dateParts[1] || '14';
-      let dateP3 = dateParts[2] || '2014';
+      let venueX = 764, venueY = 1120, venueAnchor = 'end', venueRotate = 0;
+      let dateX = 36, dateY = 1120, dateAnchor = 'start';
+      let admX = 340, admY = 740, admAngle = 45;
 
-      typeGroup.innerHTML = `
-        <!-- H1: TWO HEARTS -->
-        <g id="h1-top-group">
-          ${buildEditableHeadline(h1Top, 754, 136, 80, primaryTextColor, secondaryTextColor, 'end', 'h1-top')}
-        </g>
-        <text x="754" y="270" text-anchor="end" class="font-tomorrow" font-size="42" fill="${secondaryTextColor}">
-          ${h2Top}
-        </text>
-        <g class="font-garamond" font-size="20.5" fill="${detailTextColor}">
-          ${lineupRows}
-        </g>
-        <g transform="translate(300, 710) rotate(48)">
-          <text x="0" y="0" class="font-garamond" font-size="42" fill="${secondaryTextColor}">${admission}</text>
-        </g>
-        <g transform="translate(686, 730) rotate(-90)">
-          <text x="0" y="0" class="font-garamond" font-size="22" fill="${detailTextColor}" letter-spacing="1.5">
-            ${venue}
-          </text>
-        </g>
-        <!-- PURE™ BITBY.TV (Clean Rotated Typographic Lockup - ZERO OVERLAP) -->
-        <g transform="translate(426, 600) rotate(-90)">
-          <text x="0" y="0" class="font-cooper" font-size="26" fill="${primaryTextColor}">PURE™</text>
-          <text x="86" y="0" class="font-barlow" font-size="21" fill="${secondaryTextColor}">BITBY.TV</text>
-        </g>
-        <text x="36" y="860" class="font-tomorrow" font-size="42" fill="${secondaryTextColor}">
-          ${h2Bottom}
-        </text>
-        <!-- H1: ONE BEAT -->
-        <g id="h1-bottom-group">
-          ${buildEditableHeadline(h1Bottom, 36, 1084, 90, primaryTextColor, secondaryTextColor, 'start', 'h1-bottom')}
-        </g>
-        <g class="font-garamond" font-size="28" fill="${primaryTextColor}">
-          <text x="530" y="1022">${dateP1}</text>
-          <text x="530" y="1056">${dateP2}</text>
-          <text x="530" y="1090">${dateP3}</text>
-        </g>
-        <g transform="translate(616, 912)" fill="${primaryTextColor}" stroke="${primaryTextColor}">
-          <circle cx="20" cy="-24" r="16" fill="none" stroke-width="2" />
-          <text x="11" y="-18" class="font-tomorrow" font-size="11" stroke="none">MT</text>
-          <text x="-32" y="16" class="font-tomorrow" font-size="12" stroke="none">Dr. Martens</text>
-          <text x="64" y="16" font-family="sans-serif" font-size="16" stroke="none">★</text>
-          <text x="52" y="30" class="font-tomorrow" font-size="9" stroke="none">Heineken</text>
+      if (state.metaScatterMode === 1) {
+        venueX = 750; venueY = 480; venueRotate = 90; venueAnchor = 'start';
+        dateX = 764; dateY = 1120; dateAnchor = 'end';
+        admX = 420; admY = 320; admAngle = 40;
+      } else if (state.metaScatterMode === 2) {
+        venueX = 36; venueY = 790; venueAnchor = 'start'; venueRotate = 0;
+        dateX = 764; dateY = 80; dateAnchor = 'end';
+        admX = 660; admY = 620; admAngle = -42;
+      }
+
+      const brandLockup = `
+        <g id="brand-group" transform="translate(${764 + textOffsets['badge'].x}, ${460 + textOffsets['badge'].y}) rotate(90)">
+          <text x="0" y="0" class="font-cooper" font-size="24" fill="${primaryTextColor}">${badgeBrand}</text>
+          <text x="0" y="0" dx="${badgeBrand.length * 16 + 16}" class="font-barlow" font-size="20" fill="${secondaryTextColor}">${badgeSub}</text>
         </g>
       `;
 
-      // 4. PRECISE DEAD-CENTER ARROW ATTACHMENT
+      const diagonalAdmission = `
+        <g id="admission-group" transform="translate(${admX + textOffsets['admission'].x}, ${admY + textOffsets['admission'].y}) rotate(${admAngle})">
+          <text x="0" y="0" class="font-garamond" font-size="44" font-weight="700" fill="${secondaryTextColor}" text-anchor="middle">${admission}</text>
+        </g>
+      `;
+
+      if (state.layoutVariant === 0) {
+        typeMarkup = `
+          <g id="h1-top-group" transform="translate(${textOffsets['h1-top'].x}, ${textOffsets['h1-top'].y})">
+            <text id="h1-top-text" x="400" y="560" text-anchor="middle" class="font-tomorrow" font-size="64" font-weight="700" fill="${primaryTextColor}">
+              ${renderHeadlineSpan(h1Top, 'h1-top', primaryTextColor, secondaryTextColor)}
+            </text>
+          </g>
+          <g id="h1-bottom-group" transform="translate(${textOffsets['h1-bottom'].x}, ${textOffsets['h1-bottom'].y})">
+            <text id="h1-bottom-text" x="400" y="635" text-anchor="middle" class="font-tomorrow" font-size="52" fill="${secondaryTextColor}">
+              ${renderHeadlineSpan(h1Bottom, 'h1-bottom', secondaryTextColor, primaryTextColor)}
+            </text>
+          </g>
+          <g id="h2-group" transform="translate(${textOffsets['h2'].x}, ${textOffsets['h2'].y})">
+            <text x="${talismanX === 36 ? 190 : 36}" y="80" class="font-tomorrow" font-size="28" font-weight="700" fill="${primaryTextColor}">${h2Top}</text>
+            <text x="${talismanX === 36 ? 190 : 36}" y="115" class="font-tomorrow" font-size="20" fill="${secondaryTextColor}">${h2Bottom}</text>
+          </g>
+          <g id="lineup-group" transform="translate(${36 + textOffsets['lineup'].x}, ${880 + textOffsets['lineup'].y})" class="font-garamond" font-size="19" fill="${detailTextColor}">
+            ${lineupRows}
+          </g>
+          ${brandLockup}
+          ${diagonalAdmission}
+          <g id="venue-group" transform="translate(${textOffsets['venue'].x}, ${textOffsets['venue'].y})">
+            <text x="${venueX}" y="${venueY}" transform="${venueRotate ? `rotate(${venueRotate}, ${venueX},${venueY})` : ''}" text-anchor="${venueAnchor}" class="font-garamond" font-size="22" fill="${detailTextColor}">${venue}</text>
+          </g>
+          <g id="date-group" transform="translate(${textOffsets['date'].x}, ${textOffsets['date'].y})">
+            <text x="${dateX}" y="${dateY}" text-anchor="${dateAnchor}" class="font-garamond" font-size="24" fill="${secondaryTextColor}">${dateVal}</text>
+          </g>
+        `;
+      } else if (state.layoutVariant === 1) {
+        typeMarkup = `
+          <g id="h1-top-group" transform="translate(${textOffsets['h1-top'].x}, ${textOffsets['h1-top'].y})">
+            <text id="h1-top-text" x="36" y="110" text-anchor="start" class="font-tomorrow" font-size="64" font-weight="700" fill="${primaryTextColor}">
+              ${renderHeadlineSpan(h1Top, 'h1-top', primaryTextColor, secondaryTextColor)}
+            </text>
+          </g>
+          <g id="h2-group" transform="translate(${textOffsets['h2'].x}, ${textOffsets['h2'].y})">
+            <text x="36" y="155" class="font-tomorrow" font-size="24" fill="${secondaryTextColor}">${h2Top} // ${h2Bottom}</text>
+          </g>
+          <g id="lineup-group" transform="translate(${36 + textOffsets['lineup'].x}, ${430 + textOffsets['lineup'].y})" class="font-garamond" font-size="20" fill="${detailTextColor}">
+            ${lineupRows}
+          </g>
+          <g id="h1-bottom-group" transform="translate(${textOffsets['h1-bottom'].x}, ${textOffsets['h1-bottom'].y})">
+            <text id="h1-bottom-text" x="764" y="1030" text-anchor="end" class="font-tomorrow" font-size="68" font-weight="700" fill="${primaryTextColor}">
+              ${renderHeadlineSpan(h1Bottom, 'h1-bottom', primaryTextColor, secondaryTextColor)}
+            </text>
+          </g>
+          ${brandLockup}
+          ${diagonalAdmission}
+          <g id="venue-group" transform="translate(${textOffsets['venue'].x}, ${textOffsets['venue'].y})">
+            <text x="${venueX}" y="${venueY}" transform="${venueRotate ? `rotate(${venueRotate}, ${venueX},${venueY})` : ''}" text-anchor="${venueAnchor}" class="font-garamond" font-size="22" fill="${detailTextColor}">${venue}</text>
+          </g>
+          <g id="date-group" transform="translate(${textOffsets['date'].x}, ${textOffsets['date'].y})">
+            <text x="${dateX}" y="${dateY}" text-anchor="${dateAnchor}" class="font-garamond" font-size="24" fill="${secondaryTextColor}">${dateVal}</text>
+          </g>
+        `;
+      } else {
+        typeMarkup = `
+          <g id="h1-top-group" transform="translate(${textOffsets['h1-top'].x}, ${textOffsets['h1-top'].y})">
+            <text id="h1-top-text" x="764" y="110" text-anchor="end" class="font-tomorrow" font-size="64" font-weight="700" fill="${primaryTextColor}">
+              ${renderHeadlineSpan(h1Top, 'h1-top', primaryTextColor, secondaryTextColor)}
+            </text>
+          </g>
+          <g id="h2-group" transform="translate(${textOffsets['h2'].x}, ${textOffsets['h2'].y})">
+            <text x="764" y="155" text-anchor="end" class="font-tomorrow" font-size="26" fill="${secondaryTextColor}">${h2Top}</text>
+            <text x="36" y="960" class="font-tomorrow" font-size="30" fill="${secondaryTextColor}">${h2Bottom}</text>
+          </g>
+          <g id="lineup-group" transform="translate(${36 + textOffsets['lineup'].x}, ${440 + textOffsets['lineup'].y})" class="font-garamond" font-size="20" fill="${detailTextColor}">
+            ${lineupRows}
+          </g>
+          <g id="h1-bottom-group" transform="translate(${textOffsets['h1-bottom'].x}, ${textOffsets['h1-bottom'].y})">
+            <text id="h1-bottom-text" x="36" y="1040" text-anchor="start" class="font-tomorrow" font-size="68" font-weight="700" fill="${primaryTextColor}">
+              ${renderHeadlineSpan(h1Bottom, 'h1-bottom', primaryTextColor, secondaryTextColor)}
+            </text>
+          </g>
+          ${brandLockup}
+          ${diagonalAdmission}
+          <g id="venue-group" transform="translate(${textOffsets['venue'].x}, ${textOffsets['venue'].y})">
+            <text x="${venueX}" y="${venueY}" transform="${venueRotate ? `rotate(${venueRotate}, ${venueX},${venueY})` : ''}" text-anchor="${venueAnchor}" class="font-garamond" font-size="22" fill="${detailTextColor}">${venue}</text>
+          </g>
+          <g id="date-group" transform="translate(${textOffsets['date'].x}, ${textOffsets['date'].y})">
+            <text x="${dateX}" y="${dateY}" text-anchor="${dateAnchor}" class="font-garamond" font-size="24" fill="${secondaryTextColor}">${dateVal}</text>
+          </g>
+        `;
+      }
+
+      typeGroup.innerHTML = typeMarkup;
+
+      // 3. MULTI-AXIS PROCEDURAL STRIPES
+      const circuitGroup = document.getElementById('circuit-layer');
+      circuitGroup.innerHTML = '';
+      let tracks = [];
+
+      for (let i = 0; i < density; i++) {
+        const off = stripeOffsets[i];
+        const dir = off ? off.dir : 'h';
+        const offX = off ? off.x : 0;
+        const offY = off ? off.y : 0;
+
+        const col = (i % 2 === 0) ? "url(#grad-track-1)" : (i % 3 === 0 ? "url(#grad-track-2)" : palette[(i + 1) % palette.length]);
+        const strokeW = (i % 3 === 0) ? 8 : (i % 2 === 0 ? 4 : 2.5);
+
+        let d = '';
+        if (dir === 'h') {
+          const baseH = (i % 2 === 0) ? 240 : 760;
+          const y = Math.min(1150, Math.max(50, baseH + offY + (i * 26)));
+          const x1 = Math.min(600, Math.max(36, 36 + offX));
+          const stepX = Math.min(764, Math.max(150, 440 + offX + (i * 20)));
+          d = `M ${x1} ${y} H ${stepX} V ${y + 45} H 764`;
+        } else if (dir === 'v') {
+          const baseV = 280 + (i * 48);
+          const x = Math.min(750, Math.max(50, baseV + offX));
+          const y1 = Math.min(600, Math.max(80, 180 + offY));
+          const y2 = Math.min(1100, Math.max(300, 780 + offY));
+          d = `M ${x} ${y1} V ${y2} H ${x + 75} V ${y2 + 90}`;
+        } else {
+          const startX = Math.min(700, Math.max(50, 240 + offX + (i * 28)));
+          const startY = Math.min(600, Math.max(100, 220 + offY));
+          d = `M ${startX} ${startY} H ${startX + 130} V ${startY + 190} H ${startX + 270} V ${startY + 420} H 764`;
+        }
+
+        tracks.push({ d: d, stroke: col, w: strokeW });
+      }
+
+      let circuitSvg = '';
+      tracks.forEach(t => {
+        circuitSvg += `<path d="${t.d}" stroke="${t.stroke}" stroke-width="${t.w}" fill="none" stroke-linecap="square" stroke-linejoin="miter" />`;
+      });
+      circuitGroup.innerHTML = circuitSvg;
+
+      // 4. PRECISION CENTERED ARROW IN 'A' GLYPHS
       setTimeout(() => {
         try {
           const svg = document.getElementById('poster-svg');
+          ['h1-top', 'h1-bottom'].forEach(prefix => {
+            const textVal = (prefix === 'h1-top') ? h1Top : h1Bottom;
+            const containerGroup = document.getElementById(`${prefix}-group`);
+            if (!containerGroup) return;
 
-          for (let i = 0; i < h1Top.length; i++) {
-            const tspanA = document.getElementById(`h1-top-a-${i}`);
-            if (tspanA && svg) {
-              const bbox = tspanA.getBBox();
-              const centerX = bbox.x + (bbox.width / 2);
-              const centerY = bbox.y + (bbox.height * 0.54);
+            for (let i = 0; i < textVal.length; i++) {
+              const el = document.getElementById(`${prefix}-a-${i}`);
+              if (el && svg) {
+                const bbox = el.getBBox();
+                const centerX = bbox.x + (bbox.width / 2);
+                const centerY = bbox.y + (bbox.height * 0.54);
 
-              const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-              useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#heavy-arrow-a');
-              useEl.setAttribute('x', centerX);
-              useEl.setAttribute('y', centerY);
-              useEl.setAttribute('style', `color: ${secondaryTextColor};`);
-              document.getElementById('h1-top-group').appendChild(useEl);
+                const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+                useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#heavy-arrow-a');
+                useEl.setAttribute('x', centerX);
+                useEl.setAttribute('y', centerY);
+                useEl.setAttribute('style', `color: ${secondaryTextColor};`);
+                containerGroup.appendChild(useEl);
+              }
             }
-          }
-
-          for (let i = 0; i < h1Bottom.length; i++) {
-            const tspanA = document.getElementById(`h1-bottom-a-${i}`);
-            if (tspanA && svg) {
-              const bbox = tspanA.getBBox();
-              const centerX = bbox.x + (bbox.width / 2);
-              const centerY = bbox.y + (bbox.height * 0.54);
-
-              const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-              useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#heavy-arrow-a');
-              useEl.setAttribute('x', centerX);
-              useEl.setAttribute('y', centerY);
-              useEl.setAttribute('style', `color: ${secondaryTextColor};`);
-              document.getElementById('h1-bottom-group').appendChild(useEl);
-            }
-          }
+          });
         } catch (e) {
-          console.warn('Glyph center alignment fallback active', e);
+          // Graceful fallback for layout recalculations
         }
       }, 50);
     }
 
-    // UI Event Listeners
+    function renderSampleThumbnails() {
+      SAMPLE_PRESETS.forEach((preset, index) => {
+        const svgEl = document.getElementById(`sample-svg-${index}`);
+        if (!svgEl) return;
+
+        const isWhiteBg = (preset.bg === 'white');
+        const bgColor = isWhiteBg ? '#F8F9FA' : '#070709';
+        const basePalette = [...PALETTES[preset.palette]];
+        const p0 = basePalette[0];
+        const p1 = basePalette[1];
+        const p2 = basePalette[2];
+        const p3 = basePalette[3];
+        const pSecondary = isWhiteBg ? '#C2410C' : p0;
+        const pPrimary = isWhiteBg ? '#0A0A0E' : '#FFFFFF';
+        const pDetail = isWhiteBg ? '#1E293B' : '#E2E8F0';
+
+        const talismanInner = getTalismanInner(preset.icon, basePalette, bgColor, p3);
+
+        let linesMarkup = '';
+        if (index % 2 === 0) {
+          linesMarkup = `
+            <path d="M 40 280 H 450 V 330 H 760" stroke="${p1}" stroke-width="4.5" fill="none" />
+            <path d="M 240 760 H 520 V 810 H 760" stroke="${p2}" stroke-width="7" fill="none" />
+            <path d="M 80 840 H 600 V 890 H 760" stroke="${p0}" stroke-width="3" fill="none" />
+          `;
+        } else {
+          linesMarkup = `
+            <path d="M 320 200 V 700 H 420 V 800" stroke="${p0}" stroke-width="6" fill="none" />
+            <path d="M 480 300 V 900 H 560 V 980" stroke="${p1}" stroke-width="3.5" fill="none" />
+            <path d="M 120 400 H 300 V 600 H 720" stroke="${p2}" stroke-width="4" fill="none" />
+          `;
+        }
+
+        svgEl.innerHTML = `
+          <rect width="800" height="1200" fill="${bgColor}" />
+          ${linesMarkup}
+          <!-- Talisman -->
+          <rect x="36" y="36" width="136" height="136" fill="${bgColor}" stroke="${p0}" stroke-width="3.5" />
+          <g transform="translate(104, 104)">
+            ${talismanInner}
+          </g>
+          <!-- Typography -->
+          <g class="font-tomorrow">
+            <text x="400" y="560" text-anchor="middle" font-size="58" font-weight="700" fill="${pPrimary}">${preset.h1Top}</text>
+            <text x="400" y="630" text-anchor="middle" font-size="48" fill="${pSecondary}">${preset.h1Bottom}</text>
+            <text x="190" y="80" font-size="28" font-weight="700" fill="${pPrimary}">${preset.h2Top}</text>
+            <text x="190" y="115" font-size="20" fill="${pSecondary}">${preset.h2Bottom}</text>
+          </g>
+          <g class="font-garamond" font-size="20" fill="${pDetail}">
+            <text x="36" y="900">${preset.lineup.split('\n')[0] || ''}</text>
+            <text x="36" y="930">${preset.lineup.split('\n')[1] || ''}</text>
+            <text x="36" y="960">${preset.lineup.split('\n')[2] || ''}</text>
+            <text x="36" y="1120" font-size="24" fill="${pSecondary}">${preset.date}</text>
+            <text x="764" y="1120" text-anchor="end" font-size="20">${preset.venue}</text>
+          </g>
+        `;
+      });
+    }
+
+    function loadSamplePreset(index) {
+      const preset = SAMPLE_PRESETS[index];
+      if (!preset) return;
+
+      document.getElementById('canvas-bg-select').value = preset.bg;
+      document.getElementById('palette-select').value = preset.palette;
+      document.getElementById('icon-variant-select').value = preset.icon;
+      document.getElementById('maze-density').value = preset.density;
+      document.getElementById('density-val').textContent = `${preset.density} Bands`;
+
+      document.getElementById('h1-top').value = preset.h1Top;
+      document.getElementById('h1-bottom').value = preset.h1Bottom;
+      document.getElementById('h2-top').value = preset.h2Top;
+      document.getElementById('h2-bottom').value = preset.h2Bottom;
+      document.getElementById('badge-brand-input').value = preset.badgeBrand;
+      document.getElementById('badge-sub-input').value = preset.badgeSub;
+      document.getElementById('lineup-input').value = preset.lineup;
+      document.getElementById('venue-input').value = preset.venue;
+      document.getElementById('date-input').value = preset.date;
+      document.getElementById('admission-input').value = preset.admission;
+
+      state.layoutVariant = preset.layoutVariant;
+      state.metaScatterMode = preset.metaScatterMode;
+      state.iconVariant = preset.icon;
+      state.colorShuffle = [0, 1, 2, 3, 4, 5];
+
+      // Reset displacement sliders
+      const textKeys = ['h1-top', 'h1-bottom', 'h2', 'badge', 'lineup', 'venue', 'date', 'admission'];
+      textKeys.forEach(k => {
+        textOffsets[k].x = 0;
+        textOffsets[k].y = 0;
+      });
+
+      const sliderMappings = [
+        ['h1-top-x', 'h1-top-x-val'], ['h1-top-y', 'h1-top-y-val'],
+        ['h1-bottom-x', 'h1-bottom-x-val'], ['h1-bottom-y', 'h1-bottom-y-val'],
+        ['stripe-shift-x', 'pos-shift-x-val'], ['stripe-shift-y', 'pos-shift-y-val']
+      ];
+      sliderMappings.forEach(([sliderId, valId]) => {
+        const el = document.getElementById(sliderId);
+        const valEl = document.getElementById(valId);
+        if (el) el.value = 0;
+        if (valEl) valEl.textContent = '0';
+      });
+
+      // Update badge indicator in editor
+      const presetTag = document.getElementById('active-preset-tag');
+      if (presetTag) {
+        presetTag.textContent = `Preset: ${preset.name}`;
+      }
+
+      renderPoster();
+
+      // Smooth feedback scroll on mobile
+      if (window.innerWidth < 1280) {
+        document.getElementById('poster-frame').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function rollDice() {
+      const icons = ['eye', 'radar', 'crosshair', 'prism', 'compass', 'hex', 'monolith', 'reticle'];
+      const positions = ['TL', 'TR'];
+      const paletteKeys = Object.keys(PALETTES);
+      const directions = ['h', 'v', 's'];
+
+      state.iconVariant = pickRandom(icons);
+      state.iconPosition = pickRandom(positions);
+      state.layoutVariant = Math.floor(Math.random() * 3);
+      state.metaScatterMode = Math.floor(Math.random() * 3);
+      state.colorShuffle = shuffleArray([0, 1, 2, 3, 4, 5]);
+
+      const pool = pickRandom(HEADLINE_POOLS);
+      document.getElementById('h1-top').value = pool[0];
+      document.getElementById('h1-bottom').value = pool[1];
+      document.getElementById('h2-top').value = pool[2];
+      document.getElementById('h2-bottom').value = pool[3];
+
+      const randomPalette = pickRandom(paletteKeys);
+      document.getElementById('palette-select').value = randomPalette;
+
+      const randomDensity = Math.floor(Math.random() * 6) + 2;
+      document.getElementById('maze-density').value = randomDensity;
+      document.getElementById('density-val').textContent = `${randomDensity} Bands`;
+
+      // Reset text offsets
+      Object.keys(textOffsets).forEach(k => {
+        textOffsets[k].x = 0;
+        textOffsets[k].y = 0;
+      });
+
+      stripeOffsets.forEach((st) => {
+        st.x = (Math.random() - 0.5) * 200;
+        st.y = (Math.random() - 0.5) * 200;
+        st.dir = pickRandom(directions);
+      });
+
+      document.getElementById('active-preset-tag').textContent = 'Preset: Randomized';
+      renderPoster();
+    }
+
+    function setupTextSlider(sliderId, valId, key, axis) {
+      const slider = document.getElementById(sliderId);
+      if (slider) {
+        slider.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value);
+          const valLabel = document.getElementById(valId);
+          if (valLabel) valLabel.textContent = val;
+          textOffsets[key][axis] = val;
+          renderPoster();
+        });
+      }
+    }
+
+    setupTextSlider('h1-top-x', 'h1-top-x-val', 'h1-top', 'x');
+    setupTextSlider('h1-top-y', 'h1-top-y-val', 'h1-top', 'y');
+    setupTextSlider('h1-bottom-x', 'h1-bottom-x-val', 'h1-bottom', 'x');
+    setupTextSlider('h1-bottom-y', 'h1-bottom-y-val', 'h1-bottom', 'y');
+
+    // Stripe Shift Handlers
+    function applyStripeShift() {
+      const activeIdx = document.getElementById('active-track-select').value;
+      const xVal = parseFloat(document.getElementById('stripe-shift-x').value);
+      const yVal = parseFloat(document.getElementById('stripe-shift-y').value);
+
+      document.getElementById('pos-shift-x-val').textContent = xVal;
+      document.getElementById('pos-shift-y-val').textContent = yVal;
+
+      if (activeIdx === 'all') {
+        stripeOffsets.forEach(st => {
+          st.x = xVal;
+          st.y = yVal;
+        });
+      } else {
+        const idx = parseInt(activeIdx, 10);
+        if (stripeOffsets[idx]) {
+          stripeOffsets[idx].x = xVal;
+          stripeOffsets[idx].y = yVal;
+        }
+      }
+      renderPoster();
+    }
+
+    document.getElementById('stripe-shift-x').addEventListener('input', applyStripeShift);
+    document.getElementById('stripe-shift-y').addEventListener('input', applyStripeShift);
+
+    document.getElementById('gen-roll-dice-btn').addEventListener('click', rollDice);
+    document.getElementById('header-dice-btn').addEventListener('click', rollDice);
+
     document.getElementById('maze-density').addEventListener('input', (e) => {
-      document.getElementById('density-val').textContent = `${parseFloat(e.target.value).toFixed(2)} Bands`;
-      renderPoster();
-    });
-
-    document.getElementById('motion-topology').addEventListener('input', (e) => {
-      document.getElementById('topology-val').textContent = `Mode ${(parseFloat(e.target.value) + 1).toFixed(2)}`;
-      renderPoster();
-    });
-
-    document.getElementById('motion-shift').addEventListener('input', (e) => {
-      document.getElementById('step-shift-val').textContent = `${parseFloat(e.target.value).toFixed(2)}`;
-      renderPoster();
-    });
-
-    document.getElementById('maze-variation').addEventListener('input', (e) => {
-      document.getElementById('turn-style-val').textContent = `Level ${parseFloat(e.target.value).toFixed(1)}`;
+      document.getElementById('density-val').textContent = `${e.target.value} Bands`;
       renderPoster();
     });
 
     document.getElementById('palette-select').addEventListener('change', renderPoster);
     document.getElementById('canvas-bg-select').addEventListener('change', renderPoster);
+    document.getElementById('icon-variant-select').addEventListener('change', renderPoster);
 
-    ['h1-top', 'h1-bottom', 'h2-top', 'h2-bottom', 'venue-input', 'admission-input', 'date-input'].forEach(id => {
-      document.getElementById(id).addEventListener('input', renderPoster);
+    [
+      'h1-top', 'h1-bottom', 'h2-top', 'h2-bottom', 
+      'badge-brand-input', 'badge-sub-input',
+      'venue-input', 'admission-input', 'date-input'
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', renderPoster);
     });
 
     document.getElementById('lineup-input').addEventListener('input', renderPoster);
 
-    document.getElementById('generate-btn').addEventListener('click', () => {
-      currentSeed = Math.floor(Math.random() * 90000) + 1000;
-      document.getElementById('seed-val').textContent = currentSeed;
-      document.getElementById('seed-input').value = currentSeed;
-      document.getElementById('motion-topology').value = (Math.random() * 2.8).toFixed(2);
-      document.getElementById('topology-val').textContent = `Mode ${(parseFloat(document.getElementById('motion-topology').value) + 1).toFixed(2)}`;
-      document.getElementById('motion-shift').value = Math.random().toFixed(2);
-      document.getElementById('step-shift-val').textContent = document.getElementById('motion-shift').value;
-      renderPoster();
-    });
-
-    document.getElementById('random-seed-btn').addEventListener('click', () => {
-      currentSeed = Math.floor(Math.random() * 90000) + 1000;
-      document.getElementById('seed-val').textContent = currentSeed;
-      document.getElementById('seed-input').value = currentSeed;
-      document.getElementById('motion-topology').value = (Math.random() * 2.8).toFixed(2);
-      document.getElementById('topology-val').textContent = `Mode ${(parseFloat(document.getElementById('motion-topology').value) + 1).toFixed(2)}`;
-      document.getElementById('motion-shift').value = Math.random().toFixed(2);
-      document.getElementById('step-shift-val').textContent = document.getElementById('motion-shift').value;
-      renderPoster();
-    });
-
-    document.getElementById('seed-input').addEventListener('change', (e) => {
-      currentSeed = parseInt(e.target.value, 10) || 1024;
-      document.getElementById('seed-val').textContent = currentSeed;
-      renderPoster();
-    });
-
-    // 2x Retina PNG Canvas Exporter (1600 x 2400)
-    document.getElementById('export-png-btn').addEventListener('click', () => {
+    /* Export PNG handler */
+    document.getElementById('gen-export-png-btn').addEventListener('click', () => {
       const svg = document.getElementById('poster-svg');
       const svgData = new XMLSerializer().serializeToString(svg);
       const canvas = document.createElement('canvas');
@@ -827,16 +1277,18 @@ Tony Modica</textarea>
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(url);
         const a = document.createElement('a');
-        const bg = document.getElementById('canvas-bg-select').value;
-        a.download = `valentime-labyrinth-${bg}-${currentSeed}.png`;
+        a.download = `postergenerator-${Date.now()}.png`;
         a.href = canvas.toDataURL('image/png');
         a.click();
       };
       img.src = url;
     });
 
-    // Initial Execution
-    renderPoster();
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPoster();
+      renderSampleThumbnails();
+    });
   </script>
 </body>
 </html>
