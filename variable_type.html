@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE TELEPORTER // Live Transit Synthesizer & Generator</title>
+
+  <!-- Typography Stack: Tomorrow, EB Garamond, Barlow Condensed, Ojuju Variable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ojuju:wght@200..800&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'Cooper Hewitt';
+      src: local('Cooper Hewitt Bold Italic'), local('CooperHewitt-BoldItalic'), local('Arial Black');
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    :root {
+      --bg-dark: #070709;
+      --panel-bg: #101016;
+      --border-color: #232332;
+      --text-muted: #9494a8;
+      --accent-red: #e11d2b;
+      --accent-blue: #00bfff;
+      --accent-orange: #ffa454;
+      --accent-green: #34d399;
+      --icon-color: #00bfff;
+      --time-color: #ffa454;
+      --rail-speed: 14s;        /* Smooth, measured horizontal railway traverse */
+      --weight-speed: 3.2s;      /* Balanced bolding and return cycle */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e5e7eb;
+      font-family: 'Tomorrow', sans-serif;
+      font-weight: 400;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Left Control Sidebar */
+    .sidebar {
+      width: 470px;
+      min-width: 410px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: #09090d;
+    }
+
+    .sidebar-header h1 {
+      font-size: 13.5px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .sidebar-header h1 span { color: var(--accent-blue); }
+
+    .sidebar-header p {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar-content {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-box {
+      background: #14141e;
+      border: 1px solid #232332;
+      border-radius: 4px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-box summary {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-blue);
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-box summary::after { content: '▾'; font-size: 12px; color: var(--text-muted); }
+    details[open] summary::after { content: '▴'; }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .control-group label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-group input[type="text"],
+    .control-group select {
+      background: #09090d;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: #ffffff;
+      padding: 7px 10px;
+      font-family: 'Tomorrow', sans-serif;
+      font-weight: 400;
+      font-size: 11.5px;
+      outline: none;
+    }
+
+    .color-picker-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .color-picker-row input[type="color"] {
+      border: 1px solid var(--border-color);
+      background: none;
+      width: 32px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-wrap input[type="range"] {
+      flex: 1;
+      height: 6px;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    .btn-row { display: flex; gap: 8px; }
+
+    .btn {
+      background: #191926;
+      color: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      font-family: 'Tomorrow', sans-serif;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: all 0.15s ease;
+      font-weight: 700;
+    }
+
+    .btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+    .btn-primary {
+      background: var(--accent-red);
+      border-color: #ff4352;
+      color: #ffffff;
+    }
+    .btn-primary:hover { background: #ff3344; color: #ffffff; }
+
+    .btn-blue {
+      background: #00bfff;
+      border-color: #38bdf8;
+      color: #070709;
+    }
+    .btn-blue:hover { background: #38bdf8; }
+
+    /* Viewport Stage */
+    .viewport {
+      flex: 1;
+      background: #040406;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    #poster-frame {
+      height: min(94vh, 980px);
+      aspect-ratio: 800 / 1200;
+      position: relative;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95);
+      border: 1px solid #1a1a24;
+      flex-shrink: 0;
+      background: #070709;
+      overflow: hidden;
+    }
+
+    svg#poster-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .circuit-path-animated {
+      stroke-dasharray: 24 12;
+      animation: circuitFlow 4s linear infinite;
+    }
+
+    @keyframes circuitFlow {
+      from { stroke-dashoffset: 72; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Track-Bound Train Texts */
+    .train-text-path {
+      font-family: 'Ojuju', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      fill: #ffffff;
+      transition: fill 0.2s;
+    }
+
+    .train-text-path:hover { fill: var(--accent-blue); }
+
+    /* =========================================================================
+       DYNAMIC COLOR GRADIENT SHIFTING & BALANCED KINETIC HEADINGS
+       ========================================================================= */
+
+    .railway-heading-east {
+      font-family: 'Ojuju', sans-serif;
+      font-optical-sizing: auto;
+      fill: url(#heading-color-sweep-1);
+      animation: 
+        slideEast var(--rail-speed) linear infinite,
+        smoothWeightPulseEast var(--weight-speed) ease-in-out infinite alternate;
+      cursor: crosshair;
+      white-space: nowrap;
+      will-change: transform, font-variation-settings;
+      filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.35));
+    }
+
+    .railway-heading-west {
+      font-family: 'Ojuju', sans-serif;
+      font-optical-sizing: auto;
+      fill: url(#heading-color-sweep-2);
+      animation: 
+        slideWest var(--rail-speed) linear infinite,
+        smoothWeightPulseWest var(--weight-speed) ease-in-out infinite alternate;
+      cursor: crosshair;
+      white-space: nowrap;
+      will-change: transform, font-variation-settings;
+      filter: drop-shadow(0 0 10px rgba(255, 164, 84, 0.35));
+    }
+
+    .railway-heading-east:hover,
+    .railway-heading-west:hover {
+      animation-play-state: paused;
+      filter: drop-shadow(0 0 20px #ffa454) brightness(1.2);
+    }
+
+    /* Smooth, rhythmic bold-and-recover keyframes */
+    @keyframes smoothWeightPulseEast {
+      0% {
+        font-variation-settings: "wght" 200;
+        font-weight: 200;
+        letter-spacing: 0.01em;
+      }
+      50% {
+        font-variation-settings: "wght" 800;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+      }
+      100% {
+        font-variation-settings: "wght" 350;
+        font-weight: 350;
+        letter-spacing: 0.02em;
+      }
+    }
+
+    @keyframes smoothWeightPulseWest {
+      0% {
+        font-variation-settings: "wght" 220;
+        font-weight: 220;
+        letter-spacing: 0.01em;
+      }
+      50% {
+        font-variation-settings: "wght" 800;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+      }
+      100% {
+        font-variation-settings: "wght" 320;
+        font-weight: 320;
+        letter-spacing: 0.02em;
+      }
+    }
+
+    /* Measured, linear horizontal train traverse */
+    @keyframes slideEast {
+      0% { transform: translate3d(-950px, 0, 0); }
+      100% { transform: translate3d(950px, 0, 0); }
+    }
+
+    @keyframes slideWest {
+      0% { transform: translate3d(950px, 0, 0); }
+      100% { transform: translate3d(-950px, 0, 0); }
+    }
+
+    /* Animated Railway Ties under Headings */
+    .track-ties-east {
+      stroke-dasharray: 4 12;
+      animation: topTrackFlow calc(var(--rail-speed) / 4) linear infinite;
+    }
+
+    @keyframes topTrackFlow {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -64; }
+    }
+
+    .track-ties-west {
+      stroke-dasharray: 4 12;
+      animation: bottomTrackFlow calc(var(--rail-speed) / 4) linear infinite;
+    }
+
+    @keyframes bottomTrackFlow {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: 64; }
+    }
+
+    /* Date Pulse */
+    .date-pulse-bold {
+      font-family: 'Tomorrow', sans-serif;
+      animation: dateBoldPulse 3.5s ease-in-out infinite;
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes dateBoldPulse {
+      0%, 100% { font-weight: 400; opacity: 0.75; }
+      50% { font-weight: 900; opacity: 1; letter-spacing: 0.15em; }
+    }
+
+    /* Location Blinking Color */
+    .location-color-blink {
+      font-family: 'EB Garamond', serif;
+      animation: locationBlinkColor 3s ease-in-out infinite;
+    }
+
+    @keyframes locationBlinkColor {
+      0%, 100% { fill: #9494a8; opacity: 0.8; }
+      33% { fill: var(--accent-orange); opacity: 1; }
+      66% { fill: var(--accent-blue); opacity: 1; }
+    }
+
+    .font-tomorrow-400 { font-family: 'Tomorrow', sans-serif; font-weight: 400; }
+    .font-tomorrow-700 { font-family: 'Tomorrow', sans-serif; font-weight: 700; }
+    .font-garamond { font-family: 'EB Garamond', serif; }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>THE <span>TELEPORTER</span> // KINETIC RAIL</h1>
+      <p>Dynamic Multi-Gradient Color Shifting & Measured Railway Motion</p>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="btn-row">
+        <button class="btn btn-primary" id="mutate-btn">🎲 Choose Your Route (Infinite Shuffle)</button>
+        <button class="btn btn-blue" id="export-html-btn">Download Webpage</button>
+      </div>
+
+      <!-- Live Customizer: Icon & Time/Date Colors -->
+      <div class="control-box">
+        <summary style="color: var(--accent-green);">🎨 Custom Terminal Colors</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Emblem / Icon Color</label>
+          <div class="color-picker-row">
+            <input type="color" id="icon-color-picker" value="#00bfff">
+            <span class="text-[11px] font-mono text-slate-400" id="icon-hex">#00BFFF</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Time & Clock Digits Color</label>
+          <div class="color-picker-row">
+            <input type="color" id="time-color-picker" value="#ffa454">
+            <span class="text-[11px] font-mono text-slate-400" id="time-hex">#FFA454</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KINETIC TRACK ENGINE CONTROLS -->
+      <details class="control-box" open style="border-color: rgba(0, 191, 255, 0.4);">
+        <summary style="color: var(--accent-blue);">🚂 Track Kinetic Motion & Weight Tuning</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Circuits Train Speed <span id="train-spd-val">18s Loop</span></label>
+          <div class="range-wrap">
+            <input type="range" id="train-spd" min="6" max="36" step="2" value="18">
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Heading Railway Speed <span id="head-spd-val">14s</span></label>
+          <div class="range-wrap">
+            <input type="range" id="head-spd" min="6" max="30" step="1" value="14">
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Bolding / Pulse Tempo <span id="weight-spd-val">3.2s</span></label>
+          <div class="range-wrap">
+            <input type="range" id="weight-spd" min="1.0" max="6.0" step="0.2" value="3.2">
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Track Train Content Mode</label>
+          <select id="train-content-mode">
+            <option value="hybrid">Hybrid (Alternating Stations + Critical Alerts)</option>
+            <option value="alerts">Emergency Telemetry & Incident Alerts Only</option>
+            <option value="stations">Station Names & Gate Corridors Only</option>
+          </select>
+        </div>
+      </details>
+
+      <!-- Layout & Palette -->
+      <div class="control-box">
+        <div class="control-group">
+          <label>Compositional Preset Archetype</label>
+          <select id="layout-topology-select">
+            <option value="0">01 // Trans-Equator Balanced</option>
+            <option value="1">02 // Lateral Spine Flow</option>
+            <option value="2">03 // Horizon Split System</option>
+            <option value="3">04 // Diagonal Constructivist</option>
+            <option value="4">05 // Dual Pillar Inversion</option>
+            <option value="5">06 // Asymmetrical Terminal</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Heritage Color Palette</label>
+          <select id="palette-select">
+            <option value="rudnick-warm">Rudnick Classic (Magenta, Vermilion, Orange, Capri)</option>
+            <option value="cyber-rave">Acid Rave (Capri Blue, Toxic Mint, Neon Pink)</option>
+            <option value="violet-dusk">Nocturnal Dusk (Electric Violet, Radiant Coral)</option>
+            <option value="solarpunk">Solar Radiance (Amber, Marigold, Crimson Red)</option>
+            <option value="monochrome-pop">Monochrome Pop (Capri Blue, Vermilion, Slate)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Real-Time Departure & Boarding Boxes -->
+      <details class="control-box" open>
+        <summary style="color: var(--accent-orange);">⏱ Departure & Boarding Stations</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Origin Departure Terminal</label>
+          <select id="origin-station-select">
+            <option value="0">SHINJUKU CENTRAL (TYO-01 · JST UTC+9)</option>
+            <option value="1">TIMES SQ-42ND (NYC-04 · EDT UTC-4)</option>
+            <option value="2">CHÂTELET-LES HALLES (PAR-08 · CEST UTC+2)</option>
+            <option value="3">HONG KONG CENTRAL (HKG-02 · HKT UTC+8)</option>
+            <option value="4">ALEXANDERPLATZ (BER-09 · CEST UTC+2)</option>
+            <option value="5">KINGS CROSS ST PANCRAS (LON-01 · BST UTC+1)</option>
+            <option value="6">FLINDERS STREET (MEL-05 · AEST UTC+10)</option>
+            <option value="7">SEOUL STATION (SEL-03 · KST UTC+9)</option>
+          </select>
+        </div>
+
+        <div class="control-group" style="margin-top: 8px;">
+          <label>Destination Boarding Terminal</label>
+          <select id="dest-station-select">
+            <option value="1">TIMES SQ-42ND (NYC-04 · EDT UTC-4)</option>
+            <option value="0">SHINJUKU CENTRAL (TYO-01 · JST UTC+9)</option>
+            <option value="2">CHÂTELET-LES HALLES (PAR-08 · CEST UTC+2)</option>
+            <option value="3">HONG KONG CENTRAL (HKG-02 · HKT UTC+8)</option>
+            <option value="4">ALEXANDERPLATZ (BER-09 · CEST UTC+2)</option>
+            <option value="5">KINGS CROSS ST PANCRAS (LON-01 · BST UTC+1)</option>
+            <option value="6">FLINDERS STREET (MEL-05 · AEST UTC+10)</option>
+            <option value="7">SEOUL STATION (SEL-03 · KST UTC+9)</option>
+          </select>
+        </div>
+      </details>
+
+      <!-- Precision Text Controls -->
+      <details class="control-box" open>
+        <summary>Precision Text Controls (Ojuju)</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Headline 1 (Railway Eastbound)</label>
+          <input type="text" id="h1-top-input" value="THE TELEPORTER">
+        </div>
+        <div class="control-group">
+          <label>Headline 2 (Railway Westbound)</label>
+          <input type="text" id="h1-bottom-input" value="PLANETARY CIRCUIT">
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <!-- Viewport Stage -->
+  <main class="viewport">
+    <div id="poster-frame">
+      <svg id="poster-svg" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs id="svg-defs">
+          <!-- Dynamic Rail Gradients -->
+          <linearGradient id="grad-track-1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#34D399" />
+            <stop offset="50%" stop-color="#00BFFF" />
+            <stop offset="100%" stop-color="#E11D2B" />
+          </linearGradient>
+
+          <linearGradient id="grad-track-2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#00BFFF" />
+            <stop offset="45%" stop-color="#FFA454" />
+            <stop offset="100%" stop-color="#E82B7D" />
+          </linearGradient>
+
+          <!-- MULTI-STOP DYNAMIC GRADIENT SWEEPS FOR HEADINGS -->
+          <linearGradient id="heading-color-sweep-1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FFFFFF">
+              <animate attributeName="stop-color" values="#FFFFFF;#00BFFF;#34D399;#FFA454;#FFFFFF" dur="8s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="35%" stop-color="#00BFFF">
+              <animate attributeName="stop-color" values="#00BFFF;#EC4899;#FFCC00;#34D399;#00BFFF" dur="8s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="70%" stop-color="#FFA454">
+              <animate attributeName="stop-color" values="#FFA454;#FFFFFF;#00BFFF;#EC4899;#FFA454" dur="8s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" stop-color="#FFFFFF">
+              <animate attributeName="stop-color" values="#FFFFFF;#34D399;#FFA454;#00BFFF;#FFFFFF" dur="8s" repeatCount="indefinite" />
+            </stop>
+          </linearGradient>
+
+          <linearGradient id="heading-color-sweep-2" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#FFA454">
+              <animate attributeName="stop-color" values="#FFA454;#EC4899;#00BFFF;#FFFFFF;#FFA454" dur="9s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="40%" stop-color="#FF3E3E">
+              <animate attributeName="stop-color" values="#FF3E3E;#FFA454;#34D399;#00BFFF;#FF3E3E" dur="9s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="75%" stop-color="#00BFFF">
+              <animate attributeName="stop-color" values="#00BFFF;#FFFFFF;#FFA454;#EC4899;#00BFFF" dur="9s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" stop-color="#FFFFFF">
+              <animate attributeName="stop-color" values="#FFFFFF;#00BFFF;#FF3E3E;#FFA454;#FFFFFF" dur="9s" repeatCount="indefinite" />
+            </stop>
+          </linearGradient>
+        </defs>
+
+        <rect id="svg-bg-rect" width="800" height="1200" fill="#070709" />
+        <g id="circuit-layer"></g>
+        <g id="moving-trains-layer"></g>
+        <g id="badge-track-layer"></g>
+        <g id="station-squares-layer"></g>
+        <g id="talisman-layer"></g>
+        <g id="heading-railways-layer"></g>
+        <g id="type-layer"></g>
+      </svg>
+    </div>
+  </main>
+
+  <script>
+    const PALETTES = {
+      'rudnick-warm': [
+        ['#00BFFF', '#E11D2B', '#FFA454'],
+        ['#E11D2B', '#FF5B00', '#FFE8D6'],
+        ['#34D399', '#00BFFF', '#E82B7D']
+      ],
+      'cyber-rave': [
+        ['#34D399', '#00BFFF', '#EC4899'],
+        ['#00BFFF', '#3B82F6', '#F59E0B'],
+        ['#F43F5E', '#8B5CF6', '#34D399']
+      ],
+      'violet-dusk': [
+        ['#A78BFA', '#EC4899', '#F97316'],
+        ['#EC4899', '#A78BFA', '#00BFFF'],
+        ['#F97316', '#FDBA74', '#A78BFA']
+      ],
+      'solarpunk': [
+        ['#FFB703', '#FB8500', '#D90429'],
+        ['#FB8500', '#D90429', '#00BFFF'],
+        ['#D90429', '#FFB703', '#34D399']
+      ],
+      'monochrome-pop': [
+        ['#F1F5F9', '#CBD5E1', '#E11D2B'],
+        ['#94A3B8', '#F1F5F9', '#00BFFF'],
+        ['#CBD5E1', '#94A3B8', '#E11D2B']
+      ]
+    };
+
+    let STATIONS = [
+      { name: 'SHINJUKU CENTRAL', code: 'TYO-01', tz: 'Asia/Tokyo', offset: 'JST UTC+9', bay: 'BAY 14A', status: 'ON TIME' },
+      { name: 'TIMES SQ-42ND', code: 'NYC-04', tz: 'America/New_York', offset: 'EDT UTC-4', bay: 'PLAT 02', status: 'BOARDING' },
+      { name: 'CHÂTELET-LES HALLES', code: 'PAR-08', tz: 'Europe/Paris', offset: 'CEST UTC+2', bay: 'VOIE 04', status: 'ACCEL' },
+      { name: 'HONG KONG CENTRAL', code: 'HKG-02', tz: 'Asia/Hong_Kong', offset: 'HKT UTC+8', bay: 'BAY 08', status: 'ON TIME' },
+      { name: 'ALEXANDERPLATZ', code: 'BER-09', tz: 'Europe/Berlin', offset: 'CEST UTC+2', bay: 'GLEIS 03', status: 'HOLD 2M' },
+      { name: 'KINGS CROSS ST PANCRAS', code: 'LON-01', tz: 'Europe/London', offset: 'BST UTC+1', bay: 'PLAT 09', status: 'ON TIME' },
+      { name: 'FLINDERS STREET', code: 'MEL-05', tz: 'Australia/Melbourne', offset: 'AEST UTC+10', bay: 'BAY 06B', status: 'BOARDING' },
+      { name: 'SEOUL STATION', code: 'SEL-03', tz: 'Asia/Seoul', offset: 'KST UTC+9', bay: 'TRACK 01', status: 'ON TIME' }
+    ];
+
+    const WORLD_ADDRESSES = [
+      '2-24-12 DOGENZAKA, SHIBUYA-KU, TOKYO',
+      'SANTA LUCIA, 30121 VENEZIA, ITALIA',
+      'PLACE DU 11 NOVEMBRE, 75010 PARIS',
+      'EUROPAPLATZ 1, 10557 BERLIN, GERMANY',
+      '89 E 42ND ST, NEW YORK, NY 10017',
+      'EUSTON RD., LONDON N1C 4QP, UK',
+      'FINANCE ST, CENTRAL, HONG KONG'
+    ];
+
+    const LIVE_TRANSIT_CALLOUTS = [
+      "⚠️ ALERT HERE // EMERGENCY AT INTERLOCK 14",
+      "⚡ CONGESTION NOTED // SPEED RESTRICTION 10 MPH",
+      "⚠️ SIGNAL COLLAPSE // D/F/M REROUTED VIA 8TH AV",
+      "🚨 PLATFORM CRITICAL // HELD FOR CREW CLEARANCE",
+      "⚡ POWER SURGE ON QUEENS BLVD // HEADWAY SUSPENDED",
+      "⚠️ TRACK CIRCUIT FAULT // BRAKE OVERRIDE ENGAGED",
+      "🚨 EMERGENCY SWITCH ANOMALY // TRACK 4 OUT OF SERVICE"
+    ];
+
+    let trainDuration = 18;
+    let headingDuration = 14;
+    let weightDuration = 3.2;
+    let currentAddress = WORLD_ADDRESSES[0];
+
+    let layoutState = {
+      b1X: 48, b1Y: 340,
+      b2X: 496, b2Y: 680,
+      h1Y: 88,
+      track1Y: 104,
+      subY: 136,
+      h2Y: 1060,
+      track2Y: 1076,
+      talismanX: 44, talismanY: 180,
+      stripeSeed: 0
+    };
+
+    function getLiveTimeAndDate(tz) {
+      try {
+        const now = new Date();
+        const timeStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).format(now);
+        const dateStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          month: 'short', day: '2-digit', year: 'numeric'
+        }).format(now).toUpperCase();
+        return { time: timeStr, date: dateStr };
+      } catch (e) {
+        return { time: '14:20:00', date: 'OCT 14 2026' };
+      }
+    }
+
+    function renderPoster() {
+      const paletteKey = document.getElementById('palette-select').value;
+      const trainContentMode = document.getElementById('train-content-mode').value;
+      const h1Top = document.getElementById('h1-top-input').value || 'THE TELEPORTER';
+      const h1Bottom = document.getElementById('h1-bottom-input').value || 'PLANETARY CIRCUIT';
+
+      const iconColor = document.getElementById('icon-color-picker').value;
+      const timeColor = document.getElementById('time-color-picker').value;
+
+      document.documentElement.style.setProperty('--icon-color', iconColor);
+      document.documentElement.style.setProperty('--time-color', timeColor);
+
+      const primaryTextColor = '#FFFFFF';
+      const detailTextColor = '#CBD5E1';
+      const bgColor = '#070709';
+
+      // 1. Gradients
+      const defs = document.getElementById('svg-defs');
+      const paletteGroups = PALETTES[paletteKey] || PALETTES['rudnick-warm'];
+      paletteGroups.forEach((stops, gIdx) => {
+        let grad = document.getElementById(`grad-track-${gIdx + 1}`);
+        if (!grad) {
+          grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+          grad.setAttribute('id', `grad-track-${gIdx + 1}`);
+          defs.appendChild(grad);
+        }
+        grad.innerHTML = `
+          <stop offset="0%" stop-color="${stops[0]}" />
+          <stop offset="50%" stop-color="${stops[1]}" />
+          <stop offset="100%" stop-color="${stops[2]}" />
+        `;
+      });
+
+      // 2. Talisman / Emblem Layer
+      const origIdx = parseInt(document.getElementById('origin-station-select').value, 10);
+      const originSt = STATIONS[origIdx % STATIONS.length];
+      const { time: tOrigin } = getLiveTimeAndDate(originSt.tz);
+
+      document.getElementById('talisman-layer').innerHTML = `
+        <rect x="${layoutState.talismanX}" y="${layoutState.talismanY}" width="128" height="128" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="2.5" />
+        <rect x="${layoutState.talismanX + 4}" y="${layoutState.talismanY + 4}" width="120" height="120" fill="none" stroke="${iconColor}" stroke-width="1" stroke-dasharray="4 3" />
+        <g transform="translate(${layoutState.talismanX + 64}, ${layoutState.talismanY + 64})">
+          <circle cx="0" cy="0" r="42" fill="none" stroke="${primaryTextColor}" stroke-width="1.8" stroke-dasharray="5 3" />
+          <circle cx="0" cy="0" r="26" fill="none" stroke="${iconColor}" stroke-width="2" />
+          <line x1="-44" y1="0" x2="44" y2="0" stroke="${primaryTextColor}" stroke-width="1.5" />
+          <line x1="0" y1="-44" x2="0" y2="44" stroke="${primaryTextColor}" stroke-width="1.5" />
+          <text id="live-origin-talisman-clock" x="0" y="-17" font-size="8" fill="${detailTextColor}" text-anchor="middle">${tOrigin}</text>
+          <text x="0" y="22" font-size="7.5" font-weight="700" fill="${primaryTextColor}" text-anchor="middle">${originSt.code}</text>
+        </g>
+      `;
+
+      // 3. Procedural Circuit Tracks
+      const circuitLayer = document.getElementById('circuit-layer');
+      const badgeLayer = document.getElementById('badge-track-layer');
+      const movingTrainsLayer = document.getElementById('moving-trains-layer');
+
+      const s = layoutState.stripeSeed;
+      const trackDefinitions = [
+        `M 36 ${220 + s * 6} H ${280 + s * 10} V ${320 + s * 8} H 764`,
+        `M ${260 - s * 8} 200 V ${540 + s * 8} H ${480 + s * 8} V 980 H 764`,
+        `M 36 ${420 - s * 6} H ${460 + s * 8} V ${720 - s * 8} H ${680 + s * 6} V 990`,
+        `M ${540 + s * 8} 210 V ${780 - s * 10} H ${220 + s * 6} V 980 H 36`,
+        `M 36 ${620 + s * 6} H ${520 + s * 10} V ${860 - s * 6} H 764`
+      ];
+
+      const oldPaths = defs.querySelectorAll('.track-ref-path');
+      oldPaths.forEach(p => p.remove());
+
+      let tracksMarkup = '';
+      let badgeMarkup = '';
+      let movingTrainsMarkup = '';
+
+      trackDefinitions.forEach((d, i) => {
+        const pathId = `track-curve-${i}`;
+        const pElem = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        pElem.setAttribute('id', pathId);
+        pElem.setAttribute('class', 'track-ref-path');
+        pElem.setAttribute('d', d);
+        pElem.setAttribute('fill', 'none');
+        defs.appendChild(pElem);
+
+        tracksMarkup += `
+          <path d="${d}" stroke="url(#grad-track-${(i % 2) + 1})" stroke-width="4.5" fill="none" class="circuit-path-animated" stroke-linecap="square" />
+        `;
+
+        if (i < 3) {
+          const st = STATIONS[(i + origIdx) % STATIONS.length];
+          const badgeX = Math.min(600, 240 + (i * 120) + (s * 8));
+          const badgeY = 270 + (i * 80) + (s * 6);
+          const label = `${st.code} // ${st.bay}`;
+          badgeMarkup += `
+            <g transform="translate(${badgeX}, ${badgeY})">
+              <rect x="-4" y="-11" width="${label.length * 7.5 + 20}" height="22" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="1.8" />
+              <circle cx="5" cy="0" r="3" fill="${iconColor}" />
+              <text x="14" y="3.5" class="font-tomorrow-400" font-size="9" fill="${primaryTextColor}">${label}</text>
+            </g>
+          `;
+        }
+
+        let trainText = '';
+        const st = STATIONS[(i + 1) % STATIONS.length];
+        const callout = LIVE_TRANSIT_CALLOUTS[i % LIVE_TRANSIT_CALLOUTS.length];
+
+        if (trainContentMode === 'alerts') {
+          trainText = `${callout}    ///    `;
+        } else if (trainContentMode === 'stations') {
+          trainText = `● TRANSIT CAR: [${st.code}] ${st.name} — ${st.bay}    ///    `;
+        } else {
+          trainText = `● [${st.code}] ${st.name}    ///    ${callout}    ///    `;
+        }
+
+        const dur = (trainDuration + (i * 3.5)).toFixed(1);
+        movingTrainsMarkup += `
+          <text class="train-text-path" dy="-6">
+            <textPath href="#${pathId}" startOffset="0%">
+              ${trainText.repeat(2)}
+              <animate attributeName="startOffset" from="-100%" to="100%" dur="${dur}s" repeatCount="indefinite" />
+            </textPath>
+          </text>
+        `;
+      });
+
+      circuitLayer.innerHTML = tracksMarkup;
+      badgeLayer.innerHTML = badgeMarkup;
+      movingTrainsLayer.innerHTML = movingTrainsMarkup;
+
+      // 4. Clamped Arrival / Departure Boxes
+      const sqLayer = document.getElementById('station-squares-layer');
+      const destIdx = parseInt(document.getElementById('dest-station-select').value, 10);
+      const destSt = STATIONS[destIdx % STATIONS.length];
+      const { time: tDest, date: dDest } = getLiveTimeAndDate(destSt.tz);
+      const { date: dOrigin } = getLiveTimeAndDate(originSt.tz);
+
+      function buildBox(w, h, strokeCol, tickCol) {
+        return `
+          <rect x="0" y="0" width="${w}" height="${h}" fill="${bgColor}" stroke="${strokeCol}" stroke-width="2" />
+          <rect x="3" y="3" width="${w - 6}" height="${h - 6}" fill="none" stroke="${strokeCol}" stroke-width="0.8" opacity="0.6" />
+          <line x1="0" y1="8" x2="6" y2="8" stroke="${tickCol}" stroke-width="2" />
+          <line x1="${w - 6}" y1="8" x2="${w}" y2="8" stroke="${tickCol}" stroke-width="2" />
+        `;
+      }
+
+      sqLayer.innerHTML = `
+        <!-- SQUARE 1: ORIGIN DEPARTURE -->
+        <g transform="translate(${layoutState.b1X}, ${layoutState.b1Y})">
+          ${buildBox(224, 146, primaryTextColor, iconColor)}
+          <rect x="0" y="0" width="224" height="22" fill="${iconColor}" opacity="0.15" />
+          <text x="10" y="15" class="font-tomorrow-400" font-size="9" fill="${primaryTextColor}">DEPARTING FROM // ${originSt.code}</text>
+          <text x="10" y="38" class="font-tomorrow-700" font-size="11" fill="${primaryTextColor}">${originSt.name}</text>
+          <text x="10" y="62" class="font-tomorrow-700" font-size="17" fill="${timeColor}"><tspan id="live-origin-clock">${tOrigin}</tspan> <tspan font-size="9" fill="${detailTextColor}">${originSt.offset}</tspan></text>
+          <text x="10" y="81" class="font-tomorrow-400 date-pulse-bold" font-size="10" fill="${iconColor}">${dOrigin}</text>
+          <text x="10" y="103" class="font-garamond" font-size="14" fill="${detailTextColor}">GATE / BAY: <tspan font-weight="700" fill="${primaryTextColor}">${originSt.bay}</tspan></text>
+          <text x="10" y="126" class="font-tomorrow-400" font-size="9" fill="${iconColor}">STATUS: ${originSt.status}</text>
+        </g>
+
+        <!-- SQUARE 2: DESTINATION BOARDING -->
+        <g transform="translate(${layoutState.b2X}, ${layoutState.b2Y})">
+          ${buildBox(256, 146, iconColor, primaryTextColor)}
+          <rect x="0" y="0" width="256" height="22" fill="${primaryTextColor}" opacity="0.15" />
+          <text x="10" y="15" class="font-tomorrow-400" font-size="9" fill="${primaryTextColor}">DESTINATION TERMINUS // ${destSt.code}</text>
+          <text x="10" y="38" class="font-tomorrow-700" font-size="11" fill="${primaryTextColor}">${destSt.name}</text>
+          <text x="10" y="62" class="font-tomorrow-700" font-size="17" fill="${timeColor}"><tspan id="live-dest-clock">${tDest}</tspan> <tspan font-size="9" fill="${detailTextColor}">${destSt.offset}</tspan></text>
+          <text x="10" y="81" class="font-tomorrow-400 date-pulse-bold" font-size="10" fill="${primaryTextColor}">${dDest}</text>
+          <text x="10" y="103" class="font-garamond" font-size="14" fill="${detailTextColor}">APPROACH: <tspan font-weight="700" fill="${primaryTextColor}">${destSt.bay}</tspan></text>
+          <text x="10" y="126" class="font-tomorrow-400" font-size="9" fill="${timeColor}">SCHEDULE: ${destSt.status}</text>
+        </g>
+      `;
+
+      // 5. ANIMATED STEEL RAILWAY TRACKS (Directly beneath headings, non-overlapping)
+      const railLayer = document.getElementById('heading-railways-layer');
+      const t1 = layoutState.track1Y;
+      const t2 = layoutState.track2Y;
+      
+      railLayer.innerHTML = `
+        <!-- TOP TRACK BED (Beneath Heading 1) -->
+        <g opacity="0.9">
+          <line x1="0" y1="${t1 - 4}" x2="800" y2="${t1 - 4}" stroke="${iconColor}" stroke-width="1.5" opacity="0.75" />
+          <line x1="0" y1="${t1 + 4}" x2="800" y2="${t1 + 4}" stroke="${iconColor}" stroke-width="1.5" opacity="0.75" />
+          <line x1="0" y1="${t1}" x2="800" y2="${t1}" stroke="${primaryTextColor}" stroke-width="10" class="track-ties-east" opacity="0.85" />
+          <line x1="0" y1="${t1}" x2="800" y2="${t1}" stroke="${iconColor}" stroke-width="0.8" stroke-dasharray="2 6" />
+        </g>
+
+        <!-- BOTTOM TRACK BED (Beneath Heading 2) -->
+        <g opacity="0.9">
+          <line x1="0" y1="${t2 - 4}" x2="800" y2="${t2 - 4}" stroke="${timeColor}" stroke-width="1.5" opacity="0.75" />
+          <line x1="0" y1="${t2 + 4}" x2="800" y2="${t2 + 4}" stroke="${timeColor}" stroke-width="1.5" opacity="0.75" />
+          <line x1="0" y1="${t2}" x2="800" y2="${t2}" stroke="${primaryTextColor}" stroke-width="10" class="track-ties-west" opacity="0.85" />
+          <line x1="0" y1="${t2}" x2="800" y2="${t2}" stroke="${timeColor}" stroke-width="0.8" stroke-dasharray="2 6" />
+        </g>
+      `;
+
+      // 6. Dedicated Headings Railway Track Layer (Gradient Color Sweeping Across Text)
+      const typeLayer = document.getElementById('type-layer');
+      typeLayer.innerHTML = `
+        <!-- TOP RAILWAY TRACK: Smooth slide with balanced weight pulse Eastbound -->
+        <g transform="translate(0, ${layoutState.h1Y})">
+          <text class="railway-heading-east" font-size="52">${h1Top} // THE TELEPORTER // EXPRESS RAPID TRANSIT</text>
+        </g>
+
+        <!-- Subheading Fixed Safely Below Track Bed -->
+        <g transform="translate(36, ${layoutState.subY})">
+          <text font-family="Tomorrow" font-size="11" fill="${iconColor}" letter-spacing="0.14em">TRANS-OCEANIC INTERLOCK // ZERO INTERVAL HEADWAY</text>
+        </g>
+
+        <!-- BOTTOM RAILWAY TRACK: Smooth slide with balanced weight pulse Westbound -->
+        <g transform="translate(0, ${layoutState.h2Y})">
+          <text class="railway-heading-west" font-size="52">${h1Bottom} // CONTINUOUS TRANSIT // WARP HORIZON</text>
+        </g>
+
+        <!-- Footer Clamped within Margin (Y: 1160) -->
+        <g transform="translate(36, 1160)">
+          <text x="0" y="0" class="date-pulse-bold" font-size="10" fill="${iconColor}">OCT 14 2026 // LIVE MTA STREAM</text>
+        </g>
+
+        <g transform="translate(0, 0)">
+          <text x="764" y="1160" text-anchor="end" class="location-color-blink" font-size="15">${currentAddress}</text>
+        </g>
+      `;
+    }
+
+    // High Precision Clock Ticker
+    function tickClocks() {
+      const origIdx = parseInt(document.getElementById('origin-station-select').value, 10);
+      const destIdx = parseInt(document.getElementById('dest-station-select').value, 10);
+      const originSt = STATIONS[origIdx % STATIONS.length];
+      const destSt = STATIONS[destIdx % STATIONS.length];
+
+      const c1 = document.getElementById('live-origin-clock');
+      const c2 = document.getElementById('live-dest-clock');
+      const ct = document.getElementById('live-origin-talisman-clock');
+
+      if (c1) c1.textContent = getLiveTimeAndDate(originSt.tz).time;
+      if (c2) c2.textContent = getLiveTimeAndDate(destSt.tz).time;
+      if (ct) ct.textContent = getLiveTimeAndDate(originSt.tz).time;
+    }
+
+    // Infinite Shuffle Mutator
+    document.getElementById('mutate-btn').addEventListener('click', () => {
+      const b1W = 224, b1H = 146;
+      const b2W = 256, b2H = 146;
+
+      const quadrants = [
+        { b1: { x: 36, y: 220 }, b2: { x: 480, y: 640 } },
+        { b1: { x: 480, y: 220 }, b2: { x: 36, y: 640 } },
+        { b1: { x: 36, y: 440 }, b2: { x: 480, y: 220 } },
+        { b1: { x: 260, y: 240 }, b2: { x: 120, y: 720 } },
+        { b1: { x: 80, y: 320 }, b2: { x: 460, y: 480 } }
+      ];
+
+      const q = quadrants[Math.floor(Math.random() * quadrants.length)];
+      layoutState.b1X = q.b1.x + (Math.floor(Math.random() * 40) - 20);
+      layoutState.b1Y = q.b1.y + (Math.floor(Math.random() * 40) - 20);
+      layoutState.b2X = q.b2.x + (Math.floor(Math.random() * 40) - 20);
+      layoutState.b2Y = q.b2.y + (Math.floor(Math.random() * 40) - 20);
+
+      // Boundary Clamping
+      layoutState.b1X = Math.max(36, Math.min(800 - b1W - 36, layoutState.b1X));
+      layoutState.b1Y = Math.max(190, Math.min(960 - b1H, layoutState.b1Y));
+      layoutState.b2X = Math.max(36, Math.min(800 - b2W - 36, layoutState.b2X));
+      layoutState.b2Y = Math.max(190, Math.min(960 - b2H, layoutState.b2Y));
+
+      layoutState.h1Y = 88 + (Math.floor(Math.random() * 16) - 8);
+      layoutState.track1Y = layoutState.h1Y + 16;
+      layoutState.subY = layoutState.track1Y + 28;
+      
+      layoutState.h2Y = 1060 + (Math.floor(Math.random() * 16) - 8);
+      layoutState.track2Y = layoutState.h2Y + 16;
+
+      const safeTalismanSpots = [
+        { x: 36, y: 720 },
+        { x: 620, y: 440 },
+        { x: 620, y: 740 },
+        { x: 36, y: 190 },
+        { x: 620, y: 190 }
+      ];
+      const t = safeTalismanSpots[Math.floor(Math.random() * safeTalismanSpots.length)];
+      layoutState.talismanX = t.x;
+      layoutState.talismanY = t.y;
+
+      layoutState.stripeSeed = Math.floor(Math.random() * 6) - 3;
+
+      const palettes = Object.keys(PALETTES);
+      document.getElementById('palette-select').value = palettes[Math.floor(Math.random() * palettes.length)];
+      document.getElementById('origin-station-select').value = Math.floor(Math.random() * STATIONS.length);
+      document.getElementById('dest-station-select').value = Math.floor(Math.random() * STATIONS.length);
+
+      currentAddress = WORLD_ADDRESSES[Math.floor(Math.random() * WORLD_ADDRESSES.length)];
+
+      const vibrantHues = ['#00bfff', '#ff3e3e', '#ffa454', '#34d399', '#ec4899', '#a78bfa', '#facc15'];
+      const c1 = vibrantHues[Math.floor(Math.random() * vibrantHues.length)];
+      let c2 = vibrantHues[Math.floor(Math.random() * vibrantHues.length)];
+      if (c1 === c2) c2 = '#ffa454';
+
+      document.getElementById('icon-color-picker').value = c1;
+      document.getElementById('time-color-picker').value = c2;
+      document.getElementById('icon-hex').textContent = c1.toUpperCase();
+      document.getElementById('time-hex').textContent = c2.toUpperCase();
+
+      renderPoster();
+    });
+
+    document.getElementById('train-spd').addEventListener('input', (e) => {
+      trainDuration = parseInt(e.target.value, 10);
+      document.getElementById('train-spd-val').textContent = `${trainDuration}s Loop`;
+      renderPoster();
+    });
+
+    document.getElementById('head-spd').addEventListener('input', (e) => {
+      headingDuration = parseFloat(e.target.value);
+      document.getElementById('head-spd-val').textContent = `${headingDuration.toFixed(1)}s`;
+      document.documentElement.style.setProperty('--rail-speed', `${headingDuration}s`);
+    });
+
+    document.getElementById('weight-spd').addEventListener('input', (e) => {
+      weightDuration = parseFloat(e.target.value);
+      document.getElementById('weight-spd-val').textContent = `${weightDuration.toFixed(1)}s`;
+      document.documentElement.style.setProperty('--weight-speed', `${weightDuration}s`);
+    });
+
+    document.getElementById('icon-color-picker').addEventListener('input', (e) => {
+      document.getElementById('icon-hex').textContent = e.target.value.toUpperCase();
+      renderPoster();
+    });
+
+    document.getElementById('time-color-picker').addEventListener('input', (e) => {
+      document.getElementById('time-hex').textContent = e.target.value.toUpperCase();
+      renderPoster();
+    });
+
+    ['train-content-mode', 'layout-topology-select', 'palette-select', 'origin-station-select', 'dest-station-select'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderPoster);
+    });
+
+    ['h1-top-input', 'h1-bottom-input'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderPoster);
+    });
+
+    document.getElementById('export-html-btn').addEventListener('click', () => {
+      const fullSource = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([fullSource], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `teleporter_railway_kinetic_${Date.now()}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    setInterval(tickClocks, 1000);
+    renderPoster();
+  </script>
+</body>
+</html>
