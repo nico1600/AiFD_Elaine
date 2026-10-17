@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE TELEPORTER</title>
+
+  <!-- Typography Stack: Tomorrow, EB Garamond, Barlow Condensed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'Cooper Hewitt';
+      src: local('Cooper Hewitt Bold Italic'), local('CooperHewitt-BoldItalic'), local('Arial Black');
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    :root {
+      --bg-dark: #070709;
+      --panel-bg: #101016;
+      --border-color: #232332;
+      --text-muted: #9494a8;
+      --accent-red: #e11d2b;
+      --accent-blue: #00bfff;
+      --accent-orange: #ffa454;
+      --accent-green: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e5e7eb;
+      font-family: 'Tomorrow', sans-serif;
+      font-weight: 400;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Left Control Sidebar */
+    .sidebar {
+      width: 540px;
+      min-width: 480px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: #09090d;
+    }
+
+    .sidebar-header h1 {
+      font-size: 15px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .sidebar-header p {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.06em;
+    }
+
+    .sidebar-content {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-box {
+      background: #14141e;
+      border: 1px solid #232332;
+      border-radius: 4px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-box summary {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-blue);
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-box summary::after { content: '▾'; font-size: 12px; color: var(--text-muted); }
+    details[open] summary::after { content: '▴'; }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .control-group label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-group input[type="text"],
+    .control-group select {
+      background: #09090d;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: #ffffff;
+      padding: 7px 10px;
+      font-family: 'Tomorrow', sans-serif;
+      font-weight: 400;
+      font-size: 11.5px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .control-group input[type="text"]:focus,
+    .control-group select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-wrap input[type="range"] {
+      flex: 1;
+      height: 6px;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    .btn-row { display: flex; gap: 8px; }
+
+    .btn {
+      background: #191926;
+      color: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      font-family: 'Tomorrow', sans-serif;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: all 0.15s ease;
+      font-weight: 700;
+    }
+
+    .btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+    .btn-primary {
+      background: var(--accent-red);
+      border-color: #ff4352;
+      color: #ffffff;
+    }
+    .btn-primary:hover { background: #ff3344; color: #ffffff; }
+
+    .btn-blue {
+      background: #00bfff;
+      border-color: #38bdf8;
+      color: #070709;
+    }
+    .btn-blue:hover { background: #38bdf8; }
+
+    .btn-live {
+      background: #191926;
+      border-color: #334155;
+      color: #94a3b8;
+    }
+    .btn-live.active {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: #064e3b;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
+    }
+
+    .stream-status-box {
+      background: #080a11;
+      border: 1px dashed #283046;
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 9.5px;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stream-status-box .status-head {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .stream-status-box .status-head.active {
+      color: var(--accent-green);
+    }
+
+    .stream-status-box .status-detail {
+      color: var(--text-muted);
+      font-size: 8.5px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    /* Viewport Stage */
+    .viewport {
+      flex: 1;
+      background: #040406;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    #poster-frame {
+      height: min(94vh, 980px);
+      aspect-ratio: 800 / 1200;
+      position: relative;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.95);
+      border: 1px solid #1a1a24;
+      flex-shrink: 0;
+      background: #070709;
+      overflow: hidden;
+      transition: background-color 0.2s ease;
+    }
+
+    svg#poster-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .circuit-path-animated {
+      stroke-dasharray: 24 12;
+      animation: circuitFlow 4s linear infinite;
+    }
+
+    @keyframes circuitFlow {
+      from { stroke-dashoffset: 72; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    .font-tomorrow-400 { font-family: 'Tomorrow', sans-serif; font-weight: 400; }
+    .font-tomorrow-700 { font-family: 'Tomorrow', sans-serif; font-weight: 700; }
+    .font-garamond { font-family: 'EB Garamond', serif; }
+    .font-cooper { font-family: 'Cooper Hewitt', sans-serif; font-weight: 700; font-style: italic; }
+    .font-barlow { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>THE TELEPORTER</h1>
+      <p>Precision Zero-Overlap Synthesizer // Full-Canvas Freedom</p>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- Live Stream Controls (Defaults to Static Mode) -->
+      <div class="control-box" style="border-color: #2d3748;">
+        <div class="btn-row">
+          <button class="btn btn-live" id="toggle-stream-btn">⏸ STATIC MODE (MANUAL)</button>
+          <button class="btn" id="poll-stream-btn">↺ Poll Stream</button>
+        </div>
+
+        <div class="stream-status-box">
+          <div class="status-head" id="stream-status-head">
+            <span id="stream-indicator">○ STREAM PAUSED (STATIC BASELINE)</span>
+            <span id="stream-rate">STANDBY</span>
+          </div>
+          <div class="status-detail" id="stream-ticker">READY // TOGGLE FOR REAL-TIME TELEMETRY STREAM</div>
+        </div>
+
+        <div class="control-group">
+          <label>Planetary Friction / Magnitude <span id="magnitude-val">M 4.2 // BASELINE</span></label>
+          <div class="range-wrap">
+            <input type="range" id="magnitude-range" min="10" max="90" step="1" value="42">
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Generation Controls -->
+      <div class="btn-row">
+        <button class="btn btn-primary" id="mutate-btn">🎲 Infinite Randomize</button>
+        <button class="btn btn-blue" id="export-png-btn">Export Retina PNG</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="toggle-grid-btn">📐 Toggle Swiss Grid (Detailed)</button>
+        <button class="btn" id="export-html-btn">Download Webpage</button>
+      </div>
+
+      <!-- Master Layout Controls -->
+      <div class="control-box">
+        <div class="control-group">
+          <label>Compositional Topology Archetype</label>
+          <select id="layout-topology-select">
+            <option value="0">01 // Trans-Equator Balanced (Top-Right / Bottom-Left)</option>
+            <option value="1">02 // Lateral Spine Flow (Dual Vertical Headers)</option>
+            <option value="2">03 // Horizon Split System (Centered Monoliths)</option>
+            <option value="3">04 // Diagonal Constructivist (Staggered Anchors)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Canvas Ground Color</label>
+          <select id="canvas-bg-select">
+            <option value="white">Pristine Swiss White (#FFFFFF)</option>
+            <option value="cream">Archival Warm Cream (#F5F4EE)</option>
+            <option value="black">Deep Night Black (#070709)</option>
+            <option value="slate">Corrosive Dark Slate (#111318)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Heritage Color Palette</label>
+          <select id="palette-select">
+            <option value="rudnick-warm">Rudnick Classic (Magenta, Vermilion, Orange, Peach, Capri)</option>
+            <option value="cyber-rave">Acid Rave (Capri Blue, Toxic Mint, Neon Pink, Solar Orange)</option>
+            <option value="violet-dusk">Nocturnal Dusk (Electric Violet, Radiant Coral, Deep Peach)</option>
+            <option value="solarpunk">Solar Radiance (Amber, Marigold, Crimson Red, Capri Blue)</option>
+            <option value="monochrome-pop">Monochrome Pop (Capri Blue, Vermilion, Slate, Pure White)</option>
+            <option value="custom-random">🎲 Infinite Procedural Harmonic Palette</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Talisman Emblem (8 Variants)</label>
+          <select id="talisman-select">
+            <option value="radar">1. Segmented Tactical Radar</option>
+            <option value="chrono">2. Dual-Zone Chrono Transit Dial</option>
+            <option value="signal">3. Signal Interlocking & Switch Gate</option>
+            <option value="token">4. Commuter Turnstile Token & Pass</option>
+            <option value="hub">5. 4-Way Terminus Interchange Hub</option>
+            <option value="gyro">6. Geodesic Axial Gyroscope</option>
+            <option value="pantograph">7. High-Speed Pantograph Relay</option>
+            <option value="monolith">8. Solar Gate Monolith</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Movable & Scalable Talisman Emblem Box -->
+      <details class="control-box" open>
+        <summary style="color: var(--accent-blue);">🔮 Talisman Icon Box (Movable & Scalable)</summary>
+        
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Talisman Box Scale <span id="talisman-size-val">128px</span></label>
+          <div class="range-wrap"><input type="range" id="talisman-size" min="60" max="260" step="2" value="128"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Talisman X <span id="talisman-x-val">0px</span></label>
+            <input type="range" id="talisman-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Talisman Y <span id="talisman-y-val">0px</span></label>
+            <input type="range" id="talisman-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+      </details>
+
+      <!-- 6-Stripe Labyrinth Bundles Controls (With Full Movement) -->
+      <details class="control-box" open>
+        <summary style="color: var(--accent-orange);">⚡ 6-Stripe Labyrinth & Edge-Bleed Extension</summary>
+        
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Stripe Edge Bleed Extension</label>
+          <select id="stripe-bleed-select">
+            <option value="bleed">Full Off-Canvas Bleed (Rudnick Valentime Style)</option>
+            <option value="contain">Interior Margin Clamped (Within Canvas Frame)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Stripe Bundle Density <span id="density-val">5 Stripes</span></label>
+          <div class="range-wrap">
+            <input type="range" id="maze-density" min="2" max="6" step="1" value="5">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Select Stripe to Move</label>
+          <select id="active-line-select">
+            <option value="all">Global (All Stripes Together)</option>
+            <option value="0">Stripe 1 (High Top-Span Runner)</option>
+            <option value="1">Stripe 2 (Central Vertical Drop Spine)</option>
+            <option value="2">Stripe 3 (Stepped Full-Width Traverse)</option>
+            <option value="3">Stripe 4 (Deep Vertical Plunge Trunk)</option>
+            <option value="4">Stripe 5 (Lower Interlock Stepped Loop)</option>
+            <option value="5">Stripe 6 (Perimeter Return Runner)</option>
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Stripe Shift X <span id="line-x-val">0px</span></label>
+            <input type="range" id="line-shift-x" min="-600" max="600" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Stripe Shift Y <span id="line-y-val">0px</span></label>
+            <input type="range" id="line-shift-y" min="-600" max="600" step="5" value="0">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Base Stroke Weight <span id="stroke-val">6px</span></label>
+          <div class="range-wrap">
+            <input type="range" id="stroke-weight" min="3" max="14" step="1" value="6">
+          </div>
+        </div>
+      </details>
+
+      <!-- Movable Departure & Boarding Boxes (Full Canvas Movement) -->
+      <details class="control-box" open>
+        <summary style="color: var(--accent-green);">⏱ Full-Canvas Departure & Boarding Boxes</summary>
+        
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Box 1 (Origin) Terminal Name & Code</label>
+          <div class="btn-row">
+            <input type="text" id="b1-name-input" value="GRAND CENTRAL" style="flex: 2;">
+            <input type="text" id="b1-code-input" value="NYC-01" style="flex: 1;">
+          </div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Box 1 X <span id="b1-x-val">0px</span></label>
+            <input type="range" id="b1-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Box 1 Y <span id="b1-y-val">0px</span></label>
+            <input type="range" id="b1-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Box 2 (Destination) Terminal Name & Code</label>
+          <div class="btn-row">
+            <input type="text" id="b2-name-input" value="VENEZIA SANTA LUCIA" style="flex: 2;">
+            <input type="text" id="b2-code-input" value="VCE-01" style="flex: 1;">
+          </div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Box 2 X <span id="b2-x-val">0px</span></label>
+            <input type="range" id="b2-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Box 2 Y <span id="b2-y-val">0px</span></label>
+            <input type="range" id="b2-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+      </details>
+
+      <!-- Movable & Scalable Diagonal Element (VECTOR 01) -->
+      <details class="control-box" open>
+        <summary style="color: var(--accent-orange);">⚡ Diagonal Element (Full Canvas Roam)</summary>
+        
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Diagonal Tag Text</label>
+          <input type="text" id="vel-tag-input" value="VECTOR 01">
+        </div>
+        <div class="control-group">
+          <label>Diagonal Element Scale <span id="vel-size-val">15px</span></label>
+          <div class="range-wrap"><input type="range" id="vel-size" min="10" max="44" step="1" value="15"></div>
+        </div>
+        <div class="control-group">
+          <label>Diagonal Rotation Angle <span id="vel-rot-val">45°</span></label>
+          <div class="range-wrap"><input type="range" id="vel-rot" min="0" max="360" step="5" value="45"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Diagonal X <span id="vel-x-val">0</span></label>
+            <input type="range" id="vel-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Diagonal Y <span id="vel-y-val">0</span></label>
+            <input type="range" id="vel-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+      </details>
+
+      <!-- Precision Text & Position Controls (Expanded Ranges -1000 to +1000) -->
+      <details class="control-box" open>
+        <summary>Precision Text Placement & Canvas Navigation</summary>
+        
+        <!-- Headline 1 -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Headline 1 Text</label>
+          <input type="text" id="h1-top-input" value="EARTH PLATFORM">
+        </div>
+        <div class="control-group">
+          <label>H1 Orientation</label>
+          <select id="h1-orientation">
+            <option value="horizontal">Horizontal Default</option>
+            <option value="vertical-down">Vertical Spine (+90°)</option>
+            <option value="vertical-up">Vertical Spine (-90°)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>H1 Font Size <span id="h1-size-val">50px</span></label>
+          <div class="range-wrap"><input type="range" id="h1-size" min="16" max="110" step="1" value="50"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>H1 X <span id="h1-x-val">0</span></label>
+            <input type="range" id="h1-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>H1 Y <span id="h1-y-val">0</span></label>
+            <input type="range" id="h1-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Headline 2 -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Headline 2 Text</label>
+          <input type="text" id="h1-bottom-input" value="NULL DISTANCE">
+        </div>
+        <div class="control-group">
+          <label>H2 Orientation</label>
+          <select id="h2-orientation">
+            <option value="horizontal">Horizontal Default</option>
+            <option value="vertical-down">Vertical Spine (+90°)</option>
+            <option value="vertical-up">Vertical Spine (-90°)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>H2 Font Size <span id="h2-size-val">50px</span></label>
+          <div class="range-wrap"><input type="range" id="h2-size" min="16" max="110" step="1" value="50"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>H2 X <span id="h2-x-val">0</span></label>
+            <input type="range" id="h2-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>H2 Y <span id="h2-y-val">0</span></label>
+            <input type="range" id="h2-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Subheading -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Subheading Text</label>
+          <input type="text" id="sub-top-input" value="GEODESIC VECTOR // PLANETARY FAULT">
+        </div>
+        <div class="control-group">
+          <label>Subheading Font Size <span id="sub-size-val">13px</span></label>
+          <div class="range-wrap"><input type="range" id="sub-size" min="8" max="44" step="1" value="13"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Sub X <span id="sub-x-val">0</span></label>
+            <input type="range" id="sub-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Sub Y <span id="sub-y-val">0</span></label>
+            <input type="range" id="sub-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Intermediate Roster -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Roster Line Text (EB Garamond)</label>
+          <input type="text" id="roster-input" value="NEW YORK · SEOUL · HONG KONG · VENICE">
+        </div>
+        <div class="control-group">
+          <label>Roster Font Size <span id="roster-size-val">17px</span></label>
+          <div class="range-wrap"><input type="range" id="roster-size" min="10" max="44" step="1" value="17"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Roster X <span id="roster-x-val">0</span></label>
+            <input type="range" id="roster-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Roster Y <span id="roster-y-val">0</span></label>
+            <input type="range" id="roster-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Lateral PURE / BITBY.TV Badges -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Lateral Badges (PURE™ / BITBY.TV)</label>
+          <div class="btn-row">
+            <input type="text" id="badge-brand-input" value="PURE™" style="flex: 1;">
+            <input type="text" id="badge-sub-input" value="BITBY.TV" style="flex: 1;">
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Lateral Badge Size <span id="badge-size-val">22px</span></label>
+          <div class="range-wrap"><input type="range" id="badge-size" min="12" max="52" step="1" value="22"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Badge X <span id="badge-x-val">0</span></label>
+            <input type="range" id="badge-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Badge Y <span id="badge-y-val">0</span></label>
+            <input type="range" id="badge-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Custom Date & Location Controls -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Footer Date / Telemetry Stamp</label>
+          <input type="text" id="footer-date-input" value="OCT 17 2026 // UTC LIVE">
+        </div>
+        <div class="control-group">
+          <label>Date Font Size <span id="date-size-val">10.5px</span></label>
+          <div class="range-wrap"><input type="range" id="date-size" min="8" max="36" step="0.5" value="10.5"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Date X <span id="date-x-val">0</span></label>
+            <input type="range" id="date-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Date Y <span id="date-y-val">0</span></label>
+            <input type="range" id="date-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Footer Place / Location Address</label>
+          <input type="text" id="footer-place-input" value="FINANCE ST, CENTRAL, HONG KONG">
+        </div>
+        <div class="control-group">
+          <label>Place Font Size <span id="place-size-val">17px</span></label>
+          <div class="range-wrap"><input type="range" id="place-size" min="10" max="44" step="1" value="17"></div>
+        </div>
+        <div class="btn-row">
+          <div class="control-group" style="flex: 1;">
+            <label>Place X <span id="place-x-val">0</span></label>
+            <input type="range" id="place-x" min="-1000" max="1000" step="5" value="0">
+          </div>
+          <div class="control-group" style="flex: 1;">
+            <label>Place Y <span id="place-y-val">0</span></label>
+            <input type="range" id="place-y" min="-1000" max="1000" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Stepped Baseline Fracture & Tracking -->
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Stepped Baseline Fracture <span id="fracture-val">0px</span></label>
+          <div class="range-wrap">
+            <input type="range" id="baseline-fracture" min="0" max="16" step="2" value="0">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Letter-Spacing (Tracking) <span id="tracking-val">0.02em</span></label>
+          <div class="range-wrap">
+            <input type="range" id="tracking-range" min="-0.02" max="0.10" step="0.01" value="0.02">
+          </div>
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <!-- Viewport Stage -->
+  <main class="viewport">
+    <div id="poster-frame">
+      <svg id="poster-svg" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs id="svg-defs">
+          <!-- Multi-Stop Gradients -->
+          <linearGradient id="grad-track-1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#34D399" />
+            <stop offset="50%" stop-color="#00BFFF" />
+            <stop offset="100%" stop-color="#E11D2B" />
+          </linearGradient>
+
+          <linearGradient id="grad-track-2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#00BFFF" />
+            <stop offset="45%" stop-color="#FFA454" />
+            <stop offset="100%" stop-color="#E82B7D" />
+          </linearGradient>
+
+          <linearGradient id="grad-track-3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF5B00" />
+            <stop offset="60%" stop-color="#E11D2B" />
+            <stop offset="100%" stop-color="#34D399" />
+          </linearGradient>
+
+          <!-- High-Detail Swiss Modular Grid (12-Col x 18-Row with Crosses & Numerics) -->
+          <pattern id="swiss-grid-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path id="grid-pattern-stroke" d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(0, 191, 255, 0.20)" stroke-width="0.75" />
+            <circle id="grid-pattern-dot" cx="60" cy="60" r="1.5" fill="rgba(0, 191, 255, 0.40)" />
+            <path d="M 30 0 L 30 60 M 0 30 L 60 30" fill="none" stroke="rgba(0, 191, 255, 0.08)" stroke-width="0.5" stroke-dasharray="2 3" />
+          </pattern>
+        </defs>
+
+        <rect id="svg-bg-rect" width="800" height="1200" fill="#FFFFFF" />
+        <g id="grid-layer" style="display: none;"></g>
+        
+        <!-- ZERO-OVERLAP LAYER STACK -->
+        <g id="circuit-labyrinth-layer"></g>
+        <g id="badge-track-layer"></g>
+        <g id="station-squares-layer"></g>
+        <g id="talisman-layer"></g>
+        <g id="type-layer"></g>
+      </svg>
+    </div>
+  </main>
+
+  <script>
+    const PALETTES = {
+      'rudnick-warm': [
+        ['#00BFFF', '#E11D2B', '#FFA454', '#FFE8D6'],
+        ['#E11D2B', '#FF5B00', '#FFE8D6', '#E82B7D'],
+        ['#34D399', '#00BFFF', '#E82B7D', '#FFA454']
+      ],
+      'cyber-rave': [
+        ['#34D399', '#00BFFF', '#EC4899', '#F8FAFC'],
+        ['#00BFFF', '#3B82F6', '#F59E0B', '#34D399'],
+        ['#F43F5E', '#8B5CF6', '#34D399', '#00BFFF']
+      ],
+      'violet-dusk': [
+        ['#A78BFA', '#EC4899', '#F97316', '#FFFFFF'],
+        ['#EC4899', '#A78BFA', '#00BFFF', '#FDBA74'],
+        ['#F97316', '#FDBA74', '#A78BFA', '#00BFFF']
+      ],
+      'solarpunk': [
+        ['#FFB703', '#FB8500', '#D90429', '#FFFFFF'],
+        ['#FB8500', '#D90429', '#00BFFF', '#FFE4B5'],
+        ['#D90429', '#FFB703', '#34D399', '#FFFFFF']
+      ],
+      'monochrome-pop': [
+        ['#F1F5F9', '#CBD5E1', '#E11D2B', '#00BFFF'],
+        ['#94A3B8', '#F1F5F9', '#00BFFF', '#E11D2B'],
+        ['#CBD5E1', '#94A3B8', '#E11D2B', '#00BFFF']
+      ]
+    };
+
+    const PALETTES_LIGHT = {
+      'rudnick-warm': [
+        ['#0284C7', '#DC2626', '#EA580C', '#991B1B'],
+        ['#DC2626', '#C2410C', '#4338CA', '#DB2777'],
+        ['#059669', '#0284C7', '#DB2777', '#EA580C']
+      ],
+      'cyber-rave': [
+        ['#059669', '#0284C7', '#DB2777', '#1E293B'],
+        ['#0284C7', '#2563EB', '#D97706', '#059669'],
+        ['#E11D2B', '#7C3AED', '#059669', '#0284C7']
+      ],
+      'violet-dusk': [
+        ['#7C3AED', '#DB2777', '#EA580C', '#1E293B'],
+        ['#DB2777', '#7C3AED', '#0284C7', '#C2410C'],
+        ['#EA580C', '#C2410C', '#7C3AED', '#0284C7']
+      ],
+      'solarpunk': [
+        ['#D97706', '#EA580C', '#DC2626', '#1E293B'],
+        ['#EA580C', '#DC2626', '#0284C7', '#92400E'],
+        ['#DC2626', '#D97706', '#059669', '#1E293B']
+      ],
+      'monochrome-pop': [
+        ['#0F172A', '#334155', '#DC2626', '#0284C7'],
+        ['#475569', '#0F172A', '#0284C7', '#DC2626'],
+        ['#1E293B', '#475569', '#DC2626', '#0284C7']
+      ]
+    };
+
+    const STATIONS = [
+      { name: 'GRAND CENTRAL', code: 'NYC-01', tz: 'America/New_York', offset: 'EDT UTC-4', bay: 'TRACK 42', status: 'ON TIME', city: 'NEW YORK' },
+      { name: 'VENEZIA SANTA LUCIA', code: 'VCE-01', tz: 'Europe/Rome', offset: 'CEST UTC+2', bay: 'BINARIO 08', status: 'SYNCHRONOUS', city: 'VENICE' },
+      { name: 'SHINJUKU CENTRAL', code: 'TYO-01', tz: 'Asia/Tokyo', offset: 'JST UTC+9', bay: 'BAY 14A', status: 'ON TIME', city: 'TOKYO' },
+      { name: 'BERLIN HAUPTBAHNHOF', code: 'BER-01', tz: 'Europe/Berlin', offset: 'CEST UTC+2', bay: 'GLEIS 07', status: 'BOARDING', city: 'BERLIN' },
+      { name: 'CHÂTELET-LES HALLES', code: 'PAR-08', tz: 'Europe/Paris', offset: 'CEST UTC+2', bay: 'VOIE 04', status: 'ACCEL', city: 'PARIS' },
+      { name: 'SEOUL STATION', code: 'SEL-03', tz: 'Asia/Seoul', offset: 'KST UTC+9', bay: 'TRACK 01', status: 'ON TIME', city: 'SEOUL' }
+    ];
+
+    const WORLD_ADDRESSES = [
+      'FINANCE ST, CENTRAL, HONG KONG',
+      '2-24-12 DOGENZAKA, SHIBUYA-KU, TOKYO',
+      'SANTA LUCIA, 30121 VENEZIA, ITALIA',
+      'PLACE DU 11 NOVEMBRE, 75010 PARIS',
+      '89 E 42ND ST, NEW YORK, NY 10017'
+    ];
+
+    const HEADLINE_SETS = [
+      ['EARTH PLATFORM', 'NULL DISTANCE', 'GEODESIC VECTOR // PLANETARY FAULT'],
+      ['THE TELEPORTER', 'PLANETARY CIRCUIT', 'TRANS-OCEANIC INTERLOCK // ZERO INTERVAL'],
+      ['GLOBAL TRANSIT', 'WARP HORIZON', 'SYNCHRONOUS SPHERE // CONTINUOUS PASSAGE'],
+      ['ORBITAL NETWORK', 'CHRONO INTERCHANGE', 'AXIAL TELEPORT // HYPER ACCELERATION'],
+      ['HYPER OBJECT', 'DEEP FUTURE', 'SoundSystem Protocol // Temporal Shift']
+    ];
+
+    // Starts in STATIC MODE by default
+    let isStreamActive = false;
+    let magnitudeValue = 4.2;
+    let showGrid = false;
+    let customProceduralPalette = null;
+
+    // Precision element offsets (Expanded Range: -1000 to +1000)
+    let offsets = {
+      h1: { x: 0, y: 0 },
+      h2: { x: 0, y: 0 },
+      sub: { x: 0, y: 0 },
+      roster: { x: 0, y: 0 },
+      vel: { x: 0, y: 0, rot: 45 },
+      badge: { x: 0, y: 0 },
+      b1: { x: 0, y: 0 },
+      b2: { x: 0, y: 0 },
+      talisman: { x: 0, y: 0 },
+      date: { x: 0, y: 0 },
+      place: { x: 0, y: 0 }
+    };
+
+    let lineOffsets = [
+      { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+      { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }
+    ];
+
+    function getLiveTimeAndDate(tz) {
+      try {
+        const now = new Date();
+        const timeStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).format(now);
+        const dateStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz, month: 'short', day: '2-digit', year: 'numeric'
+        }).format(now).toUpperCase();
+        return { time: timeStr, date: dateStr };
+      } catch (e) {
+        return { time: '14:20:00', date: 'OCT 17 2026' };
+      }
+    }
+
+    // USGS Live Stream Ingest (When activated)
+    async function pollUSGSStream() {
+      if (!isStreamActive) return;
+      const ticker = document.getElementById('stream-ticker');
+      const indicator = document.getElementById('stream-indicator');
+
+      try {
+        const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.features && data.features.length > 0) {
+            const quakes = data.features.slice(0, 10);
+            const latest = quakes[Math.floor(Math.random() * quakes.length)];
+            const mag = latest.properties.mag.toFixed(1);
+            const place = (latest.properties.place || 'PLANETARY FAULT').toUpperCase();
+            const depth = latest.geometry.coordinates[2].toFixed(1);
+
+            ticker.textContent = `LIVE QUAKE: M ${mag} — ${place} // DEPTH ${depth}KM`;
+            indicator.textContent = `● SYNCED: USGS GLOBAL (${data.features.length} ACTIVE QUAKES)`;
+
+            magnitudeValue = parseFloat(mag);
+            document.getElementById('magnitude-range').value = Math.min(90, Math.max(10, Math.round(magnitudeValue * 10)));
+            updateTelemetryVisuals(magnitudeValue);
+            return;
+          }
+        }
+      } catch (err) {
+        // Fallback gracefully
+      }
+
+      simulateSeismicBurst();
+    }
+
+    function simulateSeismicBurst() {
+      const places = ['OFF EAST COAST OF HONSHU', 'SAN JUAN BAUTISTA, CA', 'VALPARAÍSO, CHILE', 'FOX ISLANDS, ALASKA', 'KERMADEC ISLANDS'];
+      const p = places[Math.floor(Math.random() * places.length)];
+      const mag = (2.5 + Math.random() * 4.2).toFixed(1);
+      const depth = (8.0 + Math.random() * 32.0).toFixed(1);
+
+      document.getElementById('stream-ticker').textContent = `LIVE QUAKE: M ${mag} — ${p} // DEPTH ${depth}KM`;
+      magnitudeValue = parseFloat(mag);
+      updateTelemetryVisuals(magnitudeValue);
+    }
+
+    function updateTelemetryVisuals(mag) {
+      const label = mag > 5.5 ? 'HIGH VELOCITY PULSE' : (mag > 4.0 ? 'MODERATE TREMOR' : 'BASELINE');
+      document.getElementById('magnitude-val').textContent = `M ${mag.toFixed(1)} // ${label}`;
+
+      const calcStroke = Math.min(10, Math.max(4, Math.round(mag + 1)));
+      document.getElementById('stroke-weight').value = calcStroke;
+      document.getElementById('stroke-val').textContent = `${calcStroke}px`;
+
+      renderPoster();
+    }
+
+    function generateRandomHarmonicPalette(isLight) {
+      const baseHue = Math.floor(Math.random() * 360);
+      const compHue1 = (baseHue + 120 + Math.floor(Math.random() * 40)) % 360;
+      const compHue2 = (baseHue + 240 + Math.floor(Math.random() * 40)) % 360;
+      const accentHue = (baseHue + 60) % 360;
+
+      const sat = isLight ? 85 : 95;
+      const light = isLight ? 42 : 60;
+
+      const toHex = (h, s, l) => {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+          const k = (n + h / 30) % 12;
+          const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+          return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+      };
+
+      const c1 = toHex(baseHue, sat, light);
+      const c2 = toHex(compHue1, sat, light);
+      const c3 = toHex(compHue2, sat, light);
+      const c4 = toHex(accentHue, sat, isLight ? 35 : 75);
+
+      return [
+        [c1, c2, c3, c4],
+        [c2, c3, c4, c1],
+        [c3, c1, c2, c4]
+      ];
+    }
+
+    /* =========================================================================
+       DYNAMIC ZERO-OVERLAP RENDERING ENGINE
+       ========================================================================= */
+    function renderPoster() {
+      const topology = parseInt(document.getElementById('layout-topology-select').value, 10);
+      const bgChoice = document.getElementById('canvas-bg-select').value;
+      const paletteKey = document.getElementById('palette-select').value;
+      const density = parseInt(document.getElementById('maze-density').value, 10);
+      const baseStrokeW = parseInt(document.getElementById('stroke-weight').value, 10);
+      const tracking = parseFloat(document.getElementById('tracking-range').value);
+      const fracture = parseInt(document.getElementById('baseline-fracture').value, 10);
+      const activeEmblem = document.getElementById('talisman-select').value;
+      const bleedMode = document.getElementById('stripe-bleed-select').value;
+
+      // Font size values
+      const h1Size = parseInt(document.getElementById('h1-size').value, 10);
+      const h2Size = parseInt(document.getElementById('h2-size').value, 10);
+      const subSize = parseInt(document.getElementById('sub-size').value, 10);
+      const rosterSize = parseInt(document.getElementById('roster-size').value, 10);
+      const velSize = parseInt(document.getElementById('vel-size').value, 10);
+      const badgeSize = parseInt(document.getElementById('badge-size').value, 10);
+      const dateSize = parseFloat(document.getElementById('date-size').value);
+      const placeSize = parseInt(document.getElementById('place-size').value, 10);
+      const talismanBoxSize = parseInt(document.getElementById('talisman-size').value, 10);
+
+      const h1Orient = document.getElementById('h1-orientation').value;
+      const h2Orient = document.getElementById('h2-orientation').value;
+
+      const isWhite = (bgChoice === 'white');
+      const isCream = (bgChoice === 'cream');
+      const isSlate = (bgChoice === 'slate');
+      const isLight = isWhite || isCream;
+      const bgColor = isWhite ? '#FFFFFF' : (isCream ? '#F5F4EE' : (isSlate ? '#111318' : '#070709'));
+
+      document.getElementById('svg-bg-rect').setAttribute('fill', bgColor);
+      document.getElementById('poster-frame').style.backgroundColor = bgColor;
+
+      let paletteGroups;
+      if (paletteKey === 'custom-random' && customProceduralPalette) {
+        paletteGroups = customProceduralPalette;
+      } else {
+        paletteGroups = isLight ? (PALETTES_LIGHT[paletteKey] || PALETTES_LIGHT['rudnick-warm']) : (PALETTES[paletteKey] || PALETTES['rudnick-warm']);
+      }
+
+      const primaryTextColor = isLight ? '#09090D' : '#FFFFFF';
+      const secondaryTextColor = isLight ? '#0284C7' : '#00BFFF';
+      const detailTextColor = isLight ? '#334155' : '#CBD5E1';
+      const accentOrange = isLight ? '#EA580C' : '#FFA454';
+
+      // 1. UPDATE GRADIENTS
+      const defs = document.getElementById('svg-defs');
+      paletteGroups.forEach((stops, gIdx) => {
+        let grad = document.getElementById(`grad-track-${gIdx + 1}`);
+        if (!grad) {
+          grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+          grad.setAttribute('id', `grad-track-${gIdx + 1}`);
+          defs.appendChild(grad);
+        }
+        grad.innerHTML = `
+          <stop offset="0%" stop-color="${stops[0]}" />
+          <stop offset="35%" stop-color="${stops[1]}" />
+          <stop offset="70%" stop-color="${stops[2]}" />
+          <stop offset="100%" stop-color="${stops[3] || stops[0]}" />
+        `;
+      });
+
+      // 2. HIGH-DETAIL MODULAR SWISS GRID
+      const gridLayer = document.getElementById('grid-layer');
+      gridLayer.style.display = showGrid ? 'inline' : 'none';
+      if (showGrid) {
+        const gridLineColor = isLight ? 'rgba(2, 132, 199, 0.24)' : 'rgba(0, 191, 255, 0.20)';
+        const gridTextColor = isLight ? 'rgba(2, 132, 199, 0.75)' : 'rgba(0, 191, 255, 0.65)';
+        
+        let gridMarkup = '<rect x="36" y="36" width="728" height="1128" fill="url(#swiss-grid-pattern)" />';
+        for (let c = 0; c <= 12; c++) {
+          const x = 36 + (c * (728 / 12));
+          gridMarkup += `<line x1="${x}" y1="36" x2="${x}" y2="1164" stroke="${gridLineColor}" stroke-width="0.8" />`;
+          gridMarkup += `<text x="${x + 3}" y="48" font-size="8" fill="${gridTextColor}" class="font-tomorrow-400">C${c}</text>`;
+        }
+        for (let r = 0; r <= 18; r++) {
+          const y = 36 + (r * (1128 / 18));
+          gridMarkup += `<line x1="36" y1="${y}" x2="764" y2="${y}" stroke="${gridLineColor}" stroke-width="0.6" stroke-dasharray="2 4" />`;
+          if (r % 2 === 0) {
+            gridMarkup += `<text x="746" y="${y - 3}" font-size="7" fill="${gridTextColor}" class="font-tomorrow-400">R${r}</text>`;
+          }
+        }
+        gridLayer.innerHTML = gridMarkup;
+      }
+
+      // 3. TALISMAN ENGINE (MOVABLE & SCALABLE)
+      const talismanLayer = document.getElementById('talisman-layer');
+      const baseTX = 44 + offsets.talisman.x;
+      const baseTY = 44 + offsets.talisman.y;
+      const tHalf = talismanBoxSize / 2;
+      const rInner = talismanBoxSize * 0.32;
+      const rCore = talismanBoxSize * 0.20;
+
+      let emblemInner = '';
+      if (activeEmblem === 'radar') {
+        emblemInner = `
+          <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="2.2" stroke-dasharray="5 3" />
+          <circle cx="0" cy="0" r="${rCore}" fill="none" stroke="${secondaryTextColor}" stroke-width="1.8" />
+          <line x1="-${rInner + 4}" y1="0" x2="${rInner + 4}" y2="0" stroke="${accentOrange}" stroke-width="1.8" />
+          <line x1="0" y1="-${rInner + 4}" x2="0" y2="${rInner + 4}" stroke="${accentOrange}" stroke-width="1.8" />
+          <circle cx="0" cy="0" r="4" fill="${primaryTextColor}" />
+        `;
+      } else if (activeEmblem === 'signal') {
+        emblemInner = `
+          <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="2.2" />
+          <line x1="-${rInner + 4}" y1="0" x2="${rInner + 4}" y2="0" stroke="${secondaryTextColor}" stroke-width="3" />
+          <line x1="-15" y1="0" x2="22" y2="-26" stroke="${accentOrange}" stroke-width="3" />
+          <circle cx="-20" cy="-18" r="6" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="2" />
+          <circle cx="22" cy="18" r="6" fill="${bgColor}" stroke="${accentOrange}" stroke-width="2" />
+        `;
+      } else if (activeEmblem === 'gyro') {
+        emblemInner = `
+          <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="2" />
+          <ellipse cx="0" cy="0" rx="${rInner}" ry="${rCore * 0.7}" fill="none" stroke="${secondaryTextColor}" stroke-width="2" />
+          <ellipse cx="0" cy="0" rx="${rCore * 0.7}" ry="${rInner}" fill="none" stroke="${accentOrange}" stroke-width="2" />
+          <circle cx="0" cy="0" r="4" fill="${primaryTextColor}" />
+        `;
+      } else {
+        emblemInner = `
+          <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="1.8" stroke-dasharray="5 3" />
+          <circle cx="0" cy="0" r="${rCore}" fill="none" stroke="${secondaryTextColor}" stroke-width="2" />
+          <line x1="-${rInner + 4}" y1="0" x2="${rInner + 4}" y2="0" stroke="${primaryTextColor}" stroke-width="1.5" />
+          <line x1="0" y1="-${rInner + 4}" x2="0" y2="${rInner + 4}" stroke="${primaryTextColor}" stroke-width="1.5" />
+          <circle cx="0" cy="0" r="4" fill="${secondaryTextColor}" />
+        `;
+      }
+
+      talismanLayer.innerHTML = `
+        <g id="talisman-group" transform="translate(${baseTX}, ${baseTY})">
+          <rect x="0" y="0" width="${talismanBoxSize}" height="${talismanBoxSize}" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="2.5" />
+          <rect x="4" y="4" width="${talismanBoxSize - 8}" height="${talismanBoxSize - 8}" fill="none" stroke="${secondaryTextColor}" stroke-width="1" stroke-dasharray="4 3" />
+          <g transform="translate(${tHalf}, ${tHalf})">
+            ${emblemInner}
+          </g>
+        </g>
+      `;
+
+      // 4. TOPOLOGY-ADAPTIVE 6-STRIPE LABYRINTH (EDGE-BLEED READY & ZERO OVERLAP)
+      const circuitLayer = document.getElementById('circuit-labyrinth-layer');
+      const badgeLayer = document.getElementById('badge-track-layer');
+      circuitLayer.innerHTML = '';
+      badgeLayer.innerHTML = '';
+
+      const xLeft = (bleedMode === 'bleed') ? -30 : 48;
+      const xRight = (bleedMode === 'bleed') ? 830 : 752;
+      const yBottom = (bleedMode === 'bleed') ? 1230 : 1020;
+
+      let trackDefinitions = [];
+      if (topology === 1) {
+        trackDefinitions = [
+          (jit) => `M ${xLeft} ${220 + jit.y} H ${340 + jit.x} V ${340 + jit.y} H ${xRight}`,
+          (jit) => `M ${280 + jit.x} 190 V ${580 + jit.y} H ${440 + jit.x} V ${yBottom} H ${xRight}`,
+          (jit) => `M ${xLeft} ${380 + jit.y} H ${480 + jit.x} V ${640 + jit.y} H ${xRight}`,
+          (jit) => `M ${520 + jit.x} 200 V ${780 + jit.y} H ${240 + jit.x} V ${yBottom} H ${xLeft}`,
+          (jit) => `M ${xLeft} ${660 + jit.y} H ${500 + jit.x} V ${740 + jit.y} H ${xRight}`,
+          (jit) => `M ${590 + jit.x} 220 V ${680 + jit.y} H ${650 + jit.x} V ${yBottom}`
+        ];
+      } else if (topology === 2) {
+        trackDefinitions = [
+          (jit) => `M ${xLeft} ${200 + jit.y} H ${300 + jit.x} V ${280 + jit.y} H ${xRight}`,
+          (jit) => `M ${280 + jit.x} 200 V ${460 + jit.y} H ${xRight}`,
+          (jit) => `M ${xLeft} ${360 + jit.y} H ${480 + jit.x} V ${480 + jit.y} H ${xRight}`,
+          (jit) => `M ${xLeft} ${760 + jit.y} H ${400 + jit.x} V ${960 + jit.y} H ${xRight}`,
+          (jit) => `M ${xRight} ${820 + jit.y} H ${280 + jit.x} V ${yBottom} H ${xLeft}`,
+          (jit) => `M ${540 + jit.x} 760 V ${920 + jit.y} H ${xRight}`
+        ];
+      } else {
+        trackDefinitions = [
+          (jit) => `M ${xLeft} ${180 + jit.y} H ${320 + jit.x} V ${260 + jit.y} H ${700 + jit.x} V ${340 + jit.y}`,
+          (jit) => `M ${290 + jit.x} 190 V ${580 + jit.y} H ${440 + jit.x} V ${980 + jit.y} H ${xRight}`,
+          (jit) => `M ${xLeft} ${340 + jit.y} H ${500 + jit.x} V ${640 + jit.y} H ${680 + jit.x} V ${960 + jit.y}`,
+          (jit) => `M ${530 + jit.x} 200 V ${780 + jit.y} H ${240 + jit.x} V ${yBottom} H ${xLeft}`,
+          (jit) => `M ${xLeft} ${640 + jit.y} H ${520 + jit.x} V ${720 + jit.y} H ${xRight}`,
+          (jit) => `M ${610 + jit.x} 220 V ${680 + jit.y} H ${680 + jit.x} V ${yBottom}`
+        ];
+      }
+
+      let tracksMarkup = '';
+      let badgeMarkup = '';
+
+      for (let i = 0; i < density; i++) {
+        const jit = lineOffsets[i];
+        const d = trackDefinitions[i % trackDefinitions.length](jit);
+        const gradId = `url(#grad-track-${(i % 3) + 1})`;
+        const w = (i % 2 === 0) ? baseStrokeW : Math.max(3, baseStrokeW - 2);
+        const animClass = isStreamActive ? 'circuit-path-animated' : '';
+
+        tracksMarkup += `
+          <path d="${d}" stroke="${gradId}" stroke-width="${w}" fill="none" class="${animClass}" stroke-linecap="square" stroke-linejoin="miter" />
+        `;
+
+        if (i < 3) {
+          const st = STATIONS[i % STATIONS.length];
+          const badgeX = (topology === 1 ? 260 : 340) + (i * 90) + jit.x;
+          const badgeY = 260 + (i * 65) + jit.y;
+          const label = `${st.code} // ${st.bay}`;
+          const badgeW = label.length * 7.5 + 20;
+
+          badgeMarkup += `
+            <g transform="translate(${badgeX}, ${badgeY})">
+              <rect x="-4" y="-11" width="${badgeW}" height="22" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="1.8" />
+              <circle cx="5" cy="0" r="3" fill="${secondaryTextColor}" />
+              <text x="14" y="3.5" class="font-tomorrow-400" font-size="9" fill="${primaryTextColor}" letter-spacing="1">${label}</text>
+            </g>
+          `;
+        }
+      }
+
+      circuitLayer.innerHTML = tracksMarkup;
+      badgeLayer.innerHTML = badgeMarkup;
+
+      // 5. MOVABLE DEPARTURE & BOARDING BOXES (Full-Canvas Translation)
+      const sqLayer = document.getElementById('station-squares-layer');
+      const b1Name = document.getElementById('b1-name-input').value || 'GRAND CENTRAL';
+      const b1Code = document.getElementById('b1-code-input').value || 'NYC-01';
+      const b2Name = document.getElementById('b2-name-input').value || 'VENEZIA SANTA LUCIA';
+      const b2Code = document.getElementById('b2-code-input').value || 'VCE-01';
+
+      const stOrigin = STATIONS[0];
+      const stDest = STATIONS[1];
+      const { time: tOrigin, date: dOrigin } = getLiveTimeAndDate(stOrigin.tz);
+      const { time: tDest, date: dDest } = getLiveTimeAndDate(stDest.tz);
+
+      let b1BaseX = 48, b1BaseY = 420, b1W = 224, b1H = 146;
+      let b2BaseX = 496, b2BaseY = 760, b2W = 256, b2H = 146;
+
+      if (topology === 1) {
+        b1BaseX = 140; b1BaseY = 260;
+        b2BaseX = 400; b2BaseY = 800;
+      } else if (topology === 2) {
+        b1BaseX = 48; b1BaseY = 320;
+        b2BaseX = 496; b2BaseY = 760;
+      }
+
+      const b1X = b1BaseX + offsets.b1.x;
+      const b1Y = b1BaseY + offsets.b1.y;
+      const b2X = b2BaseX + offsets.b2.x;
+      const b2Y = b2BaseY + offsets.b2.y;
+
+      function buildStripedBox(w, h, strokeCol, tickCol) {
+        return `
+          <rect x="0" y="0" width="${w}" height="${h}" fill="${bgColor}" stroke="${strokeCol}" stroke-width="2" />
+          <rect x="3" y="3" width="${w - 6}" height="${h - 6}" fill="none" stroke="${strokeCol}" stroke-width="0.8" opacity="0.6" />
+          <line x1="0" y1="8" x2="6" y2="8" stroke="${tickCol}" stroke-width="2" />
+          <line x1="0" y1="14" x2="4" y2="14" stroke="${tickCol}" stroke-width="1.5" />
+          <line x1="${w - 6}" y1="8" x2="${w}" y2="8" stroke="${tickCol}" stroke-width="2" />
+          <line x1="${w - 4}" y1="14" x2="${w}" y2="14" stroke="${tickCol}" stroke-width="1.5" />
+          <line x1="8" y1="${h}" x2="8" y2="${h - 6}" stroke="${tickCol}" stroke-width="2" />
+          <line x1="${w - 8}" y1="${h}" x2="${w - 8}" y2="${h - 6}" stroke="${tickCol}" stroke-width="2" />
+        `;
+      }
+
+      sqLayer.innerHTML = `
+        <path d="M ${b1X + b1W} ${b1Y + 30} H ${b1X + b1W + 28} V ${b1Y + 60}" stroke="${secondaryTextColor}" stroke-width="2" fill="none" stroke-dasharray="3 3" />
+        <path d="M ${b2X} ${b2Y + 30} H ${b2X - 28} V ${b2Y - 20}" stroke="${primaryTextColor}" stroke-width="2" fill="none" stroke-dasharray="3 3" />
+
+        <!-- ORIGIN BOX -->
+        <g transform="translate(${b1X}, ${b1Y})">
+          ${buildStripedBox(b1W, b1H, primaryTextColor, secondaryTextColor)}
+          <rect x="0" y="0" width="${b1W}" height="22" fill="${secondaryTextColor}" opacity="0.15" />
+          <text x="10" y="15" class="font-tomorrow-400" font-size="9" fill="${primaryTextColor}">DEPARTING FROM // ${b1Code}</text>
+          <text x="10" y="38" class="font-tomorrow-700" font-size="11" fill="${primaryTextColor}">${b1Name}</text>
+          <text x="10" y="62" class="font-tomorrow-700" font-size="17" fill="${accentOrange}">${tOrigin} <tspan font-size="9" font-weight="400" fill="${detailTextColor}">${stOrigin.offset}</tspan></text>
+          <text x="10" y="81" class="font-tomorrow-400" font-size="10" fill="${secondaryTextColor}">${dOrigin}</text>
+          <text x="10" y="103" class="font-garamond" font-size="14" fill="${detailTextColor}">GATE / BAY: <tspan font-weight="700" fill="${primaryTextColor}">${stOrigin.bay}</tspan></text>
+          <text x="10" y="126" class="font-tomorrow-400" font-size="9" fill="${secondaryTextColor}">STATUS: ${stOrigin.status}</text>
+        </g>
+
+        <!-- DESTINATION BOX -->
+        <g transform="translate(${b2X}, ${b2Y})">
+          ${buildStripedBox(b2W, b2H, secondaryTextColor, primaryTextColor)}
+          <rect x="0" y="0" width="${b2W}" height="22" fill="${primaryTextColor}" opacity="0.15" />
+          <text x="10" y="15" class="font-tomorrow-400" font-size="9" fill="${primaryTextColor}">DESTINATION TERMINUS // ${b2Code}</text>
+          <text x="10" y="38" class="font-tomorrow-700" font-size="11" fill="${primaryTextColor}">${b2Name}</text>
+          <text x="10" y="62" class="font-tomorrow-700" font-size="17" fill="${secondaryTextColor}">${tDest} <tspan font-size="9" font-weight="400" fill="${detailTextColor}">${stDest.offset}</tspan></text>
+          <text x="10" y="81" class="font-tomorrow-400" font-size="10" fill="${primaryTextColor}">${dDest}</text>
+          <text x="10" y="103" class="font-garamond" font-size="14" fill="${detailTextColor}">APPROACH: <tspan font-weight="700" fill="${primaryTextColor}">${stDest.bay}</tspan></text>
+          <text x="10" y="126" class="font-tomorrow-400" font-size="9" fill="${accentOrange}">SCHEDULE: ${stDest.status}</text>
+        </g>
+      `;
+
+      // 6. TYPOGRAPHIC ENGINE WITH EXPANDED FULL-CANVAS MOVEMENT
+      const typeLayer = document.getElementById('type-layer');
+      const h1Top = document.getElementById('h1-top-input').value || 'EARTH PLATFORM';
+      const h1Bottom = document.getElementById('h1-bottom-input').value || 'NULL DISTANCE';
+      const subTop = document.getElementById('sub-top-input').value || 'GEODESIC VECTOR // PLANETARY FAULT';
+      const roster = document.getElementById('roster-input').value || 'NEW YORK · SEOUL · HONG KONG · VENICE';
+      const velText = document.getElementById('vel-tag-input').value || 'VECTOR 01';
+      const brandText = document.getElementById('badge-brand-input').value || 'PURE™';
+      const badgeSub = document.getElementById('badge-sub-input').value || 'BITBY.TV';
+      const footerDateText = document.getElementById('footer-date-input').value || `${dOrigin} // UTC LIVE`;
+      const footerPlaceText = document.getElementById('footer-place-input').value || 'FINANCE ST, CENTRAL, HONG KONG';
+
+      function buildFracturedSpans(text) {
+        let markup = '';
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i];
+          const dy = (fracture > 0 && i % 2 === 1) ? `dy="${fracture}"` : `dy="0"`;
+          if (ch === 'A' || ch === 'a') {
+            markup += `<tspan fill="${secondaryTextColor}" ${dy}>${ch}</tspan>`;
+          } else {
+            markup += `<tspan ${dy}>${ch}</tspan>`;
+          }
+        }
+        return markup;
+      }
+
+      function getRotationTransform(orient) {
+        if (orient === 'vertical-down') return 'rotate(90)';
+        if (orient === 'vertical-up') return 'rotate(-90)';
+        return '';
+      }
+
+      let layoutTypeMarkup = '';
+
+      if (topology === 1) {
+        layoutTypeMarkup = `
+          <g id="h1-top-group" transform="translate(${52 + offsets.h1.x}, ${240 + offsets.h1.y}) ${getRotationTransform(h1Orient || 'vertical-down')}">
+            <text id="h1-top-text" x="0" y="0" text-anchor="start" class="font-tomorrow-400" font-size="${h1Size}" fill="${primaryTextColor}" letter-spacing="${tracking}em">
+              ${buildFracturedSpans(h1Top)}
+            </text>
+          </g>
+          <g id="h1-bottom-group" transform="translate(${752 + offsets.h2.x}, ${900 + offsets.h2.y}) ${getRotationTransform(h2Orient || 'vertical-up')}">
+            <text id="h1-bottom-text" x="0" y="0" text-anchor="start" class="font-tomorrow-400" font-size="${h2Size}" fill="${secondaryTextColor}" letter-spacing="${tracking}em">
+              ${buildFracturedSpans(h1Bottom)}
+            </text>
+          </g>
+          <g id="sub-group" transform="translate(${752 + offsets.sub.x}, ${105 + offsets.sub.y})">
+            <text x="0" y="0" text-anchor="end" class="font-tomorrow-400" font-size="${subSize}" fill="${secondaryTextColor}">${subTop}</text>
+          </g>
+          <g id="roster-group" transform="translate(${140 + offsets.roster.x}, ${1060 + offsets.roster.y})">
+            <text x="0" y="0" class="font-tomorrow-400" font-size="9.5" fill="${secondaryTextColor}">TRANSIT MATRIX:</text>
+            <text x="0" y="22" class="font-garamond" font-size="${rosterSize}" font-style="italic" fill="${primaryTextColor}">${roster}</text>
+          </g>
+        `;
+      } else if (topology === 2) {
+        layoutTypeMarkup = `
+          <g id="sub-group" transform="translate(${752 + offsets.sub.x}, ${85 + offsets.sub.y})">
+            <text x="0" y="0" text-anchor="end" class="font-tomorrow-400" font-size="${subSize}" fill="${secondaryTextColor}">${subTop}</text>
+          </g>
+          <g id="h1-top-group" transform="translate(${offsets.h1.x}, ${offsets.h1.y}) ${getRotationTransform(h1Orient)}">
+            <text id="h1-top-text" x="400" y="580" text-anchor="middle" class="font-tomorrow-400" font-size="${h1Size}" fill="${primaryTextColor}" letter-spacing="${tracking}em">
+              ${buildFracturedSpans(h1Top)}
+            </text>
+          </g>
+          <g id="h1-bottom-group" transform="translate(${offsets.h2.x}, ${offsets.h2.y}) ${getRotationTransform(h2Orient)}">
+            <text id="h1-bottom-text" x="400" y="650" text-anchor="middle" class="font-tomorrow-400" font-size="${h2Size}" fill="${secondaryTextColor}" letter-spacing="${tracking}em">
+              ${buildFracturedSpans(h1Bottom)}
+            </text>
+          </g>
+          <g id="roster-group" transform="translate(${48 + offsets.roster.x}, ${1060 + offsets.roster.y})">
+            <text x="0" y="0" class="font-tomorrow-400" font-size="9.5" fill="${secondaryTextColor}">TRANSIT MATRIX:</text>
+            <text x="0" y="22" class="font-garamond" font-size="${rosterSize}" font-style="italic" fill="${primaryTextColor}">${roster}</text>
+          </g>
+        `;
+      } else {
+        layoutTypeMarkup = `
+          <g id="h1-top-group" transform="translate(${offsets.h1.x}, ${offsets.h1.y}) ${getRotationTransform(h1Orient)}">
+            <text id="h1-top-text" x="752" y="105" text-anchor="end" class="font-tomorrow-400" font-size="${h1Size}" fill="${primaryTextColor}" letter-spacing="${tracking}em">
+              ${buildFracturedSpans(h1Top)}
+            </text>
+          </g>
+          <g id="sub-group" transform="translate(${offsets.sub.x}, ${offsets.sub.y})">
+            <text x="752" y="138" text-anchor="end" class="font-tomorrow-400" font-size="${subSize}" fill="${secondaryTextColor}" letter-spacing="0.1em">
+              ${subTop}
+            </text>
+          </g>
+          <g id="h1-bottom-group" transform="translate(${offsets.h2.x}, ${offsets.h2.y}) ${getRotationTransform(h2Orient)}">
+            <text id="h1-bottom-text" x="48" y="1080" text-anchor="start" class="font-tomorrow-400" font-size="${h2Size}" fill="${primaryTextColor}" letter-spacing="${tracking}em">
+              ${buildFracturedSpans(h1Bottom)}
+            </text>
+          </g>
+          <g id="roster-group" transform="translate(${48 + offsets.roster.x}, ${930 + offsets.roster.y})">
+            <text x="0" y="0" class="font-tomorrow-400" font-size="9.5" fill="${secondaryTextColor}" letter-spacing="1.2">SCHEDULED DESTINATIONS:</text>
+            <text x="0" y="22" class="font-garamond" font-size="${rosterSize}" font-style="italic" fill="${primaryTextColor}">${roster}</text>
+          </g>
+        `;
+      }
+
+      const velRot = (offsets.vel.rot !== undefined) ? offsets.vel.rot : 45;
+      const diagonalBoxW = velText.length * velSize * 0.72 + 24;
+      const diagonalBoxH = velSize * 2.0;
+
+      typeLayer.innerHTML = `
+        ${layoutTypeMarkup}
+
+        <!-- Lateral Vertical Brand Badge (X=752, Y=500 with full translation) -->
+        <g id="brand-group" transform="translate(${752 + offsets.badge.x}, ${500 + offsets.badge.y}) rotate(90)">
+          <rect x="-10" y="-22" width="220" height="34" fill="${bgColor}" />
+          <text x="0" y="2" class="font-cooper" font-size="${badgeSize}" fill="${primaryTextColor}">${brandText}</text>
+          <text x="96" y="2" class="font-barlow" font-size="${Math.max(12, badgeSize - 4)}" fill="${secondaryTextColor}">${badgeSub}</text>
+        </g>
+
+        <!-- Movable & Scalable Diagonal Element -->
+        <g id="vel-group" transform="translate(${390 + offsets.vel.x}, ${500 + offsets.vel.y}) rotate(${velRot})">
+          <rect x="-${diagonalBoxW / 2}" y="-${diagonalBoxH / 2}" width="${diagonalBoxW}" height="${diagonalBoxH}" fill="${bgColor}" stroke="${accentOrange}" stroke-width="1.8" />
+          <text x="0" y="${velSize * 0.35}" class="font-tomorrow-400" font-size="${velSize}" fill="${accentOrange}" text-anchor="middle" letter-spacing="0.12em">${velText}</text>
+        </g>
+
+        <!-- Custom Date & Location Anchors (Full Canvas Roam) -->
+        <g id="date-group" transform="translate(${48 + offsets.date.x}, ${1150 + offsets.date.y})">
+          <text x="0" y="0" class="font-tomorrow-400" font-size="${dateSize}" fill="${secondaryTextColor}">${footerDateText}</text>
+        </g>
+        <g id="place-group" transform="translate(${752 + offsets.place.x}, ${1150 + offsets.place.y})">
+          <text x="0" y="0" text-anchor="end" class="font-garamond" font-size="${placeSize}" fill="${detailTextColor}">${footerPlaceText}</text>
+        </g>
+      `;
+    }
+
+    // 🎲 "Choose Your Route" (Infinite Randomization)
+    document.getElementById('mutate-btn').addEventListener('click', () => {
+      const topChoice = Math.floor(Math.random() * 4);
+      document.getElementById('layout-topology-select').value = topChoice;
+
+      const bgOptions = ['white', 'cream', 'black', 'slate'];
+      const chosenBg = bgOptions[Math.floor(Math.random() * bgOptions.length)];
+      document.getElementById('canvas-bg-select').value = chosenBg;
+      const isLight = (chosenBg === 'white' || chosenBg === 'cream');
+
+      const paletteModes = ['rudnick-warm', 'cyber-rave', 'violet-dusk', 'solarpunk', 'monochrome-pop', 'custom-random'];
+      const chosenPalette = paletteModes[Math.floor(Math.random() * paletteModes.length)];
+      document.getElementById('palette-select').value = chosenPalette;
+      if (chosenPalette === 'custom-random') {
+        customProceduralPalette = generateRandomHarmonicPalette(isLight);
+      }
+
+      showGrid = (Math.random() > 0.4);
+      document.getElementById('stripe-bleed-select').value = (Math.random() > 0.3) ? 'bleed' : 'contain';
+
+      const randDensity = Math.floor(Math.random() * 3) + 4;
+      document.getElementById('maze-density').value = randDensity;
+      document.getElementById('density-val').textContent = `${randDensity} Stripes`;
+
+      const randStroke = Math.floor(Math.random() * 4) + 5;
+      document.getElementById('stroke-weight').value = randStroke;
+      document.getElementById('stroke-val').textContent = `${randStroke}px`;
+
+      lineOffsets.forEach(l => {
+        l.x = Math.round((Math.random() - 0.5) * 80);
+        l.y = Math.round((Math.random() - 0.5) * 40);
+      });
+
+      Object.keys(offsets).forEach(k => {
+        offsets[k].x = 0;
+        offsets[k].y = 0;
+      });
+      offsets.vel.rot = (Math.random() > 0.5) ? 45 : 135;
+
+      ['h1-x', 'h1-y', 'h2-x', 'h2-y', 'sub-x', 'sub-y', 'roster-x', 'roster-y', 'vel-x', 'vel-y', 'badge-x', 'badge-y', 'b1-x', 'b1-y', 'b2-x', 'b2-y', 'talisman-x', 'talisman-y', 'date-x', 'date-y', 'place-x', 'place-y'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = 0;
+        const s = document.getElementById(`${id}-val`);
+        if (s) s.textContent = (id.startsWith('b1') || id.startsWith('b2') || id.startsWith('talisman')) ? '0px' : '0';
+      });
+
+      document.getElementById('vel-rot').value = offsets.vel.rot;
+      document.getElementById('vel-rot-val').textContent = `${offsets.vel.rot}°`;
+
+      if (topChoice === 1) {
+        document.getElementById('h1-orientation').value = 'vertical-down';
+        document.getElementById('h2-orientation').value = 'vertical-up';
+      } else {
+        document.getElementById('h1-orientation').value = 'horizontal';
+        document.getElementById('h2-orientation').value = 'horizontal';
+      }
+
+      const set = HEADLINE_SETS[Math.floor(Math.random() * HEADLINE_SETS.length)];
+      document.getElementById('h1-top-input').value = set[0];
+      document.getElementById('h1-bottom-input').value = set[1];
+      document.getElementById('sub-top-input').value = set[2];
+
+      const emblems = ['radar', 'chrono', 'signal', 'token', 'hub', 'gyro', 'pantograph', 'monolith'];
+      document.getElementById('talisman-select').value = emblems[Math.floor(Math.random() * emblems.length)];
+
+      document.getElementById('footer-place-input').value = WORLD_ADDRESSES[Math.floor(Math.random() * WORLD_ADDRESSES.length)];
+
+      const randFracture = (Math.random() > 0.5) ? Math.floor(Math.random() * 3) * 2 : 0;
+      document.getElementById('baseline-fracture').value = randFracture;
+      document.getElementById('fracture-val').textContent = `${randFracture}px`;
+
+      renderPoster();
+    });
+
+    function updateActiveLineSliders() {
+      const active = document.getElementById('active-line-select').value;
+      const xVal = parseFloat(document.getElementById('line-shift-x').value);
+      const yVal = parseFloat(document.getElementById('line-shift-y').value);
+
+      document.getElementById('line-x-val').textContent = `${xVal}px`;
+      document.getElementById('line-y-val').textContent = `${yVal}px`;
+
+      if (active === 'all') {
+        lineOffsets.forEach(l => { l.x = xVal; l.y = yVal; });
+      } else {
+        const idx = parseInt(active, 10);
+        if (lineOffsets[idx]) { lineOffsets[idx].x = xVal; lineOffsets[idx].y = yVal; }
+      }
+      renderPoster();
+    }
+
+    document.getElementById('line-shift-x').addEventListener('input', updateActiveLineSliders);
+    document.getElementById('line-shift-y').addEventListener('input', updateActiveLineSliders);
+
+    document.getElementById('active-line-select').addEventListener('change', (e) => {
+      const active = e.target.value;
+      if (active !== 'all') {
+        const idx = parseInt(active, 10);
+        document.getElementById('line-shift-x').value = lineOffsets[idx].x;
+        document.getElementById('line-shift-y').value = lineOffsets[idx].y;
+        document.getElementById('line-x-val').textContent = `${lineOffsets[idx].x}px`;
+        document.getElementById('line-y-val').textContent = `${lineOffsets[idx].y}px`;
+      }
+    });
+
+    // Generic element offset setup (-1000 to +1000 range)
+    function setupSlider(sliderId, key, axis, isPx = false) {
+      document.getElementById(sliderId).addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        document.getElementById(`${sliderId}-val`).textContent = isPx ? `${val}px` : val;
+        offsets[key][axis] = val;
+        renderPoster();
+      });
+    }
+
+    setupSlider('h1-x', 'h1', 'x');
+    setupSlider('h1-y', 'h1', 'y');
+    setupSlider('h2-x', 'h2', 'x');
+    setupSlider('h2-y', 'h2', 'y');
+    setupSlider('sub-x', 'sub', 'x');
+    setupSlider('sub-y', 'sub', 'y');
+    setupSlider('roster-x', 'roster', 'x');
+    setupSlider('roster-y', 'roster', 'y');
+    setupSlider('vel-x', 'vel', 'x');
+    setupSlider('vel-y', 'vel', 'y');
+    setupSlider('badge-x', 'badge', 'x');
+    setupSlider('badge-y', 'badge', 'y');
+    setupSlider('b1-x', 'b1', 'x', true);
+    setupSlider('b1-y', 'b1', 'y', true);
+    setupSlider('b2-x', 'b2', 'x', true);
+    setupSlider('b2-y', 'b2', 'y', true);
+    setupSlider('talisman-x', 'talisman', 'x', true);
+    setupSlider('talisman-y', 'talisman', 'y', true);
+    setupSlider('date-x', 'date', 'x');
+    setupSlider('date-y', 'date', 'y');
+    setupSlider('place-x', 'place', 'x');
+    setupSlider('place-y', 'place', 'y');
+
+    document.getElementById('talisman-size').addEventListener('input', (e) => {
+      document.getElementById('talisman-size-val').textContent = `${e.target.value}px`;
+      renderPoster();
+    });
+
+    document.getElementById('vel-rot').addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      document.getElementById('vel-rot-val').textContent = `${val}°`;
+      offsets.vel.rot = val;
+      renderPoster();
+    });
+
+    ['h1-size', 'h2-size', 'sub-size', 'roster-size', 'vel-size', 'badge-size', 'place-size'].forEach(id => {
+      document.getElementById(id).addEventListener('input', (e) => {
+        document.getElementById(`${id}-val`).textContent = `${e.target.value}px`;
+        renderPoster();
+      });
+    });
+
+    document.getElementById('date-size').addEventListener('input', (e) => {
+      document.getElementById('date-size-val').textContent = `${e.target.value}px`;
+      renderPoster();
+    });
+
+    document.getElementById('toggle-stream-btn').addEventListener('click', (e) => {
+      isStreamActive = !isStreamActive;
+      const head = document.getElementById('stream-status-head');
+      if (isStreamActive) {
+        e.target.classList.add('active');
+        e.target.textContent = '⚡ LIVE TELEMETRY: ACTIVE';
+        head.classList.add('active');
+        document.getElementById('stream-indicator').textContent = '● SYNCED: USGS GLOBAL M2.5+';
+        document.getElementById('stream-rate').textContent = 'LIVE POLLING';
+        pollUSGSStream();
+      } else {
+        e.target.classList.remove('active');
+        e.target.textContent = '⏸ STATIC MODE (MANUAL)';
+        head.classList.remove('active');
+        document.getElementById('stream-indicator').textContent = '○ STREAM PAUSED (STATIC BASELINE)';
+        document.getElementById('stream-rate').textContent = 'STANDBY';
+      }
+      renderPoster();
+    });
+
+    document.getElementById('poll-stream-btn').addEventListener('click', () => {
+      pollUSGSStream();
+    });
+
+    document.getElementById('magnitude-range').addEventListener('input', (e) => {
+      updateTelemetryVisuals(parseFloat(e.target.value) / 10);
+    });
+
+    document.getElementById('toggle-grid-btn').addEventListener('click', () => {
+      showGrid = !showGrid;
+      renderPoster();
+    });
+
+    [
+      'layout-topology-select', 'canvas-bg-select', 'palette-select', 
+      'talisman-select', 'h1-orientation', 'h2-orientation', 'stripe-bleed-select'
+    ].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => {
+        if (id === 'palette-select' && document.getElementById('palette-select').value === 'custom-random') {
+          const bgChoice = document.getElementById('canvas-bg-select').value;
+          customProceduralPalette = generateRandomHarmonicPalette(bgChoice === 'white' || bgChoice === 'cream');
+        }
+        renderPoster();
+      });
+    });
+
+    [
+      'h1-top-input', 'h1-bottom-input', 'sub-top-input', 'roster-input',
+      'b1-name-input', 'b1-code-input', 'b2-name-input', 'b2-code-input',
+      'vel-tag-input', 'badge-brand-input', 'badge-sub-input',
+      'footer-date-input', 'footer-place-input'
+    ].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderPoster);
+    });
+
+    document.getElementById('maze-density').addEventListener('input', (e) => {
+      document.getElementById('density-val').textContent = `${e.target.value} Stripes`;
+      renderPoster();
+    });
+
+    document.getElementById('stroke-weight').addEventListener('input', (e) => {
+      document.getElementById('stroke-val').textContent = `${e.target.value}px`;
+      renderPoster();
+    });
+
+    document.getElementById('tracking-range').addEventListener('input', (e) => {
+      document.getElementById('tracking-val').textContent = `${parseFloat(e.target.value).toFixed(2)}em`;
+      renderPoster();
+    });
+
+    document.getElementById('baseline-fracture').addEventListener('input', (e) => {
+      document.getElementById('fracture-val').textContent = `${e.target.value}px`;
+      renderPoster();
+    });
+
+    /* =========================================================================
+       TRUE 1-PASS SVG-TO-CANVAS EXPORT WITH EMBEDDED BASE64 WEB FONTS
+       ========================================================================= */
+    let cachedFontCss = '';
+
+    async function getBase64FontCss() {
+      if (cachedFontCss) return cachedFontCss;
+      try {
+        const cssUrl = 'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap';
+        const cssRes = await fetch(cssUrl);
+        let cssText = await cssRes.text();
+
+        const urlMatches = [...cssText.matchAll(/url\((https:\/\/[^)]+)\)/g)];
+        for (const match of urlMatches) {
+          const fontUrl = match[1];
+          const fontRes = await fetch(fontUrl);
+          const fontBlob = await fontRes.blob();
+          const base64Data = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(fontBlob);
+          });
+          cssText = cssText.replace(fontUrl, base64Data);
+        }
+        cachedFontCss = cssText;
+        return cssText;
+      } catch (err) {
+        return `@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Tomorrow:ital,wght@0,400;0,700;1,400&display=swap');`;
+      }
+    }
+
+    document.getElementById('export-png-btn').addEventListener('click', async () => {
+      const exportBtn = document.getElementById('export-png-btn');
+      const originalText = exportBtn.textContent;
+      exportBtn.textContent = 'Rendering...';
+      exportBtn.disabled = true;
+
+      try {
+        await document.fonts.ready;
+
+        const svg = document.getElementById('poster-svg');
+        const clone = svg.cloneNode(true);
+        clone.setAttribute('width', '800');
+        clone.setAttribute('height', '1200');
+
+        const inlinedFontCss = await getBase64FontCss();
+
+        const defs = clone.querySelector('defs') || clone.insertBefore(
+          document.createElementNS('http://www.w3.org/2000/svg', 'defs'),
+          clone.firstChild
+        );
+
+        const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+        styleEl.textContent = `
+          ${inlinedFontCss}
+          .font-tomorrow-400 { font-family: 'Tomorrow', sans-serif; font-weight: 400; }
+          .font-tomorrow-700 { font-family: 'Tomorrow', sans-serif; font-weight: 700; }
+          .font-garamond { font-family: 'EB Garamond', serif; }
+          .font-barlow { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; }
+          .font-cooper { font-family: 'Cooper Hewitt', sans-serif; font-weight: 700; font-style: italic; }
+          text { font-family: 'Tomorrow', sans-serif; }
+        `;
+        defs.appendChild(styleEl);
+
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(clone);
+        const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+
+        const scale = 2; // 2x Retina resolution (1600 x 2400)
+        const canvas = document.createElement('canvas');
+        canvas.width = 800 * scale;
+        canvas.height = 1200 * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(scale, scale);
+
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, 800, 1200);
+          URL.revokeObjectURL(url);
+
+          const a = document.createElement('a');
+          a.href = canvas.toDataURL('image/png');
+          a.download = `the-teleporter-${Date.now()}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          exportBtn.textContent = originalText;
+          exportBtn.disabled = false;
+        };
+
+        img.onerror = (err) => {
+          console.error('Image render error:', err);
+          exportBtn.textContent = originalText;
+          exportBtn.disabled = false;
+        };
+
+        img.src = url;
+      } catch (err) {
+        console.error('Export error:', err);
+        exportBtn.textContent = originalText;
+        exportBtn.disabled = false;
+      }
+    });
+
+    document.getElementById('export-html-btn').addEventListener('click', () => {
+      const fullSource = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([fullSource], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `the_teleporter_site_${Date.now()}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    setInterval(() => {
+      if (isStreamActive) pollUSGSStream();
+    }, 45000);
+
+    // Initial Execution in Static Mode
+    renderPoster();
+  </script>
+</body>
+</html>

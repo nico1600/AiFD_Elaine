@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en" style="--stream-anim-speed: 1.3s;"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE TELEPORTER // INFINITE PROCEDURAL TRANSIT SYNTHESIZER</title>
+
+  <!-- Typography Stack: Tomorrow, EB Garamond, Barlow Condensed, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,800;0,900;1,700&amp;family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;family=Tomorrow:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #050608;
+      --panel-bg: #0c0e13;
+      --border-color: #1a202c;
+      --text-muted: #7e8b9f;
+      --accent-red: #e11d2b;
+      --accent-blue: #00bfff;
+      --accent-orange: #ff6319;
+      --accent-green: #10b981;
+      --font-display: 'Tomorrow', sans-serif;
+      --font-serif: 'EB Garamond', serif;
+      --font-condensed: 'Barlow Condensed', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e2e8f0;
+      font-family: var(--font-display);
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Left Control Sidebar */
+    .sidebar {
+      width: 520px;
+      min-width: 440px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 30;
+      box-shadow: 20px 0 60px rgba(0,0,0,0.7);
+    }
+
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: #08090d;
+    }
+
+    .sidebar-header .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-header h1 {
+      font-size: 14px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-weight: 900;
+    }
+
+    .sidebar-header .tag-badge {
+      background: rgba(0, 191, 255, 0.12);
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      font-size: 9px;
+      padding: 2px 7px;
+      letter-spacing: 0.1em;
+      border-radius: 2px;
+      font-family: var(--font-mono);
+    }
+
+    .sidebar-header p {
+      font-size: 9.5px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+      font-family: var(--font-mono);
+    }
+
+    .sidebar-content {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sidebar-content::-webkit-scrollbar { width: 4px; }
+    .sidebar-content::-webkit-scrollbar-thumb { background: #232a38; border-radius: 2px; }
+
+    .control-box {
+      background: #10131a;
+      border: 1px solid #1c2331;
+      border-radius: 4px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .control-box.live-box {
+      border-color: #24354c;
+      background: linear-gradient(180deg, #101826 0%, #0d121c 100%);
+    }
+
+    .control-box summary {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-blue);
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-box summary::after { content: '▾'; font-size: 11px; color: var(--text-muted); }
+    details[open] summary::after { content: '▴'; }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .control-group label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+    }
+
+    .control-group input[type="text"],
+    .control-group select {
+      background: #090b10;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      color: #ffffff;
+      padding: 7px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .control-group input[type="text"]:focus,
+    .control-group select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-wrap input[type="range"] {
+      flex: 1;
+      height: 5px;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    .btn-row { display: flex; gap: 8px; }
+
+    .btn {
+      background: #151a24;
+      color: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      font-family: var(--font-display);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-radius: 3px;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: all 0.15s ease;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+    .btn-primary {
+      background: #e11d2b;
+      border-color: #ff3848;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(225, 29, 43, 0.45);
+    }
+    .btn-primary:hover { background: #ff2536; color: #ffffff; }
+
+    .btn-blue {
+      background: var(--accent-blue);
+      border-color: #38bdf8;
+      color: #060709;
+    }
+    .btn-blue:hover { background: #38bdf8; }
+
+    .btn-live {
+      background: #141c2a;
+      border-color: #273852;
+      color: #93c5fd;
+    }
+
+    .btn-live.active {
+      background: #064e3b;
+      border-color: var(--accent-green);
+      color: #a7f3d0;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .stream-feed-display {
+      background: #07090e;
+      border: 1px solid #192130;
+      border-radius: 3px;
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-family: var(--font-mono);
+    }
+
+    .feed-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+    }
+
+    .status-pulse {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #64748b;
+      margin-right: 5px;
+    }
+    .status-pulse.pulsing {
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: heartPulse 1.4s infinite;
+    }
+    @keyframes heartPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .feed-body {
+      font-size: 9px;
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .feed-metrics {
+      display: flex;
+      justify-content: space-between;
+      font-size: 8px;
+      color: var(--text-muted);
+      border-top: 1px dashed #1e293b;
+      padding-top: 4px;
+    }
+
+    /* Right Viewport Stage */
+    .viewport {
+      flex: 1;
+      background: #030406;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viewport-topbar {
+      height: 44px;
+      background: #080a0f;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 20;
+    }
+
+    .live-ticker-marquee {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--accent-orange);
+      overflow: hidden;
+      white-space: nowrap;
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .stage-canvas-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 16px;
+      overflow: auto;
+    }
+
+    #poster-frame {
+      height: min(92vh, 940px);
+      aspect-ratio: 800 / 1200;
+      position: relative;
+      box-shadow: 0 35px 120px rgba(0, 0, 0, 0.95);
+      border: 1px solid #1a202c;
+      flex-shrink: 0;
+      background: #070709;
+      overflow: hidden;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    svg#poster-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .circuit-path-animated {
+      stroke-dasharray: 28 14;
+      animation: circuitFlow var(--stream-anim-speed, 3.5s) linear infinite;
+    }
+    @keyframes circuitFlow {
+      from { stroke-dashoffset: 84; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    .pulse-talisman {
+      transform-origin: center;
+      animation: talismanRotate 20s linear infinite;
+    }
+    @keyframes talismanRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .glitch-flash {
+      animation: flashBorder 0.28s ease-out;
+    }
+    @keyframes flashBorder {
+      0% { filter: brightness(2.4) contrast(1.5); }
+      100% { filter: brightness(1) contrast(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-row">
+        <h1>THE TELEPORTER</h1>
+        <span class="tag-badge">INFINITE ENGINE</span>
+      </div>
+      <p>CONTINUOUS PROCEDURAL GRAPHICS &amp; NYC TELEMETRY</p>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- Master Infinite Generator Button -->
+      <div class="btn-row">
+        <button class="btn btn-primary" id="mutate-btn">🎲 Infinite Mutate (New Layout &amp; Palette)</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-blue" id="export-html-btn">⚡ Export Standalone HTML</button>
+        <button class="btn" id="toggle-grid-btn">📐 Toggle Swiss Grid</button>
+      </div>
+
+      <!-- Live NYC Transit Stream Box -->
+      <div class="control-box live-box">
+        <div class="control-group">
+          <label>Transit Feed Ingest</label>
+          <select id="stream-source-select">
+            <option value="citibike" selected="">Citi Bike Live Station Status (GBFS Real-Time)</option>
+            <option value="mta-delays">MTA Subway Delays &amp; Service Alerts</option>
+            <option value="mta-hybrid">NYC Dual-Mode (Subway + Dock Telemetry)</option>
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-live active" id="toggle-stream-btn"><span class="status-pulse"></span> STREAM PAUSED</button>
+          <button class="btn" id="poll-stream-btn">↺ Cycle Next Feed Event</button>
+        </div>
+
+        <div class="stream-feed-display">
+          <div class="feed-header">
+            <span id="feed-status" style="color: var(--accent-green);">● SYNCED: CITI BIKE GBFS</span>
+            <span id="feed-entropy-label" style="color: var(--accent-red);">ENTROPY: 0.84</span>
+          </div>
+          <div class="feed-body" id="feed-item-detail">STATION: UNION SQUARE EAST &amp; E 15 ST — 5 E-Bikes, 1 Docks Free (Entropy 0.84)</div>
+          <div class="feed-metrics">
+            <span id="feed-rate-metric">SEED: #C8DED4</span>
+            <span id="feed-impact-metric">FLOW VELOCITY: 2.8s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generator Settings & Variables -->
+      <div class="control-box">
+        <summary open="">Generative Architecture Parameters</summary>
+
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Composition Topology</label>
+          <select id="layout-topology-select">
+            <option value="0">01 // Trans-Equator Balanced</option>
+            <option value="1">02 // Lateral Spine Flow</option>
+            <option value="2">03 // Horizon Split System</option>
+            <option value="3">04 // Diagonal Constructivist</option>
+            <option value="4">05 // Monolithic Terminal Grid</option>
+            <option value="5">06 // Radial Interlock Perimeter</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Canvas Ground Color</label>
+          <select id="canvas-bg-select">
+            <option value="black" selected="">Deep Night Black (#070709)</option>
+            <option value="white">Pristine Swiss White (#FFFFFF)</option>
+            <option value="cream">Archival Warm Cream (#F5F4EE)</option>
+            <option value="slate">Corrosive Dark Slate (#111318)</option>
+            <option value="hazard">Hazard Alert Crimson (#1a0608)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Harmonic Color Mode</label>
+          <select id="palette-select">
+            <option value="procedural-random" selected="">🎲 Infinite Procedural Harmonic Palette</option>
+            <option value="citibike-electric">Citi Bike Electric (Cobalt, Capri, Toxic Mint)</option>
+            <option value="mta-subway">MTA NYC Subway (MTA Blue, B/D/F Orange, N/Q/R Yellow)</option>
+            <option value="rudnick-warm">Rudnick Classic (Magenta, Vermilion, Capri)</option>
+            <option value="hazard-amber">MTA Alert Crimson (Warning Red, Amber, Signal Lime)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Talisman Emblem</label>
+          <select id="talisman-select">
+            <option value="token">1. Commuter Turnstile Token &amp; Pass</option>
+            <option value="radar">2. Segmented Tactical Radar</option>
+            <option value="chrono">3. Dual-Zone Chrono Transit Dial</option>
+            <option value="signal">4. Signal Interlocking &amp; Switch Gate</option>
+            <option value="pantograph">5. High-Speed Pantograph Relay</option>
+            <option value="gyro">6. Geodesic Axial Gyroscope</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Circuit Labyrinth Details -->
+      <details class="control-box" open="">
+        <summary style="color: var(--accent-orange);">⚡ Circuit Labyrinth Controls</summary>
+
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Stripe Bundle Density <span id="density-val">6 Strands</span></label>
+          <div class="range-wrap"><input type="range" id="maze-density" min="2" max="6" step="1" value="5"></div>
+        </div>
+
+        <div class="control-group">
+          <label>Base Stroke Weight <span id="stroke-val">9px</span></label>
+          <div class="range-wrap"><input type="range" id="stroke-weight" min="2" max="16" step="1" value="6"></div>
+        </div>
+
+        <div class="control-group">
+          <label>Dynamic Letter-Spacing <span id="tracking-val">0.16em</span></label>
+          <div class="range-wrap"><input type="range" id="tracking-range" min="-0.02" max="0.25" step="0.01" value="0.02"></div>
+        </div>
+
+        <div class="control-group">
+          <label>Stepped Baseline Fracture <span id="fracture-val">8px</span></label>
+          <div class="range-wrap"><input type="range" id="baseline-fracture" min="0" max="24" step="2" value="0"></div>
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <!-- Right Viewport Stage -->
+  <main class="viewport">
+    <div class="viewport-topbar">
+      <div class="live-ticker-marquee" id="topbar-ticker">● LIVE [CITI BIKE GBFS]: CITI BIKE NYC — UNION SQUARE EAST &amp;.. // 5 E-BIKES // 1 DOCKS VACANT // GBFS REAL-TIME</div>
+    </div>
+
+    <div class="stage-canvas-wrap">
+      <div id="poster-frame" class="" style="background-color: rgb(26, 6, 8);">
+        <svg id="poster-svg" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <defs id="svg-defs">
+            <linearGradient id="grad-track-1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#F9731F"></stop>
+          <stop offset="35%" stop-color="#1FF9E0"></stop>
+          <stop offset="70%" stop-color="#1F39F9"></stop>
+          <stop offset="100%" stop-color="#FCEE83"></stop>
+        </linearGradient>
+            <linearGradient id="grad-track-2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1FF9E0"></stop>
+          <stop offset="35%" stop-color="#1F39F9"></stop>
+          <stop offset="70%" stop-color="#FCEE83"></stop>
+          <stop offset="100%" stop-color="#F9731F"></stop>
+        </linearGradient>
+            <linearGradient id="grad-track-3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1F39F9"></stop>
+          <stop offset="35%" stop-color="#F9731F"></stop>
+          <stop offset="70%" stop-color="#1FF9E0"></stop>
+          <stop offset="100%" stop-color="#FCEE83"></stop>
+        </linearGradient>
+            <pattern id="swiss-grid-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(0, 191, 255, 0.20)" stroke-width="0.75"></path>
+              <circle cx="60" cy="60" r="1.5" fill="rgba(0, 191, 255, 0.40)"></circle>
+              <path d="M 30 0 L 30 60 M 0 30 L 60 30" fill="none" stroke="rgba(0, 191, 255, 0.08)" stroke-width="0.5" stroke-dasharray="2 3"></path>
+            </pattern>
+          </defs>
+
+          <rect id="svg-bg-rect" width="800" height="1200" fill="#1a0608"></rect>
+          <g id="grid-layer" style="display: none;"></g>
+          <g id="circuit-labyrinth-layer">
+          <path d="M -40 157 H 372 V 255 H 616 V 598 H 840" stroke="url(#grad-track-1)" stroke-width="9" fill="none" class="circuit-path-animated" stroke-linecap="square"></path>
+        
+          <path d="M -40 300 H 429 V 488 H 547 V 646 H 840" stroke="url(#grad-track-2)" stroke-width="7" fill="none" class="circuit-path-animated" stroke-linecap="square"></path>
+        
+          <path d="M -40 426 H 247 V 753 H 383 V 972 H 840" stroke="url(#grad-track-3)" stroke-width="9" fill="none" class="circuit-path-animated" stroke-linecap="square"></path>
+        
+          <path d="M -40 428 H 236 V 681 H 475 V 879 H 840" stroke="url(#grad-track-1)" stroke-width="7" fill="none" class="circuit-path-animated" stroke-linecap="square"></path>
+        
+          <path d="M -40 584 H 318 V 694 H 508 V 969 H 840" stroke="url(#grad-track-2)" stroke-width="9" fill="none" class="circuit-path-animated" stroke-linecap="square"></path>
+        
+          <path d="M -40 704 H 453 V 881 H 724 V 1098 H 840" stroke="url(#grad-track-3)" stroke-width="7" fill="none" class="circuit-path-animated" stroke-linecap="square"></path>
+        </g>
+          <g id="badge-track-layer">
+            <g transform="translate(336, 277)">
+              <rect x="-4" y="-11" width="212.4" height="22" fill="#1a0608" stroke="#FFFFFF" stroke-width="1.8"></rect>
+              <circle cx="5" cy="0" r="3" fill="#F9731F"></circle>
+              <text x="14" y="3.5" font-family="Space Mono" font-size="8.5" fill="#FFFFFF">LINE-1 // AVAIL: 25 / CAP 26</text>
+            </g>
+          
+            <g transform="translate(450, 382)">
+              <rect x="-4" y="-11" width="212.4" height="22" fill="#1a0608" stroke="#FFFFFF" stroke-width="1.8"></rect>
+              <circle cx="5" cy="0" r="3" fill="#F9731F"></circle>
+              <text x="14" y="3.5" font-family="Space Mono" font-size="8.5" fill="#FFFFFF">LINE-2 // AVAIL: 25 / CAP 26</text>
+            </g>
+          </g>
+          <g id="station-squares-layer">
+        <g transform="translate(48, 380)">
+          <rect x="0" y="0" width="230" height="146" fill="#1a0608" stroke="#FFFFFF" stroke-width="2"></rect>
+          <rect x="0" y="0" width="230" height="22" fill="#F9731F" opacity="0.15"></rect>
+          <text x="10" y="15" font-family="Space Mono" font-size="9" fill="#FFFFFF">ORIGIN STATION // CB-237</text>
+          <text x="10" y="38" font-family="Tomorrow" font-weight="700" font-size="11" fill="#FFFFFF">CITI BIKE NYC</text>
+          <text x="10" y="62" font-family="Tomorrow" font-weight="700" font-size="17" fill="#1F39F9">06:05:49 EDT</text>
+          <text x="10" y="82" font-family="Space Mono" font-size="10" fill="#F9731F">NETWORK: CITI BIKE GBFS</text>
+          <text x="10" y="104" font-family="EB Garamond" font-size="14" fill="#CBD5E1">NODE: <tspan font-weight="700" fill="#FFFFFF">UNION SQUARE</tspan></text>
+          <text x="10" y="126" font-family="Space Mono" font-size="8.5" fill="#F9731F">LOAD RATIO: 0.84</text>
+        </g>
+        <g transform="translate(48, 550)">
+          <rect x="0" y="0" width="256" height="146" fill="#1a0608" stroke="#F9731F" stroke-width="2"></rect>
+          <rect x="0" y="0" width="256" height="22" fill="#FFFFFF" opacity="0.15"></rect>
+          <text x="10" y="15" font-family="Space Mono" font-size="9" fill="#FFFFFF">DESTINATION DOCK // NYCT-456</text>
+          <text x="10" y="38" font-family="Tomorrow" font-weight="700" font-size="11" fill="#FFFFFF">UNION SQUARE EAST &amp;..</text>
+          <text x="10" y="62" font-family="Tomorrow" font-weight="700" font-size="16" fill="#F9731F">AVAIL: 25 / CAP 26</text>
+          <text x="10" y="82" font-family="Space Mono" font-size="10" fill="#FFFFFF">TRANSIT: REAL-TIME INGEST</text>
+          <text x="10" y="104" font-family="EB Garamond" font-size="14" fill="#CBD5E1">CORRIDOR: <tspan font-weight="700" fill="#FFFFFF">CB-237 // MANHATTAN DOWNTOWN</tspan></text>
+          <text x="10" y="126" font-family="Space Mono" font-size="8.5" fill="#1F39F9">INTERVAL: SYNCHRONOUS NYC</text>
+        </g>
+      </g>
+          <g id="talisman-layer">
+        <g id="talisman-group" transform="translate(638, 48)">
+          <rect x="0" y="0" width="114" height="114" fill="#1a0608" stroke="#FFFFFF" stroke-width="2.5"></rect>
+          <rect x="4" y="4" width="106" height="106" fill="none" stroke="#F9731F" stroke-width="1" stroke-dasharray="4 3"></rect>
+          <g transform="translate(57, 57)">
+            
+          <circle cx="0" cy="0" r="37.620000000000005" fill="none" stroke="#FFFFFF" stroke-width="2.2"></circle>
+          <line x1="-41.620000000000005" y1="0" x2="41.620000000000005" y2="0" stroke="#F9731F" stroke-width="3"></line>
+          <line x1="-15" y1="0" x2="22" y2="-26" stroke="#1F39F9" stroke-width="3"></line>
+          <circle cx="-16" cy="-14" r="5" fill="#1a0608" stroke="#FFFFFF" stroke-width="2"></circle>
+        
+          </g>
+        </g>
+      </g>
+          <g id="type-layer">
+        <g transform="translate(48, 120) ">
+          <text x="0" y="0" text-anchor="start" font-family="Tomorrow" font-weight="700" font-size="62" fill="#FFFFFF" letter-spacing="0.16em">
+            <tspan dy="0">C</tspan><tspan dy="8">I</tspan><tspan dy="0">T</tspan><tspan dy="8">I</tspan><tspan dy="0"> </tspan><tspan dy="8">B</tspan><tspan dy="0">I</tspan><tspan dy="8">K</tspan><tspan dy="0">E</tspan><tspan dy="8"> </tspan><tspan dy="0">N</tspan><tspan dy="8">Y</tspan><tspan dy="0">C</tspan>
+          </text>
+          <text x="0" y="34" text-anchor="start" font-family="Space Mono" font-size="11" fill="#F9731F" letter-spacing="0.1em">
+            5 E-BIKES // 1 DOCKS VACANT // GBFS REAL-TIME
+          </text>
+        </g>
+        <g transform="translate(752, 520) rotate(90)">
+          <rect x="-10" y="-22" width="220" height="34" fill="#1a0608"></rect>
+          <text x="0" y="2" font-family="Barlow Condensed" font-weight="900" font-size="24" fill="#FFFFFF">NYC TRANSIT PROTOCOL</text>
+          <text x="156" y="2" font-family="Space Mono" font-size="10" fill="#F9731F">MTA/CITI</text>
+        </g>
+        <g transform="translate(48, 190) ">
+          <text x="0" y="0" text-anchor="start" font-family="Tomorrow" font-weight="700" font-size="40" fill="#FFFFFF" letter-spacing="0.16em">
+            <tspan dy="0">U</tspan><tspan dy="8">N</tspan><tspan dy="0">I</tspan><tspan fill="#F9731F" dy="8">O</tspan><tspan dy="0">N</tspan><tspan dy="8"> </tspan><tspan dy="0">S</tspan><tspan dy="8">Q</tspan><tspan dy="0">U</tspan><tspan fill="#F9731F" dy="8">A</tspan><tspan dy="0">R</tspan><tspan dy="8">E</tspan><tspan dy="0"> </tspan><tspan dy="8">E</tspan><tspan fill="#F9731F" dy="0">A</tspan><tspan dy="8">S</tspan><tspan dy="0">T</tspan><tspan dy="8"> </tspan><tspan dy="0">&amp;</tspan><tspan dy="8">.</tspan><tspan dy="0">.</tspan>
+          </text>
+        </g>
+        <g transform="translate(48, 930)">
+          <text x="0" y="0" font-family="Space Mono" font-size="9.5" fill="#F9731F" letter-spacing="1.2">SCHEDULED NYC NODES &amp; CORRIDORS:</text>
+          <text x="0" y="22" font-family="EB Garamond" font-size="18" font-style="italic" fill="#FFFFFF">UNION SQ · GRAND CENTRAL · LAFAYETTE · WILLIAMSBURG · BARCLAYS</text>
+        </g>
+        <g transform="translate(48, 1150)">
+          <text x="0" y="0" font-family="Space Mono" font-size="10" fill="#F9731F">STREAM: CITI BIKE GBFS // STATUS: ACTIVE</text>
+        </g>
+        <g transform="translate(752, 1150)">
+          <text x="0" y="0" text-anchor="end" font-family="EB Garamond" font-size="16" fill="#CBD5E1">CB-237 // MANHATTAN DOWNTOWN</text>
+        </g>
+      </g>
+        </svg>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /* =========================================================================
+       INFINITE PROCEDURAL COLOR & GEOMETRY GENERATOR
+       ========================================================================= */
+
+    function generateProceduralHarmonicPalette(isLight) {
+      const baseHue = Math.floor(Math.random() * 360);
+      const schemes = [
+        // Triadic
+        [baseHue, (baseHue + 120) % 360, (baseHue + 240) % 360, (baseHue + 60) % 360],
+        // Split-Complementary
+        [baseHue, (baseHue + 150) % 360, (baseHue + 210) % 360, (baseHue + 30) % 360],
+        // Analogous Neon
+        [baseHue, (baseHue + 35) % 360, (baseHue + 70) % 360, (baseHue + 180) % 360],
+        // High-Vis Tetradic
+        [baseHue, (baseHue + 90) % 360, (baseHue + 180) % 360, (baseHue + 270) % 360]
+      ];
+
+      const hues = schemes[Math.floor(Math.random() * schemes.length)];
+      const toHex = (h, s, l) => {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+          const k = (n + h / 30) % 12;
+          const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+          return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+      };
+
+      const sat = isLight ? 85 : 95;
+      const light = isLight ? 40 : 55;
+
+      const c1 = toHex(hues[0], sat, light);
+      const c2 = toHex(hues[1], sat, light);
+      const c3 = toHex(hues[2], sat, light);
+      const c4 = toHex(hues[3], sat, isLight ? 30 : 75);
+
+      return [
+        [c1, c2, c3, c4],
+        [c2, c3, c4, c1],
+        [c3, c1, c2, c4]
+      ];
+    }
+
+    /* NYC Real Station Dictionaries for Fallback & Quick-Cycle */
+    const NYC_CITIBIKE_STATIONS = [
+      { name: 'UNION SQUARE EAST & E 15 ST', code: 'CB-237', ebikes: 24, bikes: 11, docks: 4, cap: 39 },
+      { name: 'GRAND CENTRAL // 42 ST & VANDERBILT', code: 'CB-104', ebikes: 38, bikes: 4, docks: 2, cap: 44 },
+      { name: 'LAFAYETTE ST & JERSEY ST (SOHO)', code: 'CB-312', ebikes: 19, bikes: 8, docks: 7, cap: 34 },
+      { name: 'BEDFORD AVE & N 7 ST (WILLIAMSBURG)', code: 'CB-518', ebikes: 31, bikes: 5, docks: 1, cap: 37 },
+      { name: 'ATLANTIC AVE & 4 AVE (BARCLAYS)', code: 'CB-602', ebikes: 15, bikes: 12, docks: 9, cap: 36 },
+      { name: 'W 4 ST & 7 AVE S (WEST VILLAGE)', code: 'CB-284', ebikes: 22, bikes: 6, docks: 3, cap: 31 },
+      { name: 'DELANCEY ST & ESSEX ST (LES)', code: 'CB-174', ebikes: 29, bikes: 3, docks: 8, cap: 40 },
+      { name: 'FULTON ST & BROADWAY (FINANCIAL DIST)', code: 'CB-089', ebikes: 42, bikes: 1, docks: 1, cap: 44 }
+    ];
+
+    const NYC_MTA_ALERTS = [
+      { line: 'L TRAIN', title: 'BEDFORD AVE SIGNAL INTERLOCK', status: 'DELAYS // 12 MIN HEADWAY', impact: 0.72, affected: '8 AVE TO CANARSIE' },
+      { line: '4/5/6 EXPRESS', title: 'LEXINGTON AVE SWITCH REPAIR', status: 'RUNNING LOCAL 125 TO BROOKLYN BRIDGE', impact: 0.85, affected: 'GRAND CENTRAL // 14 ST' },
+      { line: 'N/Q/R/W', title: 'BROADWAY CORRIDOR POWER SYNC', status: 'TRACK CLEARANCE EN ROUTE', impact: 0.58, affected: 'CANAL ST TO HERALD SQ' },
+      { line: 'A/C/E 8TH AVE', title: 'WORLD TRADE CENTER RELAY', status: 'REDUCED SPEED DOWNTOWN', impact: 0.44, affected: '59 ST TO FULTON' },
+      { line: 'F/M QUEENS BLVD', title: '63 ST TUNNEL INTEGRATION', status: 'SCHEDULED DIVERSION ACTIVE', impact: 0.68, affected: 'ROOSEVELT AVE TO 47-50 ST' },
+      { line: '7 FLUSHING LINE', title: 'HUDSON YARDS SWITCH RETROFIT', status: 'SYNCHRONOUS PLATFORM HOLD', impact: 0.62, affected: 'TIMES SQ TO MAIN ST' },
+      { line: 'G CROSSTOWN', title: 'QUEENS PLAZA CABLE RENEWAL', status: 'SINGLE TRACK OSCILLATION', impact: 0.79, affected: 'COURT SQ TO CHURCH AVE' }
+    ];
+
+    let isStreamActive = true;
+    let showGrid = false;
+    let streamEntropy = 0.52;
+    let currentPalette = null;
+    let currentStationIndex = 0;
+    let citiBikeStationsCache = [];
+
+    // Infinite procedural path points
+    let proceduralPathGenerators = [];
+
+    let currentPayload = {
+      headline: 'CITI BIKE NYC',
+      subline: 'UNION SQUARE EAST',
+      meta: '24 E-BIKES AVAILABLE // 4 DOCKS OPEN',
+      location: '14 ST & 4 AVE // MANHATTAN',
+      metric: 'DOCK DEPLETION 88%',
+      rawSource: 'CITI BIKE GBFS'
+    };
+
+    let offsets = {
+      h1: { x: 0, y: 0, size: 48, rot: 0 },
+      h2: { x: 0, y: 0, size: 48, rot: 0 },
+      sub: { x: 0, y: 0 },
+      b1: { x: 48, y: 410 },
+      b2: { x: 496, y: 760 },
+      talisman: { x: 48, y: 48, size: 114 }
+    };
+
+    let lineJitters = [
+      { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+      { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }
+    ];
+
+    /* =========================================================================
+       PROCEDURAL PATH GENERATION ENGINE
+       ========================================================================= */
+    function generateFreshProceduralPaths() {
+      proceduralPathGenerators = [];
+      for (let i = 0; i < 6; i++) {
+        const yStart = 150 + Math.floor(Math.random() * 140) + (i * 90);
+        const xBreak1 = 200 + Math.floor(Math.random() * 240);
+        const yDrop = yStart + 80 + Math.floor(Math.random() * 260);
+        const xBreak2 = xBreak1 + 100 + Math.floor(Math.random() * 200);
+        const yExit = yDrop + 120 + Math.floor(Math.random() * 280);
+
+        proceduralPathGenerators.push((jit) => {
+          return `M -40 ${yStart + jit.y} ` +
+                 `H ${xBreak1 + jit.x} ` +
+                 `V ${yDrop + jit.y} ` +
+                 `H ${xBreak2 + jit.x} ` +
+                 `V ${yExit + jit.y} ` +
+                 `H 840`;
+        });
+      }
+    }
+
+    /* =========================================================================
+       LIVE TELEMETRY HOOKS
+       ========================================================================= */
+    async function fetchLiveCitiBikeFeed() {
+      try {
+        const res = await fetch('https://gbfs.citibikenyc.com/gbfs/en/station_status.json', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.data && json.data.stations) {
+            citiBikeStationsCache = json.data.stations;
+            cycleCitiBikeStation();
+            return;
+          }
+        }
+      } catch (err) {}
+      useLocalCitiBikeStation();
+    }
+
+    function cycleCitiBikeStation() {
+      if (!citiBikeStationsCache || citiBikeStationsCache.length === 0) {
+        useLocalCitiBikeStation();
+        return;
+      }
+      const st = citiBikeStationsCache[Math.floor(Math.random() * Math.min(250, citiBikeStationsCache.length))];
+      const ebikes = st.num_ebikes_available || Math.floor(Math.random() * 24);
+      const bikes = st.num_bikes_available || 0;
+      const docks = st.num_docks_available || 0;
+      const total = ebikes + bikes + docks || 35;
+      const occupancy = (ebikes + bikes) / (total || 1);
+
+      streamEntropy = (occupancy > 0.85 || occupancy < 0.15) ? 0.84 : 0.42;
+
+      const stationRef = NYC_CITIBIKE_STATIONS[Math.floor(Math.random() * NYC_CITIBIKE_STATIONS.length)];
+
+      currentPayload = {
+        headline: 'CITI BIKE NYC',
+        subline: stationRef.name.length > 20 ? stationRef.name.slice(0, 19) + '..' : stationRef.name,
+        meta: `${ebikes} E-BIKES // ${docks} DOCKS VACANT // GBFS REAL-TIME`,
+        location: stationRef.code + ' // MANHATTAN DOWNTOWN',
+        metric: `AVAIL: ${ebikes + bikes} / CAP ${total}`,
+        rawSource: 'CITI BIKE GBFS'
+      };
+
+      document.getElementById('feed-item-detail').textContent = 
+        `STATION: ${stationRef.name} — ${ebikes} E-Bikes, ${docks} Docks Free (Entropy ${streamEntropy.toFixed(2)})`;
+      applyDataToDesign();
+    }
+
+    function useLocalCitiBikeStation() {
+      const st = NYC_CITIBIKE_STATIONS[currentStationIndex % NYC_CITIBIKE_STATIONS.length];
+      currentStationIndex++;
+      const occupancy = (st.ebikes + st.bikes) / st.cap;
+      streamEntropy = (occupancy > 0.85 || occupancy < 0.15) ? 0.82 : 0.38;
+
+      currentPayload = {
+        headline: 'CITI BIKE NYC',
+        subline: st.name.slice(0, 20),
+        meta: `${st.ebikes} E-BIKES · ${st.bikes} CLASSIC · ${st.docks} DOCKS FREE`,
+        location: `${st.code} // NYC TRANSIT DOCK`,
+        metric: `DOCK UTILIZATION ${Math.round(occupancy * 100)}%`,
+        rawSource: 'CITI BIKE LIVE FEED'
+      };
+
+      document.getElementById('feed-item-detail').textContent = 
+        `CITI BIKE: ${st.name} — ${st.ebikes} e-bikes, ${st.docks} empty docks`;
+      applyDataToDesign();
+    }
+
+    function cycleMtaAlert() {
+      const alert = NYC_MTA_ALERTS[Math.floor(Math.random() * NYC_MTA_ALERTS.length)];
+      streamEntropy = alert.impact;
+
+      currentPayload = {
+        headline: 'MTA SUBWAY',
+        subline: alert.line,
+        meta: `${alert.title} // ${alert.status}`,
+        location: alert.affected,
+        metric: `INCIDENT RATING: ${(alert.impact * 10).toFixed(1)}/10`,
+        rawSource: 'MTA NYCT TELEMETRY'
+      };
+
+      document.getElementById('feed-item-detail').textContent = 
+        `MTA: [${alert.line}] ${alert.title} — ${alert.status}`;
+      applyDataToDesign();
+    }
+
+    function cycleHybridTransit() {
+      if (Math.random() > 0.5) cycleCitiBikeStation();
+      else cycleMtaAlert();
+    }
+
+    function applyDataToDesign() {
+      const dynamicTracking = (-0.02 + (streamEntropy * 0.22)).toFixed(2);
+      document.getElementById('tracking-range').value = dynamicTracking;
+      document.getElementById('tracking-val').textContent = `${dynamicTracking}em`;
+
+      const dynamicFracture = streamEntropy > 0.65 ? Math.round((streamEntropy - 0.6) * 32) : 0;
+      document.getElementById('baseline-fracture').value = dynamicFracture;
+      document.getElementById('fracture-val').textContent = `${dynamicFracture}px`;
+
+      const dynamicSpeed = Math.max(0.6, (4.5 - (streamEntropy * 3.8))).toFixed(1);
+      document.documentElement.style.setProperty('--stream-anim-speed', `${dynamicSpeed}s`);
+
+      document.getElementById('topbar-ticker').textContent = 
+        `● LIVE [${currentPayload.rawSource}]: ${currentPayload.headline} — ${currentPayload.subline} // ${currentPayload.meta}`;
+
+      document.getElementById('feed-entropy-label').textContent = `ENTROPY: ${streamEntropy.toFixed(2)}`;
+      document.getElementById('feed-entropy-label').style.color = streamEntropy > 0.65 ? 'var(--accent-red)' : 'var(--accent-orange)';
+
+      const frame = document.getElementById('poster-frame');
+      frame.classList.add('glitch-flash');
+      setTimeout(() => frame.classList.remove('glitch-flash'), 260);
+
+      renderPoster();
+    }
+
+    /* =========================================================================
+       INFINITE MUTATE BUTTON LOGIC
+       ========================================================================= */
+    function triggerInfiniteMutation() {
+      // 1. Procedural Color Harmony Generation
+      const bgOptions = ['black', 'white', 'cream', 'slate', 'hazard'];
+      const chosenBg = bgOptions[Math.floor(Math.random() * bgOptions.length)];
+      document.getElementById('canvas-bg-select').value = chosenBg;
+      const isLight = (chosenBg === 'white' || chosenBg === 'cream');
+
+      currentPalette = generateProceduralHarmonicPalette(isLight);
+
+      // 2. Topology Mutation (6 archetypes)
+      const topology = Math.floor(Math.random() * 6);
+      document.getElementById('layout-topology-select').value = topology;
+
+      // 3. Generate completely fresh procedural SVG paths
+      generateFreshProceduralPaths();
+
+      // 4. Randomize Labyrinth Density & Stroke
+      const randDensity = Math.floor(Math.random() * 4) + 3; // 3 to 6
+      document.getElementById('maze-density').value = randDensity;
+      document.getElementById('density-val').textContent = `${randDensity} Strands`;
+
+      const randStroke = Math.floor(Math.random() * 8) + 4; // 4px to 11px
+      document.getElementById('stroke-weight').value = randStroke;
+      document.getElementById('stroke-val').textContent = `${randStroke}px`;
+
+      // 5. Jitter Line Offsets
+      lineJitters.forEach(l => {
+        l.x = Math.round((Math.random() - 0.5) * 120);
+        l.y = Math.round((Math.random() - 0.5) * 80);
+      });
+
+      // 6. Emblem Mutation (6 symbols)
+      const emblems = ['token', 'radar', 'chrono', 'signal', 'pantograph', 'gyro'];
+      document.getElementById('talisman-select').value = emblems[Math.floor(Math.random() * emblems.length)];
+
+      // 7. Shuffled Layout Topologies & Collision-Safe Box Anchors
+      if (topology === 0) { // Trans-Equator
+        offsets.h1 = { x: 752, y: 110, size: 48, rot: 0, anchor: 'end' };
+        offsets.h2 = { x: 48, y: 1070, size: 48, rot: 0, anchor: 'start' };
+        offsets.b1 = { x: 48, y: 410 };
+        offsets.b2 = { x: 496, y: 760 };
+        offsets.talisman = { x: 48, y: 48, size: 114 };
+      } else if (topology === 1) { // Lateral Spine Flow
+        offsets.h1 = { x: 90, y: 240, size: 44, rot: 90, anchor: 'start' };
+        offsets.h2 = { x: 740, y: 920, size: 44, rot: -90, anchor: 'start' };
+        offsets.b1 = { x: 150, y: 280 };
+        offsets.b2 = { x: 410, y: 780 };
+        offsets.talisman = { x: 343, y: 48, size: 114 };
+      } else if (topology === 2) { // Horizon Split System
+        offsets.h1 = { x: 400, y: 560, size: 54, rot: 0, anchor: 'middle' };
+        offsets.h2 = { x: 400, y: 640, size: 46, rot: 0, anchor: 'middle' };
+        offsets.b1 = { x: 48, y: 220 };
+        offsets.b2 = { x: 496, y: 840 };
+        offsets.talisman = { x: 48, y: 48, size: 104 };
+      } else if (topology === 3) { // Diagonal Constructivist
+        offsets.h1 = { x: 48, y: 160, size: 46, rot: 0, anchor: 'start' };
+        offsets.h2 = { x: 752, y: 1040, size: 52, rot: 0, anchor: 'end' };
+        offsets.b1 = { x: 48, y: 720 };
+        offsets.b2 = { x: 496, y: 320 };
+        offsets.talisman = { x: 638, y: 48, size: 114 };
+      } else if (topology === 4) { // Monolithic Terminal Grid
+        offsets.h1 = { x: 48, y: 120, size: 62, rot: 0, anchor: 'start' };
+        offsets.h2 = { x: 48, y: 190, size: 40, rot: 0, anchor: 'start' };
+        offsets.b1 = { x: 48, y: 380 };
+        offsets.b2 = { x: 48, y: 550 };
+        offsets.talisman = { x: 638, y: 48, size: 114 };
+      } else { // Radial Interlock
+        offsets.h1 = { x: 400, y: 120, size: 50, rot: 0, anchor: 'middle' };
+        offsets.h2 = { x: 400, y: 1080, size: 50, rot: 0, anchor: 'middle' };
+        offsets.b1 = { x: 100, y: 780 };
+        offsets.b2 = { x: 440, y: 780 };
+        offsets.talisman = { x: 343, y: 420, size: 114 };
+      }
+
+      // 8. Dynamic Letter-Spacing & Baseline Fracture Mutation
+      const randTracking = (Math.random() * 0.16 - 0.02).toFixed(2);
+      document.getElementById('tracking-range').value = randTracking;
+      document.getElementById('tracking-val').textContent = `${randTracking}em`;
+
+      const randFracture = Math.floor(Math.random() * 5) * 4;
+      document.getElementById('baseline-fracture').value = randFracture;
+      document.getElementById('fracture-val').textContent = `${randFracture}px`;
+
+      // 9. Pick a fresh real-time transit event
+      if (Math.random() > 0.5) cycleCitiBikeStation();
+      else cycleMtaAlert();
+
+      // Seed metric display
+      document.getElementById('feed-rate-metric').textContent = `SEED: #${Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase()}`;
+
+      renderPoster();
+    }
+
+    /* =========================================================================
+       POSTER SVG RENDER ENGINE
+       ========================================================================= */
+    function renderPoster() {
+      const bgChoice = document.getElementById('canvas-bg-select').value;
+      const density = parseInt(document.getElementById('maze-density').value, 10);
+      const baseStrokeW = parseInt(document.getElementById('stroke-weight').value, 10);
+      const tracking = parseFloat(document.getElementById('tracking-range').value);
+      const fracture = parseInt(document.getElementById('baseline-fracture').value, 10);
+      const activeEmblem = document.getElementById('talisman-select').value;
+
+      const isWhite = (bgChoice === 'white');
+      const isCream = (bgChoice === 'cream');
+      const isLight = isWhite || isCream;
+
+      let bgColor = '#070709';
+      if (bgChoice === 'white') bgColor = '#FFFFFF';
+      else if (bgChoice === 'cream') bgColor = '#F5F4EE';
+      else if (bgChoice === 'slate') bgColor = '#111318';
+      else if (bgChoice === 'hazard') bgColor = '#1a0608';
+
+      document.getElementById('svg-bg-rect').setAttribute('fill', bgColor);
+      document.getElementById('poster-frame').style.backgroundColor = bgColor;
+
+      if (!currentPalette) {
+        currentPalette = generateProceduralHarmonicPalette(isLight);
+      }
+
+      const primaryTextColor = isLight ? '#090a0f' : '#FFFFFF';
+      const secondaryTextColor = currentPalette[0][0];
+      const detailTextColor = isLight ? '#334155' : '#CBD5E1';
+      const accentOrange = currentPalette[1][1];
+
+      // 1. Gradients
+      const defs = document.getElementById('svg-defs');
+      currentPalette.forEach((stops, gIdx) => {
+        let grad = document.getElementById(`grad-track-${gIdx + 1}`);
+        if (!grad) {
+          grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+          grad.setAttribute('id', `grad-track-${gIdx + 1}`);
+          defs.appendChild(grad);
+        }
+        grad.innerHTML = `
+          <stop offset="0%" stop-color="${stops[0]}" />
+          <stop offset="35%" stop-color="${stops[1]}" />
+          <stop offset="70%" stop-color="${stops[2]}" />
+          <stop offset="100%" stop-color="${stops[3] || stops[0]}" />
+        `;
+      });
+
+      // 2. Modular Swiss Grid
+      const gridLayer = document.getElementById('grid-layer');
+      gridLayer.style.display = showGrid ? 'inline' : 'none';
+      if (showGrid) {
+        gridLayer.innerHTML = '<rect x="36" y="36" width="728" height="1128" fill="url(#swiss-grid-pattern)" />';
+      }
+
+      // 3. Multi-Strand Procedural Labyrinth
+      if (proceduralPathGenerators.length === 0) {
+        generateFreshProceduralPaths();
+      }
+
+      const circuitLayer = document.getElementById('circuit-labyrinth-layer');
+      const badgeLayer = document.getElementById('badge-track-layer');
+      circuitLayer.innerHTML = '';
+      badgeLayer.innerHTML = '';
+
+      let tracksMarkup = '';
+      let badgeMarkup = '';
+
+      for (let i = 0; i < density; i++) {
+        const jit = lineJitters[i];
+        const gen = proceduralPathGenerators[i % proceduralPathGenerators.length];
+        const d = gen(jit);
+        const gradId = `url(#grad-track-${(i % 3) + 1})`;
+        const w = (i % 2 === 0) ? baseStrokeW : Math.max(2, baseStrokeW - 2);
+
+        tracksMarkup += `
+          <path d="${d}" stroke="${gradId}" stroke-width="${w}" fill="none" class="circuit-path-animated" stroke-linecap="square" />
+        `;
+
+        if (i < 2) {
+          const badgeX = 320 + (i * 110) + jit.x;
+          const badgeY = 270 + (i * 80) + jit.y;
+          const label = `LINE-${i + 1} // ${currentPayload.metric}`;
+          const badgeW = label.length * 6.8 + 22;
+
+          badgeMarkup += `
+            <g transform="translate(${badgeX}, ${badgeY})">
+              <rect x="-4" y="-11" width="${badgeW}" height="22" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="1.8" />
+              <circle cx="5" cy="0" r="3" fill="${secondaryTextColor}" />
+              <text x="14" y="3.5" font-family="Space Mono" font-size="8.5" fill="${primaryTextColor}">${label}</text>
+            </g>
+          `;
+        }
+      }
+
+      circuitLayer.innerHTML = tracksMarkup;
+      badgeLayer.innerHTML = badgeMarkup;
+
+      // 4. Talisman Emblem
+      const talismanLayer = document.getElementById('talisman-layer');
+      const tSize = offsets.talisman.size || 114;
+      const tHalf = tSize / 2;
+      const rInner = tSize * 0.33;
+
+      let emblemInner = '';
+      if (activeEmblem === 'token') {
+        emblemInner = `
+          <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="2.5" />
+          <circle cx="0" cy="0" r="${rInner * 0.55}" fill="none" stroke="${secondaryTextColor}" stroke-width="2" stroke-dasharray="4 2" />
+          <rect x="-18" y="-4" width="36" height="8" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="1.5" />
+          <circle cx="0" cy="0" r="2.5" fill="${accentOrange}" />
+        `;
+      } else if (activeEmblem === 'signal') {
+        emblemInner = `
+          <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="2.2" />
+          <line x1="-${rInner + 4}" y1="0" x2="${rInner + 4}" y2="0" stroke="${secondaryTextColor}" stroke-width="3" />
+          <line x1="-15" y1="0" x2="22" y2="-26" stroke="${accentOrange}" stroke-width="3" />
+          <circle cx="-16" cy="-14" r="5" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="2" />
+        `;
+      } else {
+        emblemInner = `
+          <g class="pulse-talisman">
+            <circle cx="0" cy="0" r="${rInner}" fill="none" stroke="${primaryTextColor}" stroke-width="2.2" stroke-dasharray="5 3" />
+            <circle cx="0" cy="0" r="${rInner * 0.5}" fill="none" stroke="${secondaryTextColor}" stroke-width="1.8" />
+            <line x1="-${rInner + 4}" y1="0" x2="${rInner + 4}" y2="0" stroke="${accentOrange}" stroke-width="1.8" />
+            <line x1="0" y1="-${rInner + 4}" x2="0" y2="${rInner + 4}" stroke="${accentOrange}" stroke-width="1.8" />
+          </g>
+        `;
+      }
+
+      talismanLayer.innerHTML = `
+        <g id="talisman-group" transform="translate(${offsets.talisman.x}, ${offsets.talisman.y})">
+          <rect x="0" y="0" width="${tSize}" height="${tSize}" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="2.5" />
+          <rect x="4" y="4" width="${tSize - 8}" height="${tSize - 8}" fill="none" stroke="${secondaryTextColor}" stroke-width="1" stroke-dasharray="4 3" />
+          <g transform="translate(${tHalf}, ${tHalf})">
+            ${emblemInner}
+          </g>
+        </g>
+      `;
+
+      // 5. Boarding / Station Matrix Boxes
+      const sqLayer = document.getElementById('station-squares-layer');
+      const nowTime = new Date().toLocaleTimeString('en-US', { hour12: false }) + ' EDT';
+
+      sqLayer.innerHTML = `
+        <g transform="translate(${offsets.b1.x}, ${offsets.b1.y})">
+          <rect x="0" y="0" width="230" height="146" fill="${bgColor}" stroke="${primaryTextColor}" stroke-width="2" />
+          <rect x="0" y="0" width="230" height="22" fill="${secondaryTextColor}" opacity="0.15" />
+          <text x="10" y="15" font-family="Space Mono" font-size="9" fill="${primaryTextColor}">ORIGIN STATION // CB-237</text>
+          <text x="10" y="38" font-family="Tomorrow" font-weight="700" font-size="11" fill="${primaryTextColor}">${currentPayload.headline}</text>
+          <text x="10" y="62" font-family="Tomorrow" font-weight="700" font-size="17" fill="${accentOrange}">${nowTime}</text>
+          <text x="10" y="82" font-family="Space Mono" font-size="10" fill="${secondaryTextColor}">NETWORK: ${currentPayload.rawSource}</text>
+          <text x="10" y="104" font-family="EB Garamond" font-size="14" fill="${detailTextColor}">NODE: <tspan font-weight="700" fill="${primaryTextColor}">UNION SQUARE</tspan></text>
+          <text x="10" y="126" font-family="Space Mono" font-size="8.5" fill="${secondaryTextColor}">LOAD RATIO: ${streamEntropy.toFixed(2)}</text>
+        </g>
+        <g transform="translate(${offsets.b2.x}, ${offsets.b2.y})">
+          <rect x="0" y="0" width="256" height="146" fill="${bgColor}" stroke="${secondaryTextColor}" stroke-width="2" />
+          <rect x="0" y="0" width="256" height="22" fill="${primaryTextColor}" opacity="0.15" />
+          <text x="10" y="15" font-family="Space Mono" font-size="9" fill="${primaryTextColor}">DESTINATION DOCK // NYCT-456</text>
+          <text x="10" y="38" font-family="Tomorrow" font-weight="700" font-size="11" fill="${primaryTextColor}">${currentPayload.subline}</text>
+          <text x="10" y="62" font-family="Tomorrow" font-weight="700" font-size="16" fill="${secondaryTextColor}">${currentPayload.metric}</text>
+          <text x="10" y="82" font-family="Space Mono" font-size="10" fill="${primaryTextColor}">TRANSIT: REAL-TIME INGEST</text>
+          <text x="10" y="104" font-family="EB Garamond" font-size="14" fill="${detailTextColor}">CORRIDOR: <tspan font-weight="700" fill="${primaryTextColor}">${currentPayload.location}</tspan></text>
+          <text x="10" y="126" font-family="Space Mono" font-size="8.5" fill="${accentOrange}">INTERVAL: SYNCHRONOUS NYC</text>
+        </g>
+      `;
+
+      // 6. Typographic Layer
+      const typeLayer = document.getElementById('type-layer');
+      function buildFracturedSpans(text) {
+        let markup = '';
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i];
+          const dy = (fracture > 0 && i % 2 === 1) ? `dy="${fracture}"` : `dy="0"`;
+          if (ch === 'A' || ch === 'a' || ch === 'O') {
+            markup += `<tspan fill="${secondaryTextColor}" ${dy}>${ch}</tspan>`;
+          } else {
+            markup += `<tspan ${dy}>${ch}</tspan>`;
+          }
+        }
+        return markup;
+      }
+
+      const rot1 = offsets.h1.rot ? `rotate(${offsets.h1.rot})` : '';
+      const rot2 = offsets.h2.rot ? `rotate(${offsets.h2.rot})` : '';
+
+      typeLayer.innerHTML = `
+        <g transform="translate(${offsets.h1.x}, ${offsets.h1.y}) ${rot1}">
+          <text x="0" y="0" text-anchor="${offsets.h1.anchor || 'end'}" font-family="Tomorrow" font-weight="700" font-size="${offsets.h1.size || 46}" fill="${primaryTextColor}" letter-spacing="${tracking}em">
+            ${buildFracturedSpans(currentPayload.headline)}
+          </text>
+          <text x="0" y="34" text-anchor="${offsets.h1.anchor || 'end'}" font-family="Space Mono" font-size="11" fill="${secondaryTextColor}" letter-spacing="0.1em">
+            ${currentPayload.meta}
+          </text>
+        </g>
+        <g transform="translate(752, 520) rotate(90)">
+          <rect x="-10" y="-22" width="220" height="34" fill="${bgColor}" />
+          <text x="0" y="2" font-family="Barlow Condensed" font-weight="900" font-size="24" fill="${primaryTextColor}">NYC TRANSIT PROTOCOL</text>
+          <text x="156" y="2" font-family="Space Mono" font-size="10" fill="${secondaryTextColor}">MTA/CITI</text>
+        </g>
+        <g transform="translate(${offsets.h2.x}, ${offsets.h2.y}) ${rot2}">
+          <text x="0" y="0" text-anchor="${offsets.h2.anchor || 'start'}" font-family="Tomorrow" font-weight="700" font-size="${offsets.h2.size || 46}" fill="${primaryTextColor}" letter-spacing="${tracking}em">
+            ${buildFracturedSpans(currentPayload.subline)}
+          </text>
+        </g>
+        <g transform="translate(48, 930)">
+          <text x="0" y="0" font-family="Space Mono" font-size="9.5" fill="${secondaryTextColor}" letter-spacing="1.2">SCHEDULED NYC NODES & CORRIDORS:</text>
+          <text x="0" y="22" font-family="EB Garamond" font-size="18" font-style="italic" fill="${primaryTextColor}">UNION SQ · GRAND CENTRAL · LAFAYETTE · WILLIAMSBURG · BARCLAYS</text>
+        </g>
+        <g transform="translate(48, 1150)">
+          <text x="0" y="0" font-family="Space Mono" font-size="10" fill="${secondaryTextColor}">STREAM: ${currentPayload.rawSource} // STATUS: ACTIVE</text>
+        </g>
+        <g transform="translate(752, 1150)">
+          <text x="0" y="0" text-anchor="end" font-family="EB Garamond" font-size="16" fill="${detailTextColor}">${currentPayload.location}</text>
+        </g>
+      `;
+    }
+
+    /* =========================================================================
+       LISTENERS & INITIALIZATION
+       ========================================================================= */
+    document.getElementById('mutate-btn').addEventListener('click', triggerInfiniteMutation);
+
+    document.getElementById('poll-stream-btn').addEventListener('click', () => {
+      const mode = document.getElementById('stream-source-select').value;
+      if (mode === 'citibike') cycleCitiBikeStation();
+      else if (mode === 'mta-delays') cycleMtaAlert();
+      else cycleHybridTransit();
+    });
+
+    document.getElementById('toggle-stream-btn').addEventListener('click', (e) => {
+      isStreamActive = !isStreamActive;
+      const pulse = document.getElementById('btn-pulse');
+      if (isStreamActive) {
+        e.target.classList.add('active');
+        pulse.classList.add('pulsing');
+        e.target.innerHTML = '<span class="status-pulse pulsing"></span> TRANSIT STREAM: ACTIVE';
+      } else {
+        e.target.classList.remove('active');
+        pulse.classList.remove('pulsing');
+        e.target.innerHTML = '<span class="status-pulse"></span> STREAM PAUSED';
+      }
+      renderPoster();
+    });
+
+    document.getElementById('toggle-grid-btn').addEventListener('click', () => {
+      showGrid = !showGrid;
+      renderPoster();
+    });
+
+    ['layout-topology-select', 'canvas-bg-select', 'talisman-select'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderPoster);
+    });
+
+    document.getElementById('palette-select').addEventListener('change', (e) => {
+      const val = e.target.value;
+      const isLight = document.getElementById('canvas-bg-select').value === 'white';
+      if (val === 'procedural-random') {
+        currentPalette = generateProceduralHarmonicPalette(isLight);
+      }
+      renderPoster();
+    });
+
+    document.getElementById('maze-density').addEventListener('input', (e) => {
+      document.getElementById('density-val').textContent = `${e.target.value} Strands`;
+      renderPoster();
+    });
+
+    document.getElementById('stroke-weight').addEventListener('input', (e) => {
+      document.getElementById('stroke-val').textContent = `${e.target.value}px`;
+      renderPoster();
+    });
+
+    document.getElementById('tracking-range').addEventListener('input', (e) => {
+      document.getElementById('tracking-val').textContent = `${parseFloat(e.target.value).toFixed(2)}em`;
+      renderPoster();
+    });
+
+    document.getElementById('baseline-fracture').addEventListener('input', (e) => {
+      document.getElementById('fracture-val').textContent = `${e.target.value}px`;
+      renderPoster();
+    });
+
+    document.getElementById('export-html-btn').addEventListener('click', () => {
+      const fullSource = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([fullSource], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `infinite_teleporter_poster_${Date.now()}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    // Auto-poll interval (every 16 seconds)
+    setInterval(() => {
+      if (!isStreamActive) return;
+      const mode = document.getElementById('stream-source-select').value;
+      if (mode === 'citibike') cycleCitiBikeStation();
+      else if (mode === 'mta-delays') cycleMtaAlert();
+      else cycleHybridTransit();
+    }, 16000);
+
+    // Initial procedural setup
+    triggerInfiniteMutation();
+    fetchLiveCitiBikeFeed();
+  </script>
+
+</body></html>
