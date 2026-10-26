@@ -375,7 +375,6 @@
   </header>
 
   <main>
-    <!-- LEFT: GENERATOR CONTROLS -->
     <div class="controls-col">
       <button id="btn-generate" class="btn-primary" style="justify-content: center; padding: 14px; font-size: 14px;">
         ✨ GENERATE SURREAL EMBLEM
@@ -447,7 +446,6 @@
       </div>
     </div>
 
-    <!-- CENTER: MASTER VIEWPORT -->
     <div class="stage-col">
       <div class="canvas-hud">
         <div class="hud-tag" id="hud-shape">BOUNDARY: CIRCLE</div>
@@ -467,7 +465,6 @@
       </div>
     </div>
 
-    <!-- RIGHT: SCALE TESTS -->
     <div class="sidebar-right">
       <div>
         <div class="section-title">Physical Flight Test</div>
@@ -499,28 +496,24 @@
   </main>
 
   <script>
-    // State Architecture
     const state = {
-      shape: 'circle', // 'circle' or 'square'
+      shape: 'circle',
       schema: 'occulted-horizon',
       atmosphere: 'cosmic-dusk',
       bColorType: 'pure-white',
       seed: 4912,
       grayscale: false,
 
-      // Letter B State (Pure single-color solid vector)
       b: {
         x: 400,
         y: 400,
         scale: 1.0
       },
 
-      // Draggable Typographic Nodes (Guaranteed inside boundary)
       t1: { text: "BARUCH", x: 400, y: 155, size: 40, tracking: "0.28em", anchor: "middle" },
       t2: { text: "IN THE COSMOS", x: 400, y: 665, size: 24, tracking: "0.22em", anchor: "middle" },
       t3: { text: "ISS // 51.6°N LEO", x: 400, y: 705, size: 12, tracking: "0.3em", anchor: "middle" },
 
-      // Colors & Gradients
       palette: {
         bgDeep: '#040711',
         bgGlow: '#0a162b',
@@ -560,18 +553,15 @@
       }
     };
 
-    // DOM Elements
     const mainSvg = document.getElementById('main-svg');
     const svgContent = document.getElementById('svg-content');
     const svgDefs = document.getElementById('svg-defs');
     const preview35 = document.getElementById('preview-35');
     const previewMicro = document.getElementById('preview-micro');
 
-    // Dragging
     let dragTarget = null;
     let dragOffset = { x: 0, y: 0 };
 
-    // Strict Boundary Box & Containment Engine (Zero Bleed Guard)
     function clampPoint(x, y, margin = 45) {
       if (state.shape === 'circle') {
         const cx = 400, cy = 400, maxR = 360 - margin;
@@ -590,7 +580,6 @@
       }
     }
 
-    // Toggle Shape
     document.getElementById('btn-shape-circle').addEventListener('click', () => {
       state.shape = 'circle';
       document.getElementById('btn-shape-circle').classList.add('active');
@@ -649,11 +638,9 @@
       previewMicro.style.filter = f;
     });
 
-    // Master Generator Engine (Truly Surreal & Cohesive Combinations)
     document.getElementById('btn-generate').addEventListener('click', () => {
       state.seed = Math.floor(Math.random() * 90000) + 1000;
 
-      // 1. Boundary
       state.shape = Math.random() > 0.5 ? 'circle' : 'square';
       if (state.shape === 'circle') {
         document.getElementById('btn-shape-circle').classList.add('active');
@@ -665,25 +652,21 @@
         document.getElementById('hud-shape').innerText = "BOUNDARY: SQUARE 3.5\"";
       }
 
-      // 2. Schema
       const schemas = ['occulted-horizon', 'harmonic-cage', 'spectral-corona', 'monolith-alignment', 'bearcat-hyperdrift'];
       state.schema = schemas[Math.floor(Math.random() * schemas.length)];
       document.getElementById('param-schema').value = state.schema;
       document.getElementById('hud-schema').innerText = `SCHEMA: ${state.schema.replace('-', ' ').toUpperCase()}`;
 
-      // 3. Atmosphere
       const atmospheres = Object.keys(atmosphereThemes);
       state.atmosphere = atmospheres[Math.floor(Math.random() * atmospheres.length)];
       document.getElementById('param-atmosphere').value = state.atmosphere;
       state.palette = { ...atmosphereThemes[state.atmosphere] };
 
-      // 4. Letter B scale (from modest inset jewel to monumental monolith)
       const scaleChoices = [0.65, 0.8, 0.95, 1.15, 1.35];
       state.b.scale = scaleChoices[Math.floor(Math.random() * scaleChoices.length)];
       document.getElementById('param-b-scale').value = state.b.scale;
       document.getElementById('val-b-scale').innerText = `${state.b.scale.toFixed(2)}x`;
 
-      // 5. Letter B Position (Asymmetrical or Centered depending on schema)
       if (state.schema === 'occulted-horizon') {
         state.b.x = 360 + (Math.random() * 60 - 30);
         state.b.y = 420;
@@ -695,9 +678,7 @@
         state.b.y = 400;
       }
 
-      // 6. Typographic Dynamic Relationship
       recomposeTypography();
-
       clampAll();
       render();
     });
@@ -707,19 +688,16 @@
       const bBig = state.b.scale > 1.1;
 
       if (state.schema === 'monolith-alignment') {
-        // Vertical rail stamp and telemetry lock
         state.t1 = { ...state.t1, x: isCircle ? 230 : 160, y: 700, size: 36, tracking: "0.25em", anchor: "start" };
         state.t2 = { ...state.t2, x: isCircle ? 570 : 640, y: 700, size: 20, tracking: "0.3em", anchor: "end" };
         state.t3 = { ...state.t3, x: 400, y: 135, size: 12, tracking: "0.35em", anchor: "middle" };
       } 
       else if (bBig) {
-        // When B is huge, integrate text at clean tangential baselines
         state.t1 = { ...state.t1, x: 400, y: isCircle ? 140 : 105, size: 34, tracking: "0.32em", anchor: "middle" };
         state.t2 = { ...state.t2, x: 400, y: isCircle ? 675 : 710, size: 24, tracking: "0.25em", anchor: "middle" };
         state.t3 = { ...state.t3, x: 400, y: isCircle ? 710 : 740, size: 12, tracking: "0.35em", anchor: "middle" };
       } 
       else {
-        // Asymmetric floating alignments
         const styles = ['arch-crown', 'split-diagonal', 'corner-badge'];
         const s = styles[Math.floor(Math.random() * styles.length)];
 
@@ -753,16 +731,12 @@
       state.t3.x = p3.x; state.t3.y = p3.y;
     }
 
-    // Mathematical Clean Geometric "B" Vector Path (Solid, NO interior vertical line bug)
     function getCleanBPath(cx, cy, s) {
-      // Solid cyber-monolith B: outer contour + two subtractive inner cutouts
-      // Drawn as a single composite SVG path (evenodd fill rule) for absolute crispness
       const w = 180 * s;
       const h = 260 * s;
       const x0 = cx - w * 0.45;
       const y0 = cy - h * 0.5;
 
-      // Outer perimeter of B
       const rOuter = 50 * s;
       const rInner = 28 * s;
       
@@ -775,15 +749,11 @@
         A ${rOuter} ${rOuter} 0 0 1 ${x0 + w * 0.55} ${y0 + h}
         H ${x0}
         Z
-
-        <!-- Upper Counter Hole (Cutout) -->
         M ${x0 + 44 * s} ${y0 + 36 * s}
         H ${x0 + w * 0.48}
         A ${rInner} ${rInner} 0 0 1 ${x0 + w * 0.48} ${y0 + h * 0.42}
         H ${x0 + 44 * s}
         Z
-
-        <!-- Lower Counter Hole (Cutout) -->
         M ${x0 + 44 * s} ${y0 + h * 0.58}
         H ${x0 + w * 0.52}
         A ${rInner * 1.1} ${rInner * 1.1} 0 0 1 ${x0 + w * 0.52} ${y0 + h * 0.88}
@@ -807,18 +777,15 @@
       return `<path d="${d}" fill="${color}"/>`;
     }
 
-    // Main Vector Generator Engine
     function generateVector() {
       const p = state.palette;
       const isCircle = state.shape === 'circle';
       const b = state.b;
 
-      // Color selection for Letter B (Strictly single, solid, unified tone)
       let bSolidColor = "#ffffff";
       if (state.bColorType === 'soft-bone') bSolidColor = "#f5f3ef";
       else if (state.bColorType === 'electric-tint') bSolidColor = p.celestial1;
 
-      // 1. HARD BOUNDARY DEFINITION (Strictly no bleed)
       svgDefs.innerHTML = `
         ${isCircle 
           ? `<clipPath id="boundary-clip"><circle cx="400" cy="400" r="360"/></clipPath>` 
@@ -840,7 +807,6 @@
           <rect width="800" height="800" fill="url(#nebula-glow)"/>
       `;
 
-      // 2. BACKGROUND COSMIC GRAIN & STARS
       let rnd = state.seed;
       const pseudoRnd = () => {
         const x = Math.sin(rnd++) * 10000;
@@ -866,26 +832,19 @@
       }
       svg += `</g>`;
 
-      // 3. SURREAL VISUAL SCHEMAS (Organically interacting with B)
       svg += `<g id="surreal-schema">`;
 
       if (state.schema === 'occulted-horizon') {
-        // Surreal Occulting Planet: Massive soft gradient sphere behind B with intersecting gravitational rings
         svg += `
-          <!-- Occulted Celestial Disc -->
           <circle cx="480" cy="380" r="190" fill="none" stroke="${p.celestial1}" stroke-width="2.5" opacity="0.85"/>
           <circle cx="480" cy="380" r="175" fill="${p.bgGlow}" opacity="0.6"/>
           <path d="M 320 280 A 190 190 0 0 1 660 440" fill="none" stroke="${p.celestial2}" stroke-width="4" opacity="0.9"/>
-          
-          <!-- Intersecting Orbital Wireframe Ring Passing Through B -->
           <ellipse cx="400" cy="420" rx="270" ry="75" fill="none" stroke="${p.celestial1}" stroke-width="1.5" transform="rotate(-26 400 420)" opacity="0.6"/>
           <ellipse cx="400" cy="420" rx="230" ry="60" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 8" transform="rotate(-26 400 420)" opacity="0.5"/>
-          
           ${makeDiffractionStar(240, 290, 16, 4, '#ffffff')}
         `;
       }
       else if (state.schema === 'harmonic-cage') {
-        // Quantum Orbital Resonance (Clean geometric nested ellipses inspired by modern aerospace emblems)[cite: 3]
         svg += `<g transform="translate(400, 400)">`;
         for (let r = 70; r <= 290; r += 32) {
           const col = (r % 64 === 0) ? p.celestial1 : p.celestial2;
@@ -900,13 +859,10 @@
         svg += `</g>`;
       }
       else if (state.schema === 'spectral-corona') {
-        // High-contrast Solar Flare Corona & Refraction Rays
         svg += `
           <g transform="translate(${b.x}, ${b.y})">
-            <!-- Corona Pulses -->
             <circle cx="0" cy="0" r="170" fill="none" stroke="${p.celestial1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.8"/>
             <circle cx="0" cy="0" r="195" fill="none" stroke="${p.celestial2}" stroke-width="1.5" opacity="0.5"/>
-            <!-- Razor Diffraction Spikes radiating outward -->
             <line x1="-240" y1="0" x2="240" y2="0" stroke="${p.celestial1}" stroke-width="1.5" opacity="0.7"/>
             <line x1="0" y1="-240" x2="0" y2="240" stroke="${p.celestial1}" stroke-width="1.5" opacity="0.7"/>
             <line x1="-170" y1="-170" x2="170" y2="170" stroke="${p.celestial2}" stroke-width="1" stroke-dasharray="8 6" opacity="0.6"/>
@@ -917,14 +873,10 @@
         `;
       }
       else if (state.schema === 'monolith-alignment') {
-        // Celestial Transit Horizon & Technical Navigational Scales
         svg += `
-          <!-- Equatorial Horizon Line -->
           <line x1="50" y1="400" x2="750" y2="400" stroke="${p.celestial2}" stroke-width="1.5" stroke-dasharray="12 8" opacity="0.6"/>
-          <!-- Calibrated Coordinate Reticle -->
           <circle cx="400" cy="400" r="230" fill="none" stroke="${p.celestial1}" stroke-width="2" opacity="0.75"/>
           <circle cx="400" cy="400" r="245" fill="none" stroke="${p.celestial2}" stroke-width="1" stroke-dasharray="4 6" opacity="0.5"/>
-          <!-- Navigational Angle Markers -->
           <line x1="400" y1="155" x2="400" y2="175" stroke="#ffffff" stroke-width="2"/>
           <line x1="400" y1="625" x2="400" y2="645" stroke="#ffffff" stroke-width="2"/>
           <line x1="155" y1="400" x2="175" y2="400" stroke="#ffffff" stroke-width="2"/>
@@ -933,7 +885,6 @@
         `;
       }
       else if (state.schema === 'bearcat-hyperdrift') {
-        // Bearcat Vector Plumes: Aerodynamic cosmic claws sweeping across the negative space
         svg += `<g transform="translate(400, 400)">`;
         const arcs = [-100, -35, 35, 100];
         arcs.forEach((yPos, idx) => {
@@ -949,18 +900,14 @@
 
       svg += `</g>`;
 
-      // 4. THE PROPORTIONED LETTER "B" (Single solid color, NO black stripe bug)
       const bPathData = getCleanBPath(b.x, b.y, b.scale);
       svg += `
         <g id="letter-b-node" class="draggable-item" data-id="b">
-          <!-- Subtle Physical Depth Shadow Behind the Glyph -->
           <path d="${bPathData}" fill="#000000" opacity="0.5" transform="translate(0, 6)" fill-rule="evenodd"/>
-          <!-- The Pure Solid Monolith Letterform (Clean, unified tone) -->
           <path d="${bPathData}" fill="${bSolidColor}" fill-rule="evenodd"/>
         </g>
       `;
 
-      // 5. DRAGGABLE & HARMONIZED TYPOGRAPHY MODULES
       const renderLabel = (id, node) => `
         <g id="group-${id}" class="draggable-item" transform="translate(${node.x}, ${node.y})" data-id="${id}">
           <text font-family="'Space Grotesk', sans-serif" 
@@ -978,7 +925,6 @@
       svg += renderLabel('t2', state.t2);
       svg += renderLabel('t3', state.t3);
 
-      // 6. EMBROIDERED MERROWED EDGE BORDER (Physical Patch Frame)
       if (isCircle) {
         svg += `
           <circle cx="400" cy="400" r="360" fill="none" stroke="${p.borderCol}" stroke-width="13"/>
@@ -993,11 +939,10 @@
         `;
       }
 
-      svg += `</g>`; // End boundary clip
+      svg += `</g>`;
       return svg;
     }
 
-    // Render Dispatcher
     function render() {
       const markup = generateVector();
       svgContent.innerHTML = markup;
@@ -1005,11 +950,9 @@
       previewMicro.innerHTML = markup;
     }
 
-    // Interactive Dragging strictly inside patch bounds
     mainSvg.addEventListener('mousedown', e => {
       const pt = getSvgCoords(e);
 
-      // Check letter B click
       const bDist = Math.hypot(pt.x - state.b.x, pt.y - state.b.y);
       if (bDist < 120 * state.b.scale) {
         dragTarget = 'b';
@@ -1017,7 +960,6 @@
         return;
       }
 
-      // Check typography
       const testText = (node, key) => {
         const d = Math.hypot(pt.x - node.x, pt.y - node.y);
         if (d < 50) {
@@ -1061,7 +1003,6 @@
       };
     }
 
-    // Export Vector SVG
     document.getElementById('btn-export-svg').addEventListener('click', () => {
       const serializer = new XMLSerializer();
       const svgStr = serializer.serializeToString(mainSvg);
@@ -1074,7 +1015,6 @@
       URL.revokeObjectURL(url);
     });
 
-    // Export 2400px Master PNG
     document.getElementById('btn-export-png').addEventListener('click', () => {
       const size = 2400;
       const canvas = document.createElement('canvas');
@@ -1099,7 +1039,6 @@
       img.src = url;
     });
 
-    // Launch
     state.palette = { ...atmosphereThemes[state.atmosphere] };
     clampAll();
     render();
