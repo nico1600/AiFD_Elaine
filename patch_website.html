@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BARUCH IN THE COSMOS — Surrealist Space Emblem Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #04060a;
+      --panel: #0a0e17;
+      --border: #162032;
+      --accent: #38bdf8;
+      --text: #f1f5f9;
+      --text-muted: #64748b;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    header {
+      background: rgba(10, 14, 23, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: #ffffff;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Chivo Mono', monospace;
+      font-weight: 800;
+      color: #04060a;
+      font-size: 16px;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .brand-subtitle {
+      font-family: 'Chivo Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      border: 1px solid var(--border);
+      background: #111724;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #1a2336;
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    button.btn-primary {
+      background: #ffffff;
+      color: #04060a;
+      border-color: #ffffff;
+      font-weight: 700;
+    }
+
+    button.btn-primary:hover {
+      background: #e2e8f0;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 360px 1fr 280px;
+      height: calc(100vh - 61px);
+    }
+
+    @media (max-width: 1200px) {
+      main { grid-template-columns: 340px 1fr; height: auto; }
+      .sidebar-right { display: none; }
+    }
+
+    @media (max-width: 860px) {
+      main { display: flex; flex-direction: column; height: auto; }
+    }
+
+    .controls-col {
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-title {
+      font-family: 'Chivo Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    label span.val {
+      font-family: 'Chivo Mono', monospace;
+      color: var(--text);
+    }
+
+    .toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-toggle {
+      justify-content: center;
+      padding: 9px;
+      font-size: 12px;
+    }
+
+    .btn-toggle.active {
+      background: #19263c;
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      background: #162032;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+      border: 2px solid #04060a;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      background: #111724;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      outline: none;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    .stage-col {
+      background: radial-gradient(circle at center, #0d1525 0%, #04060a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .canvas-hud {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .hud-tag {
+      font-family: 'Chivo Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(10, 14, 23, 0.85);
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .patch-viewport-wrapper {
+      width: 100%;
+      max-width: 580px;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95));
+    }
+
+    #main-svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .drag-hint {
+      margin-top: 14px;
+      font-family: 'Chivo Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar-right {
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .scale-card {
+      background: #080c14;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scale-card-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: 'Chivo Mono', monospace;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 6px;
+    }
+
+    .real-world-box {
+      width: 190px;
+      height: 190px;
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .real-world-box svg, .micro-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .micro-box {
+      width: 72px;
+      height: 72px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .draggable-item {
+      cursor: move;
+    }
+    .draggable-item:hover {
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div>
+        <div class="brand-title">Baruch in the Cosmos</div>
+        <div class="brand-subtitle">Surrealist Monogram & Mission Emblem Generator</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="toggle-contrast">◑ Monochrome Mode</button>
+      <button id="btn-export-svg">Export SVG</button>
+      <button class="btn-primary" id="btn-export-png">Export 2400px PNG</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="controls-col">
+      <button id="btn-generate" class="btn-primary" style="justify-content: center; padding: 14px; font-size: 14px;">
+        ✨ GENERATE SURREAL EMBLEM
+      </button>
+
+      <div>
+        <div class="section-title">Patch Boundary (Strict)</div>
+        <div class="toggle-group">
+          <button class="btn-toggle active" id="btn-shape-circle">Circle</button>
+          <button class="btn-toggle" id="btn-shape-square">Square 3.5"</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Surreal Aerospace Schema</div>
+        <select id="param-schema">
+          <option value="occulted-horizon">Occulted Horizon & Shadow Eclipse</option>
+          <option value="harmonic-cage">Harmonic Orbit & Quantum Wireframe</option>
+          <option value="spectral-corona">Prismatic Solar Corona & Flares</option>
+          <option value="monolith-alignment">Celestial Transit & Alignment Rail</option>
+          <option value="bearcat-hyperdrift">Bearcat Vector Drift & Ion Wake</option>
+        </select>
+      </div>
+
+      <div>
+        <div class="section-title">Deep Space Atmosphere</div>
+        <select id="param-atmosphere">
+          <option value="cosmic-dusk">Cosmic Dusk (Deep Indigo, Solar Gold, White)</option>
+          <option value="ultraviolet">Ultraviolet Void (Magenta, Cyan, Pure White)</option>
+          <option value="martian-dust">Martian Twilight (Rust Oxide, Amber, Bone)</option>
+          <option value="monochrome-noir">Monochrome Noir (Stark Carbon & Pure White)</option>
+          <option value="bioluminescent">Orbital Biome (Deep Emerald, Neon Teal, White)</option>
+        </select>
+      </div>
+
+      <div>
+        <div class="section-title">Letter "B" Presence</div>
+        <div class="control-group">
+          <label>Scale <span class="val" id="val-b-scale">1.00x</span></label>
+          <input type="range" id="param-b-scale" min="0.55" max="1.45" step="0.05" value="1.0">
+        </div>
+        <div class="control-group" style="margin-top: 8px;">
+          <label>Letter Color Scheme</label>
+          <select id="param-b-color">
+            <option value="pure-white">Pure Stark White (#FFFFFF)</option>
+            <option value="soft-bone">Warm Celestial Bone (#F5F3EF)</option>
+            <option value="electric-tint">Atmospheric Glow Tint</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Typography Content</div>
+        <div class="control-group">
+          <label>Word 1</label>
+          <input type="text" id="input-w1" value="BARUCH">
+        </div>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Word 2</label>
+          <input type="text" id="input-w2" value="IN THE COSMOS">
+        </div>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Flight Coordinate Stamp</label>
+          <input type="text" id="input-w3" value="ISS // 51.6°N LEO">
+        </div>
+        <button id="btn-shuffle-text" style="margin-top: 10px; width: 100%; justify-content: center;">
+          ⤭ Re-Compose Typography Alignment
+        </button>
+      </div>
+    </div>
+
+    <div class="stage-col">
+      <div class="canvas-hud">
+        <div class="hud-tag" id="hud-shape">BOUNDARY: CIRCLE</div>
+        <div class="hud-tag" id="hud-schema">SCHEMA: OCCULTED HORIZON</div>
+      </div>
+
+      <div class="patch-viewport-wrapper">
+        <svg id="main-svg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+          <defs id="svg-defs"></defs>
+          <g id="svg-content"></g>
+        </svg>
+      </div>
+
+      <div class="drag-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l3 3 3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+        Click & drag the "B" or typography blocks (Safe within patch boundary)
+      </div>
+    </div>
+
+    <div class="sidebar-right">
+      <div>
+        <div class="section-title">Physical Flight Test</div>
+        <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+          Verifying thread density and pure shape recognition at physical 3.5″ scale and miniature 72px flight lapel size.
+        </p>
+      </div>
+
+      <div class="scale-card">
+        <div class="scale-card-header">
+          <span>STANDARD REAL SIZE</span>
+          <span>3.5″ × 3.5″</span>
+        </div>
+        <div class="real-world-box">
+          <svg id="preview-35" viewBox="0 0 800 800"></svg>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <div class="scale-card-header">
+          <span>MICRO EMBROIDERY (LAPEL)</span>
+          <span>0.75″ (72px)</span>
+        </div>
+        <div class="micro-box">
+          <svg id="preview-micro" viewBox="0 0 800 800"></svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const state = {
+      shape: 'circle',
+      schema: 'occulted-horizon',
+      atmosphere: 'cosmic-dusk',
+      bColorType: 'pure-white',
+      seed: 4912,
+      grayscale: false,
+
+      b: {
+        x: 400,
+        y: 400,
+        scale: 1.0
+      },
+
+      t1: { text: "BARUCH", x: 400, y: 155, size: 40, tracking: "0.28em", anchor: "middle" },
+      t2: { text: "IN THE COSMOS", x: 400, y: 665, size: 24, tracking: "0.22em", anchor: "middle" },
+      t3: { text: "ISS // 51.6°N LEO", x: 400, y: 705, size: 12, tracking: "0.3em", anchor: "middle" },
+
+      palette: {
+        bgDeep: '#040711',
+        bgGlow: '#0a162b',
+        celestial1: '#ffb703',
+        celestial2: '#00e5ff',
+        celestial3: '#fb8500',
+        starCol: '#ffffff',
+        borderCol: '#1e293b'
+      }
+    };
+
+    const atmosphereThemes = {
+      'cosmic-dusk': {
+        bgDeep: '#050a14', bgGlow: '#0c1b33',
+        celestial1: '#ffb703', celestial2: '#38bdf8', celestial3: '#fb8500',
+        starCol: '#ffffff', borderCol: '#1b3558'
+      },
+      'ultraviolet': {
+        bgDeep: '#080312', bgGlow: '#190a33',
+        celestial1: '#ec4899', celestial2: '#00e5ff', celestial3: '#a855f7',
+        starCol: '#ffffff', borderCol: '#3b0764'
+      },
+      'martian-dust': {
+        bgDeep: '#0f0708', bgGlow: '#220c0d',
+        celestial1: '#ea580c', celestial2: '#f59e0b', celestial3: '#e11d48',
+        starCol: '#fef08a', borderCol: '#451a03'
+      },
+      'monochrome-noir': {
+        bgDeep: '#080808', bgGlow: '#171717',
+        celestial1: '#ffffff', celestial2: '#737373', celestial3: '#404040',
+        starCol: '#ffffff', borderCol: '#262626'
+      },
+      'bioluminescent': {
+        bgDeep: '#020b10', bgGlow: '#05202b',
+        celestial1: '#00f5d4', celestial2: '#0284c7', celestial3: '#10b981',
+        starCol: '#ffffff', borderCol: '#064e3b'
+      }
+    };
+
+    const mainSvg = document.getElementById('main-svg');
+    const svgContent = document.getElementById('svg-content');
+    const svgDefs = document.getElementById('svg-defs');
+    const preview35 = document.getElementById('preview-35');
+    const previewMicro = document.getElementById('preview-micro');
+
+    let dragTarget = null;
+    let dragOffset = { x: 0, y: 0 };
+
+    function clampPoint(x, y, margin = 45) {
+      if (state.shape === 'circle') {
+        const cx = 400, cy = 400, maxR = 360 - margin;
+        const dist = Math.hypot(x - cx, y - cy);
+        if (dist > maxR) {
+          const a = Math.atan2(y - cy, x - cx);
+          return { x: cx + Math.cos(a) * maxR, y: cy + Math.sin(a) * maxR };
+        }
+        return { x, y };
+      } else {
+        const min = 40 + margin, max = 760 - margin;
+        return {
+          x: Math.max(min, Math.min(max, x)),
+          y: Math.max(min, Math.min(max, y))
+        };
+      }
+    }
+
+    document.getElementById('btn-shape-circle').addEventListener('click', () => {
+      state.shape = 'circle';
+      document.getElementById('btn-shape-circle').classList.add('active');
+      document.getElementById('btn-shape-square').classList.remove('active');
+      document.getElementById('hud-shape').innerText = "BOUNDARY: CIRCLE";
+      clampAll();
+      render();
+    });
+
+    document.getElementById('btn-shape-square').addEventListener('click', () => {
+      state.shape = 'square';
+      document.getElementById('btn-shape-square').classList.add('active');
+      document.getElementById('btn-shape-circle').classList.remove('active');
+      document.getElementById('hud-shape').innerText = "BOUNDARY: SQUARE 3.5\"";
+      clampAll();
+      render();
+    });
+
+    document.getElementById('param-schema').addEventListener('change', e => {
+      state.schema = e.target.value;
+      document.getElementById('hud-schema').innerText = `SCHEMA: ${state.schema.replace('-', ' ').toUpperCase()}`;
+      render();
+    });
+
+    document.getElementById('param-atmosphere').addEventListener('change', e => {
+      state.atmosphere = e.target.value;
+      state.palette = { ...atmosphereThemes[state.atmosphere] };
+      render();
+    });
+
+    document.getElementById('param-b-color').addEventListener('change', e => {
+      state.bColorType = e.target.value;
+      render();
+    });
+
+    document.getElementById('param-b-scale').addEventListener('input', e => {
+      state.b.scale = parseFloat(e.target.value);
+      document.getElementById('val-b-scale').innerText = `${state.b.scale.toFixed(2)}x`;
+      render();
+    });
+
+    document.getElementById('input-w1').addEventListener('input', e => { state.t1.text = e.target.value; render(); });
+    document.getElementById('input-w2').addEventListener('input', e => { state.t2.text = e.target.value; render(); });
+    document.getElementById('input-w3').addEventListener('input', e => { state.t3.text = e.target.value; render(); });
+
+    document.getElementById('btn-shuffle-text').addEventListener('click', () => {
+      recomposeTypography();
+      render();
+    });
+
+    document.getElementById('toggle-contrast').addEventListener('click', () => {
+      state.grayscale = !state.grayscale;
+      const f = state.grayscale ? 'grayscale(1) contrast(1.4)' : 'none';
+      mainSvg.style.filter = f;
+      preview35.style.filter = f;
+      previewMicro.style.filter = f;
+    });
+
+    document.getElementById('btn-generate').addEventListener('click', () => {
+      state.seed = Math.floor(Math.random() * 90000) + 1000;
+
+      state.shape = Math.random() > 0.5 ? 'circle' : 'square';
+      if (state.shape === 'circle') {
+        document.getElementById('btn-shape-circle').classList.add('active');
+        document.getElementById('btn-shape-square').classList.remove('active');
+        document.getElementById('hud-shape').innerText = "BOUNDARY: CIRCLE";
+      } else {
+        document.getElementById('btn-shape-square').classList.add('active');
+        document.getElementById('btn-shape-circle').classList.remove('active');
+        document.getElementById('hud-shape').innerText = "BOUNDARY: SQUARE 3.5\"";
+      }
+
+      const schemas = ['occulted-horizon', 'harmonic-cage', 'spectral-corona', 'monolith-alignment', 'bearcat-hyperdrift'];
+      state.schema = schemas[Math.floor(Math.random() * schemas.length)];
+      document.getElementById('param-schema').value = state.schema;
+      document.getElementById('hud-schema').innerText = `SCHEMA: ${state.schema.replace('-', ' ').toUpperCase()}`;
+
+      const atmospheres = Object.keys(atmosphereThemes);
+      state.atmosphere = atmospheres[Math.floor(Math.random() * atmospheres.length)];
+      document.getElementById('param-atmosphere').value = state.atmosphere;
+      state.palette = { ...atmosphereThemes[state.atmosphere] };
+
+      const scaleChoices = [0.65, 0.8, 0.95, 1.15, 1.35];
+      state.b.scale = scaleChoices[Math.floor(Math.random() * scaleChoices.length)];
+      document.getElementById('param-b-scale').value = state.b.scale;
+      document.getElementById('val-b-scale').innerText = `${state.b.scale.toFixed(2)}x`;
+
+      if (state.schema === 'occulted-horizon') {
+        state.b.x = 360 + (Math.random() * 60 - 30);
+        state.b.y = 420;
+      } else if (state.schema === 'bearcat-hyperdrift') {
+        state.b.x = 420;
+        state.b.y = 380;
+      } else {
+        state.b.x = 400;
+        state.b.y = 400;
+      }
+
+      recomposeTypography();
+      clampAll();
+      render();
+    });
+
+    function recomposeTypography() {
+      const isCircle = state.shape === 'circle';
+      const bBig = state.b.scale > 1.1;
+
+      if (state.schema === 'monolith-alignment') {
+        state.t1 = { ...state.t1, x: isCircle ? 230 : 160, y: 700, size: 36, tracking: "0.25em", anchor: "start" };
+        state.t2 = { ...state.t2, x: isCircle ? 570 : 640, y: 700, size: 20, tracking: "0.3em", anchor: "end" };
+        state.t3 = { ...state.t3, x: 400, y: 135, size: 12, tracking: "0.35em", anchor: "middle" };
+      } 
+      else if (bBig) {
+        state.t1 = { ...state.t1, x: 400, y: isCircle ? 140 : 105, size: 34, tracking: "0.32em", anchor: "middle" };
+        state.t2 = { ...state.t2, x: 400, y: isCircle ? 675 : 710, size: 24, tracking: "0.25em", anchor: "middle" };
+        state.t3 = { ...state.t3, x: 400, y: isCircle ? 710 : 740, size: 12, tracking: "0.35em", anchor: "middle" };
+      } 
+      else {
+        const styles = ['arch-crown', 'split-diagonal', 'corner-badge'];
+        const s = styles[Math.floor(Math.random() * styles.length)];
+
+        if (s === 'arch-crown') {
+          state.t1 = { ...state.t1, x: 400, y: 165, size: 42, tracking: "0.3em", anchor: "middle" };
+          state.t2 = { ...state.t2, x: 400, y: 645, size: 26, tracking: "0.26em", anchor: "middle" };
+          state.t3 = { ...state.t3, x: 400, y: 685, size: 13, tracking: "0.35em", anchor: "middle" };
+        } else if (s === 'split-diagonal') {
+          state.t1 = { ...state.t1, x: isCircle ? 250 : 180, y: 180, size: 38, tracking: "0.26em", anchor: "start" };
+          state.t2 = { ...state.t2, x: isCircle ? 550 : 620, y: 640, size: 24, tracking: "0.22em", anchor: "end" };
+          state.t3 = { ...state.t3, x: isCircle ? 550 : 620, y: 675, size: 12, tracking: "0.3em", anchor: "end" };
+        } else {
+          state.t1 = { ...state.t1, x: 400, y: 640, size: 40, tracking: "0.25em", anchor: "middle" };
+          state.t2 = { ...state.t2, x: 400, y: 680, size: 20, tracking: "0.35em", anchor: "middle" };
+          state.t3 = { ...state.t3, x: 400, y: 140, size: 12, tracking: "0.4em", anchor: "middle" };
+        }
+      }
+    }
+
+    function clampAll() {
+      const gPt = clampPoint(state.b.x, state.b.y, 70);
+      state.b.x = gPt.x; state.b.y = gPt.y;
+
+      const p1 = clampPoint(state.t1.x, state.t1.y, 35);
+      state.t1.x = p1.x; state.t1.y = p1.y;
+
+      const p2 = clampPoint(state.t2.x, state.t2.y, 35);
+      state.t2.x = p2.x; state.t2.y = p2.y;
+
+      const p3 = clampPoint(state.t3.x, state.t3.y, 35);
+      state.t3.x = p3.x; state.t3.y = p3.y;
+    }
+
+    function getCleanBPath(cx, cy, s) {
+      const w = 180 * s;
+      const h = 260 * s;
+      const x0 = cx - w * 0.45;
+      const y0 = cy - h * 0.5;
+
+      const rOuter = 50 * s;
+      const rInner = 28 * s;
+      
+      const d = `
+        M ${x0} ${y0}
+        H ${x0 + w * 0.55}
+        A ${rOuter} ${rOuter} 0 0 1 ${x0 + w} ${y0 + h * 0.45}
+        A ${rOuter} ${rOuter} 0 0 1 ${x0 + w * 0.65} ${y0 + h * 0.5}
+        A ${rOuter * 1.1} ${rOuter * 1.1} 0 0 1 ${x0 + w * 1.05} ${y0 + h * 0.95}
+        A ${rOuter} ${rOuter} 0 0 1 ${x0 + w * 0.55} ${y0 + h}
+        H ${x0}
+        Z
+        M ${x0 + 44 * s} ${y0 + 36 * s}
+        H ${x0 + w * 0.48}
+        A ${rInner} ${rInner} 0 0 1 ${x0 + w * 0.48} ${y0 + h * 0.42}
+        H ${x0 + 44 * s}
+        Z
+        M ${x0 + 44 * s} ${y0 + h * 0.58}
+        H ${x0 + w * 0.52}
+        A ${rInner * 1.1} ${rInner * 1.1} 0 0 1 ${x0 + w * 0.52} ${y0 + h * 0.88}
+        H ${x0 + 44 * s}
+        Z
+      `;
+      return d;
+    }
+
+    function makeDiffractionStar(cx, cy, r, pts, color) {
+      let d = "";
+      const step = Math.PI / pts;
+      for (let i = 0; i < 2 * pts; i++) {
+        const rad = (i % 2 === 0) ? r : r * 0.28;
+        const a = i * step;
+        const x = cx + rad * Math.cos(a);
+        const y = cy + rad * Math.sin(a);
+        d += (i === 0 ? "M " : "L ") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+      }
+      d += "Z";
+      return `<path d="${d}" fill="${color}"/>`;
+    }
+
+    function generateVector() {
+      const p = state.palette;
+      const isCircle = state.shape === 'circle';
+      const b = state.b;
+
+      let bSolidColor = "#ffffff";
+      if (state.bColorType === 'soft-bone') bSolidColor = "#f5f3ef";
+      else if (state.bColorType === 'electric-tint') bSolidColor = p.celestial1;
+
+      svgDefs.innerHTML = `
+        ${isCircle 
+          ? `<clipPath id="boundary-clip"><circle cx="400" cy="400" r="360"/></clipPath>` 
+          : `<clipPath id="boundary-clip"><rect x="40" y="40" width="720" height="720" rx="24"/></clipPath>`
+        }
+        <radialGradient id="nebula-glow" cx="45%" cy="40%" r="65%">
+          <stop offset="0%" stop-color="${p.bgGlow}"/>
+          <stop offset="100%" stop-color="${p.bgDeep}"/>
+        </radialGradient>
+        <linearGradient id="horizon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${p.celestial1}"/>
+          <stop offset="100%" stop-color="${p.celestial2}"/>
+        </linearGradient>
+      `;
+
+      let svg = `
+        <rect width="800" height="800" fill="#010204"/>
+        <g clip-path="url(#boundary-clip)">
+          <rect width="800" height="800" fill="url(#nebula-glow)"/>
+      `;
+
+      let rnd = state.seed;
+      const pseudoRnd = () => {
+        const x = Math.sin(rnd++) * 10000;
+        return x - Math.floor(x);
+      };
+
+      svg += `<g id="stars-matrix">`;
+      for (let i = 0; i < 65; i++) {
+        let sx, sy;
+        if (isCircle) {
+          const r = pseudoRnd() * 325;
+          const a = pseudoRnd() * Math.PI * 2;
+          sx = 400 + Math.cos(a) * r;
+          sy = 400 + Math.sin(a) * r;
+        } else {
+          sx = 60 + pseudoRnd() * 680;
+          sy = 60 + pseudoRnd() * 680;
+        }
+        const rStar = pseudoRnd() * 1.5 + 0.6;
+        const op = (0.25 + pseudoRnd() * 0.6).toFixed(2);
+        const col = (i % 4 === 0) ? p.celestial1 : (i % 6 === 0 ? p.celestial2 : p.starCol);
+        svg += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${rStar.toFixed(1)}" fill="${col}" opacity="${op}"/>`;
+      }
+      svg += `</g>`;
+
+      svg += `<g id="surreal-schema">`;
+
+      if (state.schema === 'occulted-horizon') {
+        svg += `
+          <circle cx="480" cy="380" r="190" fill="none" stroke="${p.celestial1}" stroke-width="2.5" opacity="0.85"/>
+          <circle cx="480" cy="380" r="175" fill="${p.bgGlow}" opacity="0.6"/>
+          <path d="M 320 280 A 190 190 0 0 1 660 440" fill="none" stroke="${p.celestial2}" stroke-width="4" opacity="0.9"/>
+          <ellipse cx="400" cy="420" rx="270" ry="75" fill="none" stroke="${p.celestial1}" stroke-width="1.5" transform="rotate(-26 400 420)" opacity="0.6"/>
+          <ellipse cx="400" cy="420" rx="230" ry="60" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 8" transform="rotate(-26 400 420)" opacity="0.5"/>
+          ${makeDiffractionStar(240, 290, 16, 4, '#ffffff')}
+        `;
+      }
+      else if (state.schema === 'harmonic-cage') {
+        svg += `<g transform="translate(400, 400)">`;
+        for (let r = 70; r <= 290; r += 32) {
+          const col = (r % 64 === 0) ? p.celestial1 : p.celestial2;
+          svg += `<circle cx="0" cy="0" r="${r}" fill="none" stroke="${col}" stroke-width="1.2" opacity="0.45"/>`;
+        }
+        for (let ex = 45; ex <= 210; ex += 40) {
+          svg += `
+            <ellipse cx="0" cy="0" rx="${ex * 0.35}" ry="${ex * 1.15}" fill="none" stroke="${p.celestial1}" stroke-width="1.5" opacity="0.75"/>
+            <ellipse cx="0" cy="0" rx="${ex * 0.7}" ry="${ex * 0.9}" fill="none" stroke="${p.celestial2}" stroke-width="1.2" opacity="0.5"/>
+          `;
+        }
+        svg += `</g>`;
+      }
+      else if (state.schema === 'spectral-corona') {
+        svg += `
+          <g transform="translate(${b.x}, ${b.y})">
+            <circle cx="0" cy="0" r="170" fill="none" stroke="${p.celestial1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.8"/>
+            <circle cx="0" cy="0" r="195" fill="none" stroke="${p.celestial2}" stroke-width="1.5" opacity="0.5"/>
+            <line x1="-240" y1="0" x2="240" y2="0" stroke="${p.celestial1}" stroke-width="1.5" opacity="0.7"/>
+            <line x1="0" y1="-240" x2="0" y2="240" stroke="${p.celestial1}" stroke-width="1.5" opacity="0.7"/>
+            <line x1="-170" y1="-170" x2="170" y2="170" stroke="${p.celestial2}" stroke-width="1" stroke-dasharray="8 6" opacity="0.6"/>
+            <line x1="-170" y1="170" x2="170" y2="-170" stroke="${p.celestial2}" stroke-width="1" stroke-dasharray="8 6" opacity="0.6"/>
+            ${makeDiffractionStar(0, -170, 18, 4, '#ffffff')}
+            ${makeDiffractionStar(170, 0, 14, 4, p.celestial1)}
+          </g>
+        `;
+      }
+      else if (state.schema === 'monolith-alignment') {
+        svg += `
+          <line x1="50" y1="400" x2="750" y2="400" stroke="${p.celestial2}" stroke-width="1.5" stroke-dasharray="12 8" opacity="0.6"/>
+          <circle cx="400" cy="400" r="230" fill="none" stroke="${p.celestial1}" stroke-width="2" opacity="0.75"/>
+          <circle cx="400" cy="400" r="245" fill="none" stroke="${p.celestial2}" stroke-width="1" stroke-dasharray="4 6" opacity="0.5"/>
+          <line x1="400" y1="155" x2="400" y2="175" stroke="#ffffff" stroke-width="2"/>
+          <line x1="400" y1="625" x2="400" y2="645" stroke="#ffffff" stroke-width="2"/>
+          <line x1="155" y1="400" x2="175" y2="400" stroke="#ffffff" stroke-width="2"/>
+          <line x1="625" y1="400" x2="645" y2="400" stroke="#ffffff" stroke-width="2"/>
+          ${makeDiffractionStar(400, 175, 12, 4, '#ffffff')}
+        `;
+      }
+      else if (state.schema === 'bearcat-hyperdrift') {
+        svg += `<g transform="translate(400, 400)">`;
+        const arcs = [-100, -35, 35, 100];
+        arcs.forEach((yPos, idx) => {
+          const col = idx % 2 === 0 ? p.celestial1 : p.celestial2;
+          svg += `
+            <path d="M -220 ${yPos + 80} Q 0 ${yPos - 40} 240 ${yPos - 120}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+            <path d="M -210 ${yPos + 90} Q 10 ${yPos - 30} 250 ${yPos - 110}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="8 6" opacity="0.7"/>
+            ${makeDiffractionStar(240, yPos - 120, 12, 4, '#ffffff')}
+          `;
+        });
+        svg += `</g>`;
+      }
+
+      svg += `</g>`;
+
+      const bPathData = getCleanBPath(b.x, b.y, b.scale);
+      svg += `
+        <g id="letter-b-node" class="draggable-item" data-id="b">
+          <path d="${bPathData}" fill="#000000" opacity="0.5" transform="translate(0, 6)" fill-rule="evenodd"/>
+          <path d="${bPathData}" fill="${bSolidColor}" fill-rule="evenodd"/>
+        </g>
+      `;
+
+      const renderLabel = (id, node) => `
+        <g id="group-${id}" class="draggable-item" transform="translate(${node.x}, ${node.y})" data-id="${id}">
+          <text font-family="'Space Grotesk', sans-serif" 
+                font-size="${node.size}" 
+                font-weight="700" 
+                fill="#ffffff" 
+                letter-spacing="${node.tracking || '0.2em'}" 
+                text-anchor="${node.anchor || 'middle'}">
+            ${node.text}
+          </text>
+        </g>
+      `;
+
+      svg += renderLabel('t1', state.t1);
+      svg += renderLabel('t2', state.t2);
+      svg += renderLabel('t3', state.t3);
+
+      if (isCircle) {
+        svg += `
+          <circle cx="400" cy="400" r="360" fill="none" stroke="${p.borderCol}" stroke-width="13"/>
+          <circle cx="400" cy="400" r="353" fill="none" stroke="#ffffff" stroke-width="1.8" opacity="0.85"/>
+          <circle cx="400" cy="400" r="367" fill="none" stroke="${p.celestial1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.7"/>
+        `;
+      } else {
+        svg += `
+          <rect x="40" y="40" width="720" height="720" rx="24" fill="none" stroke="${p.borderCol}" stroke-width="13"/>
+          <rect x="47" y="47" width="706" height="706" rx="17" fill="none" stroke="#ffffff" stroke-width="1.8" opacity="0.85"/>
+          <rect x="33" y="33" width="734" height="734" rx="31" fill="none" stroke="${p.celestial1}" stroke-width="2" stroke-dasharray="8 6" opacity="0.7"/>
+        `;
+      }
+
+      svg += `</g>`;
+      return svg;
+    }
+
+    function render() {
+      const markup = generateVector();
+      svgContent.innerHTML = markup;
+      preview35.innerHTML = markup;
+      previewMicro.innerHTML = markup;
+    }
+
+    mainSvg.addEventListener('mousedown', e => {
+      const pt = getSvgCoords(e);
+
+      const bDist = Math.hypot(pt.x - state.b.x, pt.y - state.b.y);
+      if (bDist < 120 * state.b.scale) {
+        dragTarget = 'b';
+        dragOffset = { x: pt.x - state.b.x, y: pt.y - state.b.y };
+        return;
+      }
+
+      const testText = (node, key) => {
+        const d = Math.hypot(pt.x - node.x, pt.y - node.y);
+        if (d < 50) {
+          dragTarget = key;
+          dragOffset = { x: pt.x - node.x, y: pt.y - node.y };
+          return true;
+        }
+        return false;
+      };
+
+      if (testText(state.t1, 't1')) return;
+      if (testText(state.t2, 't2')) return;
+      if (testText(state.t3, 't3')) return;
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!dragTarget) return;
+      const pt = getSvgCoords(e);
+
+      if (dragTarget === 'b') {
+        const clamped = clampPoint(pt.x - dragOffset.x, pt.y - dragOffset.y, 65 * state.b.scale);
+        state.b.x = clamped.x;
+        state.b.y = clamped.y;
+      } else if (state[dragTarget]) {
+        const clamped = clampPoint(pt.x - dragOffset.x, pt.y - dragOffset.y, 35);
+        state[dragTarget].x = clamped.x;
+        state[dragTarget].y = clamped.y;
+      }
+      render();
+    });
+
+    window.addEventListener('mouseup', () => {
+      dragTarget = null;
+    });
+
+    function getSvgCoords(e) {
+      const rect = mainSvg.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (800 / rect.width),
+        y: (e.clientY - rect.top) * (800 / rect.height)
+      };
+    }
+
+    document.getElementById('btn-export-svg').addEventListener('click', () => {
+      const serializer = new XMLSerializer();
+      const svgStr = serializer.serializeToString(mainSvg);
+      const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `baruch-surreal-patch-${state.shape}-${state.schema}-#${state.seed}.svg`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('btn-export-png').addEventListener('click', () => {
+      const size = 2400;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const serializer = new XMLSerializer();
+      const svgStr = serializer.serializeToString(mainSvg);
+      const img = new Image();
+
+      const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, size, size);
+        URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = `baruch-surreal-patch-${state.shape}-2400px.png`;
+        a.click();
+      };
+      img.src = url;
+    });
+
+    state.palette = { ...atmosphereThemes[state.atmosphere] };
+    clampAll();
+    render();
+  </script>
+</body>
+</html>
