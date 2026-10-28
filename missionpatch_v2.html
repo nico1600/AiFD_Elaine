@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baruch Space Mission Patch</title>
+
+  <!-- Adobe Typekit Web Fonts: Digibop & Comba[cite: 5] -->
+  <link rel="stylesheet" href="https://use.typekit.net/omn5lee.css">
+  <link rel="stylesheet" href="https://use.typekit.net/wxl0wdt.css">
+
+  <!-- Supporting Typography[cite: 5] -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;700;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020409;
+      --panel: #080d18;
+      --border: #142238;
+      --accent-cyan: #00e5ff;
+      --accent-pink: #ff2a8d;
+      --accent-lime: #39ff14;
+      --accent-orange: #ff9100;
+      --text: #f8fafc;
+      --text-muted: #798da6;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(8, 13, 24, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'comba', sans-serif;
+      font-weight: 700;
+      color: #020409;
+      font-size: 19px;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .brand-subtitle {
+      font-family: 'Chivo Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: #0f192b;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #182845;
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+
+    button.btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan), #0284c7);
+      color: #020409;
+      border: none;
+      font-weight: 800;
+    }
+
+    button.btn-primary:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.45);
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 420px 1fr 270px;
+      height: calc(100vh - 57px);
+    }
+
+    @media (max-width: 1250px) {
+      main { grid-template-columns: 380px 1fr; height: auto; }
+      .sidebar-right { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      main { display: flex; flex-direction: column; height: auto; }
+    }
+
+    .controls-col {
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-title {
+      font-family: 'Chivo Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    label {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    label span.val {
+      font-family: 'Chivo Mono', monospace;
+      color: var(--text);
+    }
+
+    .toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-toggle {
+      justify-content: center;
+      padding: 8px;
+      font-size: 11.5px;
+    }
+
+    .btn-toggle.active {
+      background: #162a48;
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #141f32;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+      border: 2px solid #020409;
+      cursor: ew-resize;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      background: #0d1522;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12.5px;
+      padding: 7px 11px;
+      border-radius: var(--radius);
+      outline: none;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .stage-col {
+      background: radial-gradient(circle at center, #091322 0%, #020409 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .canvas-hud {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .hud-tag {
+      font-family: 'Chivo Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      background: rgba(8, 13, 24, 0.88);
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .patch-viewport-wrapper {
+      width: 100%;
+      max-width: 580px;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.98));
+    }
+
+    #main-svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .drag-hint {
+      margin-top: 12px;
+      font-family: 'Chivo Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar-right {
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .scale-card {
+      background: #04070e;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .scale-card-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      font-family: 'Chivo Mono', monospace;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 5px;
+    }
+
+    .real-world-box {
+      width: 185px;
+      height: 185px;
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .micro-box {
+      width: 72px;
+      height: 72px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .real-world-box svg, .micro-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .control-box {
+      background: #0a111c;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .control-box summary {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-cyan);
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-box summary::after { content: '▾'; font-size: 11px; }
+    details[open] summary::after { content: '▴'; }
+
+    .draggable-node {
+      cursor: move;
+    }
+    .draggable-node:hover {
+      filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.7));
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div>
+        <div class="brand-title">Baruch Space Mission Patch</div>
+        <div class="brand-subtitle">Pure Text (Zero Stroke, No Boxes) // Pixelated Space Elements & Expanded Palettes</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="toggle-contrast">◑ Monochrome Mode</button>
+      <button id="btn-export-svg">Export SVG</button>
+      <button class="btn-primary" id="btn-export-png">Export 2400px PNG</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="controls-col">
+      <button id="btn-generate" class="btn-primary" style="justify-content: center; padding: 13px; font-size: 13px;">
+        🎲 SHUFFLE PATCH (COMBA & DIGIBOP)
+      </button>
+
+      <div>
+        <div class="section-title">Patch Boundary (3.5" Format)</div>
+        <div class="toggle-group">
+          <button class="btn-toggle active" id="btn-shape-square">Square 3.5"</button>
+          <button class="btn-toggle" id="btn-shape-circle">Circle 3.5"</button>
+        </div>
+      </div>
+
+      <!-- Typography Choice: Direct Digibop / Comba switch[cite: 5] -->
+      <div class="control-box">
+        <summary>🔤 Primary Typeface Engine (Pure Text)</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Font Family</label>
+          <select id="select-font-family">
+            <option value="comba-bold" selected>Comba (Bold 700)</option>
+            <option value="digibop-normal">Digibop (Normal)</option>
+            <option value="digibop-italic">Digibop (Italic)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Floating Letter Dispersion (Space Drift)</label>
+          <select id="select-drift-mode">
+            <option value="floating-scatter">Floating Scattered Drift</option>
+            <option value="orbital-sine">Microgravity Sine Wave</option>
+            <option value="staggered-cascade">Staggered Diagonal Cascade</option>
+            <option value="anchored-cluster">Playful Compact Cluster</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>BARUCH Kinetic Gradient Colorway</label>
+          <select id="select-baruch-shade">
+            <option value="rudnick-vibrant" selected>David Rudnick Kinetic (Vibrant Multi-Stop)</option>
+            <option value="rudnick-soft">David Rudnick Kinetic (Soft Daylight)</option>
+            <option value="pop-neon-sweep">Pop Neon Sweep (Lime, Cyan, Magenta)</option>
+            <option value="solar-flare-sweep">Solar Flare Sweep (Gold, Coral, Cyan)</option>
+            <option value="starlight-white">Starlight Pure Silver-White</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Scatter Dispersion Distance <span class="val" id="val-scatter-dist">36px</span></label>
+          <input type="range" id="slider-scatter-dist" min="0" max="110" value="36">
+        </div>
+      </div>
+
+      <!-- Edge-to-Edge Coordinate Sliders -->
+      <details class="control-box" open>
+        <summary>🕹 Edge-to-Edge Sliders (Full Range)</summary>
+
+        <div class="control-group" style="margin-top: 6px;">
+          <label>BARUCH Center X <span class="val" id="val-baruch-x">400</span></label>
+          <input type="range" id="slider-baruch-x" min="80" max="720" value="400">
+        </div>
+        <div class="control-group">
+          <label>BARUCH Center Y <span class="val" id="val-baruch-y">385</span></label>
+          <input type="range" id="slider-baruch-y" min="80" max="720" value="385">
+        </div>
+        <div class="control-group">
+          <label>BARUCH Scale <span class="val" id="val-baruch-s">1.00x</span></label>
+          <input type="range" id="slider-baruch-s" min="0.60" max="1.60" step="0.05" value="1.0">
+        </div>
+
+        <div style="border-top: 1px dashed var(--border); margin: 6px 0;"></div>
+
+        <div class="control-group">
+          <label>Pixel Space Centerpiece</label>
+          <select id="select-space-archetype">
+            <option value="pixel-rocket" selected>Pixel 8-Bit Mission Rocket & Thruster</option>
+            <option value="pixel-mothership">Pixel UFO Saucer & Beam</option>
+            <option value="pixel-shooting-star">Pixelated Shooting Stars & Comets</option>
+            <option value="pixel-saturn">Pixel Ringed Exoplanet & Moons</option>
+            <option value="pixel-cage">Pixelated Harmonic ACME Lattice</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Pixel Centerpiece X <span class="val" id="val-space-x">400</span></label>
+          <input type="range" id="slider-space-x" min="80" max="720" value="400">
+        </div>
+        <div class="control-group">
+          <label>Pixel Centerpiece Y <span class="val" id="val-space-y">400</span></label>
+          <input type="range" id="slider-space-y" min="80" max="720" value="400">
+        </div>
+        <div class="control-group">
+          <label>Pixel Scale <span class="val" id="val-space-s">1.00x</span></label>
+          <input type="range" id="slider-space-s" min="0.55" max="1.45" step="0.05" value="1.0">
+        </div>
+
+        <div style="border-top: 1px dashed var(--border); margin: 6px 0;"></div>
+
+        <div class="control-group">
+          <label>Top Phrase Y <span class="val" id="val-top-y">110</span></label>
+          <input type="range" id="slider-top-y" min="50" max="750" value="110">
+        </div>
+        <div class="control-group">
+          <label>Top Phrase Font Size (3.5" Sizable) <span class="val" id="val-top-size">20px</span></label>
+          <input type="range" id="slider-top-size" min="11" max="36" step="1" value="20">
+        </div>
+
+        <div class="control-group" style="margin-top: 4px;">
+          <label>Bottom Phrase Y <span class="val" id="val-bot-y">685</span></label>
+          <input type="range" id="slider-bot-y" min="50" max="750" value="685">
+        </div>
+        <div class="control-group">
+          <label>Bottom Phrase Font Size (3.5" Sizable) <span class="val" id="val-bot-size">18px</span></label>
+          <input type="range" id="slider-bot-size" min="11" max="34" step="1" value="18">
+        </div>
+      </details>
+
+      <!-- Pixel Creatures & Palettes[cite: 5] -->
+      <div class="control-box">
+        <summary>👾 Pixel Creatures & Balanced Colors</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Pixel Alien Density <span class="val" id="val-alien-count">6 Creatures</span></label>
+          <input type="range" id="slider-alien-count" min="2" max="12" step="1" value="6">
+        </div>
+        <div class="control-group">
+          <label>Colorway Palette</label>
+          <select id="select-palette">
+            <option value="pop-neon" selected>Pop Neon (Electric Cyan, Hot Magenta, Lime, Starlight)</option>
+            <option value="rudnick-transit">Rudnick Transit (Capri Blue, Vermilion, Tangerine, White)</option>
+            <option value="acme-solar">ACME Solar (Amber Orange, Solar Gold, Cobalt, Deep Void)</option>
+            <option value="cosmic-arcade">Cosmic Arcade (Teal Sky, Coral Red, Mint, Starlight)</option>
+            <option value="retro-astral">Retro Astral (Cyan, Amber Orange, Dark Violet)</option>
+            <option value="stark-monochrome">Carbon Noir (Pure Titanium & Graphite)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sizable NASA Words -->
+      <div class="control-box">
+        <summary>✍ Custom Sizable NASA / SSEP Words</summary>
+        <div class="control-group" style="margin-top: 6px;">
+          <label>Top Arch Label</label>
+          <input type="text" id="input-top-text" value="BARUCH COLLEGE // SSEP MISSION 19">
+        </div>
+        <div class="control-group">
+          <label>Bottom Mission Phrase</label>
+          <input type="text" id="input-bot-text" value="MICROGRAVITY RESEARCH PLATFORM">
+        </div>
+        <div class="control-group">
+          <label>Orbit / Year Stamp</label>
+          <input type="text" id="input-sub-text" value="SPRING 2027 // 51.6° ISS LEO">
+        </div>
+        <button id="btn-shuffle-phrase" style="margin-top: 6px; width: 100%; justify-content: center;">
+          ⤭ Generate Random Space Mission Phrase
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Stage -->
+    <div class="stage-col">
+      <div class="canvas-hud">
+        <div class="hud-tag" id="hud-font">FONT: COMBA (BOLD 700)</div>
+        <div class="hud-tag" id="hud-centerpiece">PIXEL: 8-BIT MISSION ROCKET</div>
+      </div>
+
+      <div class="patch-viewport-wrapper">
+        <svg id="main-svg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+          <defs id="svg-defs"></defs>
+          <g id="svg-content"></g>
+        </svg>
+      </div>
+
+      <div class="drag-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l3 3 3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+        Move sliders or click & drag individual floating letters, pixel creatures, or rockets
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="sidebar-right">
+      <div>
+        <div class="section-title">Physical Flight Test</div>
+        <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+          Optimized for 3.5″ embroidery. <strong>BARUCH</strong> is rendered as <strong>pure text with strictly ZERO stroke and NO background box or pill</strong>. The moving multi-stop gradient sweep is restored alongside rich colorways, with all celestial bodies, rockets, and alien creatures rendered as playful 8-bit pixels.
+        </p>
+      </div>
+
+      <div class="scale-card">
+        <div class="scale-card-header">
+          <span>REAL SIZE 1:1</span>
+          <span>3.5″ × 3.5″</span>
+        </div>
+        <div class="real-world-box">
+          <svg id="preview-35" viewBox="0 0 800 800"></svg>
+        </div>
+      </div>
+
+      <div class="scale-card">
+        <div class="scale-card-header">
+          <span>MICRO EMBROIDERY (LAPEL)</span>
+          <span>0.75″ (72px)</span>
+        </div>
+        <div class="micro-box">
+          <svg id="preview-micro" viewBox="0 0 800 800"></svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // State Architecture
+    const state = {
+      shape: 'square',
+      fontFamily: 'comba-bold',
+      baruchShade: 'rudnick-vibrant',
+      driftMode: 'floating-scatter',
+      scatterDist: 36,
+      paletteTheme: 'pop-neon',
+      seed: 9281,
+      grayscale: false,
+      alienCount: 6,
+
+      // BARUCH Floating Typography Node (PURE TEXT: STRICTLY NO STROKE, NO BACKGROUND)
+      baruch: {
+        x: 400,
+        y: 385,
+        scale: 1.0,
+        letterOffsets: [
+          { dx: -190, dy: -10, rot: -6, s: 1.04 },
+          { dx: -115, dy: 14, rot: 5, s: 0.98 },
+          { dx: -40, dy: -16, rot: -8, s: 1.1 },
+          { dx: 45, dy: 12, rot: 6, s: 1.0 },
+          { dx: 125, dy: -14, rot: -5, s: 1.04 },
+          { dx: 200, dy: 16, rot: 8, s: 1.08 }
+        ]
+      },
+
+      // Pixel Space Centerpiece Node
+      space: {
+        x: 400,
+        y: 400,
+        scale: 1.0,
+        rotation: 0,
+        archetype: 'pixel-rocket'
+      },
+
+      // Sizable Dynamic Phrases
+      topPhrase: { text: "BARUCH COLLEGE // SSEP MISSION 19", y: 110, size: 20, tracking: "0.22em" },
+      botPhrase: { text: "MICROGRAVITY RESEARCH PLATFORM", y: 685, size: 18, tracking: "0.19em" },
+      subPhrase: { text: "SPRING 2027 // 51.6° ISS LEO", y: 722, size: 11, tracking: "0.28em" },
+
+      // Pixel Creatures
+      aliens: []
+    };
+
+    // Color Palettes[cite: 5]
+    const palettes = {
+      'pop-neon': {
+        bg: '#02050b',
+        panelBg: '#091322',
+        c1: '#00d8ff', // Electric Cyan
+        c2: '#ff2a8d', // Hot Pop Magenta
+        c3: '#39ff14', // Acid Lime
+        c4: '#ffb703', // Solar Gold
+        c5: '#ffffff',
+        border: '#0d1d36',
+        borderGlow: '#00d8ff'
+      },
+      'rudnick-transit': {
+        bg: '#040407',
+        panelBg: '#0c0d16',
+        c1: '#00bfff', // Capri Blue
+        c2: '#e11d2b', // Vermilion Red
+        c3: '#ffa454', // Tangerine
+        c4: '#34d399', // Mint
+        c5: '#ffffff',
+        border: '#1b1b28',
+        borderGlow: '#00bfff'
+      },
+      'acme-solar': {
+        bg: '#030206',
+        panelBg: '#120a1c',
+        c1: '#f97316', // Amber Orange
+        c2: '#eab308', // Solar Gold
+        c3: '#0284c7', // Deep Cobalt
+        c4: '#38bdf8', // Ice Cyan
+        c5: '#ffffff',
+        border: '#241438',
+        borderGlow: '#f97316'
+      },
+      'cosmic-arcade': {
+        bg: '#020408',
+        panelBg: '#08121f',
+        c1: '#38bdf8',
+        c2: '#f43f5e',
+        c3: '#10b981',
+        c4: '#f59e0b',
+        c5: '#f8fafc',
+        border: '#0d1c33',
+        borderGlow: '#38bdf8'
+      },
+      'retro-astral': {
+        bg: '#040308',
+        panelBg: '#0f0c1a',
+        c1: '#06b6d4',
+        c2: '#fb923c',
+        c3: '#818cf8',
+        c4: '#fbbf24',
+        c5: '#f8fafc',
+        border: '#1a162b',
+        borderGlow: '#06b6d4'
+      },
+      'stark-monochrome': {
+        bg: '#000000',
+        panelBg: '#121216',
+        c1: '#f8fafc',
+        c2: '#94a3b8',
+        c3: '#64748b',
+        c4: '#cbd5e1',
+        c5: '#ffffff',
+        border: '#27272a',
+        borderGlow: '#ffffff'
+      }
+    };
+
+    const missionPhrases = [
+      "MICROGRAVITY RESEARCH PLATFORM",
+      "ORBITAL CRYSTAL NUCLEATION",
+      "ADVANCED COMBUSTION EXPERIMENT",
+      "STUDENT SPACEFLIGHT EXPERIMENTS PROGRAM",
+      "WEIGHTLESS CELLULAR REACTION",
+      "SPHERICAL FLAME DYNAMICS",
+      "BARUCH EXPEDITION 2027",
+      "DEEP SPACE COLLABORATIVE LAB"
+    ];
+
+    // DOM Elements[cite: 5]
+    const mainSvg = document.getElementById('main-svg');
+    const svgContent = document.getElementById('svg-content');
+    const svgDefs = document.getElementById('svg-defs');
+    const preview35 = document.getElementById('preview-35');
+    const previewMicro = document.getElementById('preview-micro');
+
+    let dragTarget = null;
+    let dragIndex = -1;
+    let dragOffset = { x: 0, y: 0 };
+
+    function clampPoint(x, y, margin = 20) {
+      if (state.shape === 'circle') {
+        const cx = 400, cy = 400, maxR = 360 - margin;
+        const dist = Math.hypot(x - cx, y - cy);
+        if (dist > maxR) {
+          const a = Math.atan2(y - cy, x - cx);
+          return { x: cx + Math.cos(a) * maxR, y: cy + Math.sin(a) * maxR };
+        }
+        return { x, y };
+      } else {
+        const min = 40 + margin, max = 760 - margin;
+        return {
+          x: Math.max(min, Math.min(max, x)),
+          y: Math.max(min, Math.min(max, y))
+        };
+      }
+    }
+
+    function ensureTextBounds() {
+      const topLen = state.topPhrase.text.length;
+      const maxTopW = 680;
+      const estTopW = topLen * (state.topPhrase.size * 0.62);
+      if (estTopW > maxTopW) {
+        state.topPhrase.size = Math.floor(maxTopW / (topLen * 0.62));
+        document.getElementById('slider-top-size').value = state.topPhrase.size;
+        document.getElementById('val-top-size').innerText = `${state.topPhrase.size}px`;
+      }
+
+      const botLen = state.botPhrase.text.length;
+      const maxBotW = 680;
+      const estBotW = botLen * (state.botPhrase.size * 0.62);
+      if (estBotW > maxBotW) {
+        state.botPhrase.size = Math.floor(maxBotW / (botLen * 0.62));
+        document.getElementById('slider-bot-size').value = state.botPhrase.size;
+        document.getElementById('val-bot-size').innerText = `${state.botPhrase.size}px`;
+      }
+    }
+
+    function calculateFloatingLetters() {
+      const letters = ['B', 'A', 'R', 'U', 'C', 'H'];
+      const baseSpacing = state.fontFamily === 'comba-bold' ? 78 : 74;
+      const totalWidth = (letters.length - 1) * baseSpacing;
+      const startX = -totalWidth / 2;
+      const dist = state.scatterDist;
+
+      return letters.map((char, i) => {
+        let dx = startX + i * baseSpacing;
+        let dy = 0;
+        let rot = 0;
+        let s = 1.0;
+
+        if (state.driftMode === 'floating-scatter') {
+          dx += (Math.sin((i + state.seed) * 2.3) * (dist * 0.65));
+          dy = Math.cos((i + state.seed) * 1.7) * dist;
+          rot = Math.sin((i + state.seed) * 3.1) * (dist * 0.35);
+          s = 0.96 + (Math.sin((i + state.seed) * 4.2) * 0.14);
+        } else if (state.driftMode === 'orbital-sine') {
+          const t = i / (letters.length - 1);
+          dy = Math.sin(t * Math.PI * 2) * (dist * 0.85);
+          rot = Math.cos(t * Math.PI * 2) * 12;
+          s = 1.0 + Math.sin(t * Math.PI) * 0.1;
+        } else if (state.driftMode === 'staggered-cascade') {
+          dy = (i - 2.5) * (dist * 0.6);
+          rot = (i % 2 === 0 ? -1 : 1) * 8;
+        } else {
+          dx = startX + i * (baseSpacing * 0.9);
+          dy = (i % 2 === 0 ? -1 : 1) * (dist * 0.3);
+          rot = (i % 2 === 0 ? -1 : 1) * 5;
+        }
+
+        return { char, dx, dy, rot: +rot.toFixed(1), s: +s.toFixed(2) };
+      });
+    }
+
+    // PIXEL GRID MATRIX GENERATOR
+    function buildPixelGrid(pattern, pixelSize, colorMap) {
+      let rects = "";
+      const rows = pattern.length;
+      const cols = pattern[0].length;
+      const offsetX = -(cols * pixelSize) / 2;
+      const offsetY = -(rows * pixelSize) / 2;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const char = pattern[r][c];
+          if (char !== '.' && colorMap[char]) {
+            rects += `<rect x="${offsetX + c * pixelSize}" y="${offsetY + r * pixelSize}" width="${pixelSize}" height="${pixelSize}" fill="${colorMap[char]}"/>`;
+          }
+        }
+      }
+      return rects;
+    }
+
+    // Generate Pixelated Abstract Pop Creatures
+    function generatePixelAliens(count) {
+      const p = palettes[state.paletteTheme];
+      const types = ['pixel-invader', 'pixel-blob', 'pixel-star', 'pixel-cyclops'];
+      const colors = [p.c1, p.c2, p.c3, p.c4, '#ffffff'];
+      const list = [];
+
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2 + (Math.sin(i + state.seed) * 0.4);
+        const dist = 190 + Math.abs(Math.sin(i * 1.8 + state.seed)) * 135;
+        const x = 400 + Math.cos(angle) * dist;
+        const y = 400 + Math.sin(angle) * dist;
+
+        list.push({
+          type: types[i % types.length],
+          x: Math.max(75, Math.min(725, x)),
+          y: Math.max(90, Math.min(710, y)),
+          scale: +(0.7 + Math.random() * 0.5).toFixed(2),
+          cPrimary: colors[i % colors.length],
+          cSecondary: colors[(i + 2) % colors.length]
+        });
+      }
+      return list;
+    }
+
+    function renderPixelAlien(a, idx) {
+      const px = 5;
+      let pattern = [];
+      const colorMap = { 'A': a.cPrimary, 'B': a.cSecondary, 'W': '#ffffff', 'K': '#020408' };
+
+      if (a.type === 'pixel-invader') {
+        pattern = [
+          "..A.....A..",
+          "...A...A...",
+          "..AAAAAAA..",
+          ".AA.AAA.AA.",
+          "AAAAAAAAAAA",
+          "A.AAAAAAA.A",
+          "A.A.....A.A",
+          "...AA.AA..."
+        ];
+      } else if (a.type === 'pixel-blob') {
+        pattern = [
+          "...AAAA...",
+          ".AAAAAAAA.",
+          "AAWWAAWWAA",
+          "AAKKAAKKAA",
+          "AAAAAAAAAA",
+          "AAAAAAAAAA",
+          ".AA.AA.AA.",
+          "A........A"
+        ];
+      } else if (a.type === 'pixel-star') {
+        pattern = [
+          "....AA....",
+          "...AAAA...",
+          "..AAAAAA..",
+          "AAAAAAAAAA",
+          "..AAWWAA..",
+          "..AAKKAA..",
+          "AAAAAAAAAA",
+          "..AAAAAA..",
+          "...AAAA...",
+          "....AA...."
+        ];
+      } else {
+        pattern = [
+          "....AA....",
+          "...AAAA...",
+          "..AAAAAA..",
+          ".AAAWWAAA.",
+          ".AAAKKAAA.",
+          ".AAAAAAAA.",
+          "..AAAAAA..",
+          ".A..AA..A."
+        ];
+      }
+
+      const pixelArt = buildPixelGrid(pattern, px, colorMap);
+      return `
+        <g class="draggable-node" data-id="alien-${idx}" transform="translate(${a.x}, ${a.y}) scale(${a.scale})">
+          ${pixelArt}
+        </g>
+      `;
+    }
+
+    // PIXEL SPACE CENTERPIECE ARCHETYPES (Always rendered pixelated)
+    function renderPixelSpaceArchitecture() {
+      const p = palettes[state.paletteTheme];
+      const s = state.space.scale;
+      const arch = state.space.archetype;
+      const px = 8;
+
+      let svg = `<g class="draggable-node" transform="translate(${state.space.x}, ${state.space.y}) scale(${s})" data-id="space-center">`;
+
+      // 1. Pixelated Outer Boundary Frame
+      svg += `
+        <circle cx="0" cy="0" r="255" fill="${p.panelBg}" opacity="0.95"/>
+        <circle cx="0" cy="0" r="248" fill="none" stroke="${p.c1}" stroke-width="2.5" stroke-dasharray="4 4" opacity="0.75"/>
+      `;
+
+      if (arch === 'pixel-rocket') {
+        // 8-bit Microgravity Launch Rocket
+        const rocketPattern = [
+          "......A......",
+          ".....AAA.....",
+          "....AABAA....",
+          "....AABAA....",
+          "...AABBAA...",
+          "...AAWWAA...",
+          "...AAKKAA...",
+          "...AABBAA...",
+          "...AAAAAA...",
+          "..AAAAAAAA..",
+          ".AAA.AA.AAA.",
+          "AAA..AA..AAA",
+          "AA...AA...AA",
+          ".....CC.....",
+          "....CCCC....",
+          ".....CC.....",
+          "......C......"
+        ];
+        const colorMap = { 'A': '#f8fafc', 'B': p.c1, 'C': p.c4, 'W': '#ffffff', 'K': '#020408' };
+        svg += `
+          <g transform="scale(1.2)">
+            ${buildPixelGrid(rocketPattern, px, colorMap)}
+          </g>
+        `;
+      } else if (arch === 'pixel-mothership') {
+        // 8-bit Flying Saucer & Tractor Rays
+        const ufoPattern = [
+          "......AAAA......",
+          "....AAWWWWAA....",
+          "...AAWWKKWWAA...",
+          "..AAAAAAAAAAAA..",
+          ".AB..AB..BA..BA.",
+          "AAAAAAAAAAAAAAAA",
+          "..AA..AAAA..AA..",
+          "....CC....CC....",
+          "...CCCC..CCCC...",
+          "..CCCCCC.CCCCCC."
+        ];
+        const colorMap = { 'A': p.c2, 'B': p.c3, 'C': p.c1, 'W': '#ffffff', 'K': '#020408' };
+        svg += `
+          <g transform="scale(1.35)">
+            ${buildPixelGrid(ufoPattern, px, colorMap)}
+          </g>
+        `;
+      } else if (arch === 'pixel-shooting-star') {
+        // Pixelated Shooting Comets
+        const starPattern = [
+          ".....A.....",
+          "....AAA....",
+          "...AAAAA...",
+          "AAAAAAAAAAA",
+          "..AAAWAAA..",
+          "..AAAKAAA..",
+          "AAAAAAAAAAA",
+          "...AAAAA...",
+          "....AAA....",
+          ".....A....."
+        ];
+        const colorMap = { 'A': p.c4, 'W': '#ffffff', 'K': p.c1 };
+        svg += `
+          <g>
+            <rect x="-180" y="-120" width="32" height="8" fill="${p.c1}" opacity="0.6"/>
+            <rect x="-140" y="-96" width="32" height="8" fill="${p.c1}" opacity="0.7"/>
+            <rect x="-100" y="-72" width="32" height="8" fill="${p.c1}" opacity="0.8"/>
+            <rect x="-60" y="-48" width="32" height="8" fill="${p.c1}"/>
+
+            <g transform="translate(10, 10)">
+              ${buildPixelGrid(starPattern, 7, colorMap)}
+            </g>
+
+            <rect x="70" y="55" width="24" height="8" fill="${p.c3}"/>
+            <rect x="100" y="80" width="24" height="8" fill="${p.c3}" opacity="0.8"/>
+            <rect x="130" y="105" width="24" height="8" fill="${p.c3}" opacity="0.6"/>
+          </g>
+        `;
+      } else if (arch === 'pixel-saturn') {
+        // Pixel Ringed Exoplanet & Moons
+        const planetPattern = [
+          "......AAAA......",
+          "....AAAAAAAA....",
+          "..AAAAAAAABBBB..",
+          ".AAAAAABBBBBBBB.",
+          "CCCCCCCCCCCCCCCC",
+          "DDDDDDDDDDDDDDDD",
+          ".BBBBBBBBAAAAAA.",
+          "..BBBBAAAAAAAA..",
+          "....AAAAAAAA....",
+          "......AAAA......"
+        ];
+        const colorMap = { 'A': p.c1, 'B': p.c2, 'C': '#ffffff', 'D': p.c4 };
+        svg += `
+          <g transform="scale(1.4)">
+            ${buildPixelGrid(planetPattern, px, colorMap)}
+          </g>
+          <rect x="-160" y="-80" width="20" height="20" fill="${p.c3}"/>
+          <rect x="150" y="100" width="24" height="24" fill="#ffffff"/>
+        `;
+      } else {
+        // Pixelated Harmonic ACME Lattice[cite: 3]
+        svg += `
+          <ellipse cx="0" cy="0" rx="230" ry="60" fill="none" stroke="${p.c1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.6"/>
+          <ellipse cx="0" cy="0" rx="230" ry="130" fill="none" stroke="${p.c1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.6"/>
+          <ellipse cx="0" cy="0" rx="130" ry="230" fill="none" stroke="${p.c1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.6"/>
+          <ellipse cx="0" cy="0" rx="60" ry="230" fill="none" stroke="${p.c1}" stroke-width="2" stroke-dasharray="6 6" opacity="0.6"/>
+          
+          <rect x="-24" y="-80" width="48" height="160" fill="${p.bg}" stroke="${p.c2}" stroke-width="3"/>
+          <rect x="-12" y="-50" width="24" height="100" fill="${p.c4}"/>
+          <rect x="-180" y="-30" width="16" height="16" fill="#ffffff"/>
+          <rect x="170" y="50" width="16" height="16" fill="${p.c3}"/>
+        `;
+      }
+
+      svg += `</g>`;
+      return svg;
+    }
+
+    // FLOATING BARUCH MONOGRAM (STRICTLY PURE TEXT: ZERO STROKE, NO BACKGROUND)
+    function renderFloatingBaruch(cx, cy, s) {
+      let fontStack = '"comba", sans-serif';
+      let fontStyle = 'normal';
+      let fontWeight = '700';
+
+      if (state.fontFamily === 'digibop-normal') {
+        fontStack = '"digibop", sans-serif';
+        fontStyle = 'normal';
+        fontWeight = '400';
+      } else if (state.fontFamily === 'digibop-italic') {
+        fontStack = '"digibop", sans-serif';
+        fontStyle = 'italic';
+        fontWeight = '400';
+      }
+
+      // Restored colorful kinetic gradients
+      let fillCol = "url(#rudnick-vibrant-sweep)";
+      if (state.baruchShade === 'rudnick-soft') {
+        fillCol = "url(#rudnick-soft-sweep)";
+      } else if (state.baruchShade === 'pop-neon-sweep') {
+        fillCol = "url(#pop-neon-text-sweep)";
+      } else if (state.baruchShade === 'solar-flare-sweep') {
+        fillCol = "url(#solar-flare-text-sweep)";
+      } else if (state.baruchShade === 'starlight-white') {
+        fillCol = "#f8fafc";
+      }
+
+      const fontSize = (state.fontFamily === 'comba-bold' ? 88 : 84) * s;
+
+      let lettersSvg = `<g transform="translate(${cx}, ${cy})" class="draggable-node" data-id="baruch-group">`;
+
+      state.baruch.letterOffsets.forEach((item, idx) => {
+        const lx = item.dx * s;
+        const ly = item.dy * s;
+        const rot = item.rot;
+        const letterScale = item.s;
+
+        // PURE TEXT ONLY: NO rect, NO background pill, NO stroke, NO stroke outline
+        lettersSvg += `
+          <g transform="translate(${lx}, ${ly}) rotate(${rot}) scale(${letterScale})" class="draggable-node" data-id="letter-${idx}">
+            <text x="0" y="0" font-family='${fontStack}' font-style='${fontStyle}' font-weight='${fontWeight}' font-size='${fontSize}' fill='${fillCol}' stroke='none' text-anchor='middle' dominant-baseline='central'>
+              ${item.char}
+            </text>
+          </g>
+        `;
+      });
+
+      lettersSvg += `</g>`;
+      return lettersSvg;
+    }
+
+    // MAIN COMPOSITION GENERATOR
+    function generateVector() {
+      const p = palettes[state.paletteTheme];
+      const isCircle = state.shape === 'circle';
+
+      svgDefs.innerHTML = `
+        ${isCircle 
+          ? `<clipPath id="boundary-clip"><circle cx="400" cy="400" r="360"/></clipPath>` 
+          : `<clipPath id="boundary-clip"><rect x="40" y="40" width="720" height="720" rx="36"/></clipPath>`
+        }
+
+        <!-- RESTORED VIBRANT MULTI-STOP DAVID RUDNICK KINETIC GRADIENT (FROM GEMINI-CODE-1793210427703)[cite: 5] -->
+        <linearGradient id="rudnick-vibrant-sweep" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFFFFF">
+            <animate attributeName="stop-color" values="#FFFFFF;#00E5FF;#39FF14;#FF9100;#FFFFFF" dur="6.5s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="35%" stop-color="#00E5FF">
+            <animate attributeName="stop-color" values="#00E5FF;#FF2A8D;#FFB703;#39FF14;#00E5FF" dur="6.5s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="70%" stop-color="#FF9100">
+            <animate attributeName="stop-color" values="#FF9100;#FFFFFF;#00E5FF;#FF2A8D;#FF9100" dur="6.5s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="100%" stop-color="#FFFFFF">
+            <animate attributeName="stop-color" values="#FFFFFF;#39FF14;#FF9100;#00E5FF;#FFFFFF" dur="6.5s" repeatCount="indefinite" />
+          </stop>
+        </linearGradient>
+
+        <!-- SOFT DAYLIGHT KINETIC GRADIENT -->
+        <linearGradient id="rudnick-soft-sweep" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFFFFF">
+            <animate attributeName="stop-color" values="#FFFFFF;#7DD3FC;#A7F3D0;#FED7AA;#FFFFFF" dur="7s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="35%" stop-color="#BAE6FD">
+            <animate attributeName="stop-color" values="#BAE6FD;#FBCFE8;#FEF08A;#A7F3D0;#BAE6FD" dur="7s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="70%" stop-color="#FED7AA">
+            <animate attributeName="stop-color" values="#FED7AA;#FFFFFF;#BAE6FD;#FBCFE8;#FED7AA" dur="7s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="100%" stop-color="#FFFFFF">
+            <animate attributeName="stop-color" values="#FFFFFF;#A7F3D0;#FED7AA;#BAE6FD;#FFFFFF" dur="7s" repeatCount="indefinite" />
+          </stop>
+        </linearGradient>
+
+        <!-- POP NEON GRADIENT[cite: 5] -->
+        <linearGradient id="pop-neon-text-sweep" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#39FF14">
+            <animate attributeName="stop-color" values="#39FF14;#00D8FF;#FF2A8D;#39FF14" dur="5.5s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="50%" stop-color="#00D8FF">
+            <animate attributeName="stop-color" values="#00D8FF;#FF2A8D;#39FF14;#00D8FF" dur="5.5s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="100%" stop-color="#FF2A8D">
+            <animate attributeName="stop-color" values="#FF2A8D;#39FF14;#00D8FF;#FF2A8D" dur="5.5s" repeatCount="indefinite" />
+          </stop>
+        </linearGradient>
+
+        <!-- SOLAR FLARE GRADIENT -->
+        <linearGradient id="solar-flare-text-sweep" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFB703">
+            <animate attributeName="stop-color" values="#FFB703;#FF2A8D;#38BDF8;#FFB703" dur="6s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="50%" stop-color="#FF2A8D">
+            <animate attributeName="stop-color" values="#FF2A8D;#38BDF8;#FFB703;#FF2A8D" dur="6s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="100%" stop-color="#38BDF8">
+            <animate attributeName="stop-color" values="#38BDF8;#FFB703;#FF2A8D;#38BDF8" dur="6s" repeatCount="indefinite" />
+          </stop>
+        </linearGradient>
+
+        <radialGradient id="space-bg" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stop-color="${p.panelBg}"/>
+          <stop offset="100%" stop-color="${p.bg}"/>
+        </radialGradient>
+      `;
+
+      let svg = `
+        <rect width="800" height="800" fill="#000000"/>
+        <g clip-path="url(#boundary-clip)">
+          <rect width="800" height="800" fill="url(#space-bg)"/>
+      `;
+
+      // 1. Pixelated Stars
+      let rnd = state.seed;
+      const pseudoRnd = () => { const x = Math.sin(rnd++) * 10000; return x - Math.floor(x); };
+
+      svg += `<g id="pixel-stars">`;
+      for (let i = 0; i < 50; i++) {
+        const sx = 65 + Math.floor(pseudoRnd() * 84) * 8;
+        const sy = 65 + Math.floor(pseudoRnd() * 84) * 8;
+        const col = i % 4 === 0 ? p.c1 : (i % 6 === 0 ? p.c4 : '#ffffff');
+        svg += `<rect x="${sx}" y="${sy}" width="6" height="6" fill="${col}" opacity="${(0.4 + pseudoRnd() * 0.5).toFixed(2)}"/>`;
+      }
+      svg += `</g>`;
+
+      // 2. Pixel Space Architecture Centerpiece
+      svg += renderPixelSpaceArchitecture();
+
+      // 3. Pixelated Pop Creatures
+      svg += `<g id="pixel-aliens-group">`;
+      state.aliens.forEach((a, idx) => {
+        svg += renderPixelAlien(a, idx);
+      });
+      svg += `</g>`;
+
+      // 4. Floating BARUCH Monogram Letters (PURE TEXT: STRICTLY ZERO STROKE, NO BOXES)
+      svg += renderFloatingBaruch(state.baruch.x, state.baruch.y, state.baruch.scale);
+
+      // 5. Sizable Typography (PURE TEXT: STRICTLY NO STROKE, NO BOXES)
+      svg += `
+        <!-- Top Phrase -->
+        <g class="draggable-node" transform="translate(400, ${state.topPhrase.y})" data-id="topPhrase">
+          <text font-family="'Space Grotesk', sans-serif" font-size="${state.topPhrase.size}" font-weight="800" fill="#ffffff" stroke="none" letter-spacing="${state.topPhrase.tracking}" text-anchor="middle">
+            ${state.topPhrase.text}
+          </text>
+        </g>
+
+        <!-- Bottom Phrase -->
+        <g class="draggable-node" transform="translate(400, ${state.botPhrase.y})" data-id="botPhrase">
+          <text font-family="'Space Grotesk', sans-serif" font-size="${state.botPhrase.size}" font-weight="800" fill="#ffffff" stroke="none" letter-spacing="${state.botPhrase.tracking}" text-anchor="middle">
+            ${state.botPhrase.text}
+          </text>
+        </g>
+
+        <!-- Sub Coordinates -->
+        <g class="draggable-node" transform="translate(400, ${state.subPhrase.y})" data-id="subPhrase">
+          <text font-family="'Chivo Mono', monospace" font-size="${state.subPhrase.size}" font-weight="700" fill="${p.c1}" stroke="none" letter-spacing="${state.subPhrase.tracking}" text-anchor="middle">
+            ${state.subPhrase.text}
+          </text>
+        </g>
+      `;
+
+      // 6. Embroidered Merrowed Edge Border
+      if (isCircle) {
+        svg += `
+          <circle cx="400" cy="400" r="360" fill="none" stroke="${p.border}" stroke-width="18"/>
+          <circle cx="400" cy="400" r="351" fill="none" stroke="${p.borderGlow}" stroke-width="3" opacity="0.9"/>
+          <circle cx="400" cy="400" r="369" fill="none" stroke="${p.c2}" stroke-width="2.5" stroke-dasharray="8 6" opacity="0.8"/>
+        `;
+      } else {
+        svg += `
+          <rect x="40" y="40" width="720" height="720" rx="36" fill="none" stroke="${p.border}" stroke-width="18"/>
+          <rect x="49" y="49" width="702" height="702" rx="27" fill="none" stroke="${p.borderGlow}" stroke-width="3" opacity="0.9"/>
+          <rect x="31" y="31" width="738" height="738" rx="45" fill="none" stroke="${p.c2}" stroke-width="2.5" stroke-dasharray="8 6" opacity="0.8"/>
+        `;
+      }
+
+      svg += `</g>`;
+      return svg;
+    }
+
+    function render() {
+      ensureTextBounds();
+      const markup = generateVector();
+      svgContent.innerHTML = markup;
+      preview35.innerHTML = markup;
+      previewMicro.innerHTML = markup;
+    }
+
+    // Control Listeners
+    document.getElementById('select-font-family').addEventListener('change', e => {
+      state.fontFamily = e.target.value;
+      const label = e.target.options[e.target.selectedIndex].text;
+      document.getElementById('hud-font').innerText = `FONT: ${label.toUpperCase()}`;
+      state.baruch.letterOffsets = calculateFloatingLetters();
+      render();
+    });
+
+    document.getElementById('select-baruch-shade').addEventListener('change', e => {
+      state.baruchShade = e.target.value;
+      render();
+    });
+
+    document.getElementById('select-space-archetype').addEventListener('change', e => {
+      state.space.archetype = e.target.value;
+      const label = e.target.options[e.target.selectedIndex].text;
+      document.getElementById('hud-centerpiece').innerText = `PIXEL: ${label.toUpperCase()}`;
+      render();
+    });
+
+    document.getElementById('select-drift-mode').addEventListener('change', e => {
+      state.driftMode = e.target.value;
+      state.baruch.letterOffsets = calculateFloatingLetters();
+      render();
+    });
+
+    document.getElementById('slider-scatter-dist').addEventListener('input', e => {
+      state.scatterDist = parseInt(e.target.value);
+      document.getElementById('val-scatter-dist').innerText = `${state.scatterDist}px`;
+      state.baruch.letterOffsets = calculateFloatingLetters();
+      render();
+    });
+
+    // Sliders
+    document.getElementById('slider-baruch-x').addEventListener('input', e => {
+      state.baruch.x = parseInt(e.target.value);
+      document.getElementById('val-baruch-x').innerText = state.baruch.x;
+      render();
+    });
+
+    document.getElementById('slider-baruch-y').addEventListener('input', e => {
+      state.baruch.y = parseInt(e.target.value);
+      document.getElementById('val-baruch-y').innerText = state.baruch.y;
+      render();
+    });
+
+    document.getElementById('slider-baruch-s').addEventListener('input', e => {
+      state.baruch.scale = parseFloat(e.target.value);
+      document.getElementById('val-baruch-s').innerText = `${state.baruch.scale.toFixed(2)}x`;
+      render();
+    });
+
+    document.getElementById('slider-space-x').addEventListener('input', e => {
+      state.space.x = parseInt(e.target.value);
+      document.getElementById('val-space-x').innerText = state.space.x;
+      render();
+    });
+
+    document.getElementById('slider-space-y').addEventListener('input', e => {
+      state.space.y = parseInt(e.target.value);
+      document.getElementById('val-space-y').innerText = state.space.y;
+      render();
+    });
+
+    document.getElementById('slider-space-s').addEventListener('input', e => {
+      state.space.scale = parseFloat(e.target.value);
+      document.getElementById('val-space-s').innerText = `${state.space.scale.toFixed(2)}x`;
+      render();
+    });
+
+    document.getElementById('slider-top-y').addEventListener('input', e => {
+      state.topPhrase.y = parseInt(e.target.value);
+      document.getElementById('val-top-y').innerText = state.topPhrase.y;
+      render();
+    });
+
+    document.getElementById('slider-top-size').addEventListener('input', e => {
+      state.topPhrase.size = parseInt(e.target.value);
+      document.getElementById('val-top-size').innerText = `${state.topPhrase.size}px`;
+      render();
+    });
+
+    document.getElementById('slider-bot-y').addEventListener('input', e => {
+      state.botPhrase.y = parseInt(e.target.value);
+      state.subPhrase.y = state.botPhrase.y + 37;
+      document.getElementById('val-bot-y').innerText = state.botPhrase.y;
+      render();
+    });
+
+    document.getElementById('slider-bot-size').addEventListener('input', e => {
+      state.botPhrase.size = parseInt(e.target.value);
+      document.getElementById('val-bot-size').innerText = `${state.botPhrase.size}px`;
+      render();
+    });
+
+    document.getElementById('slider-alien-count').addEventListener('input', e => {
+      state.alienCount = parseInt(e.target.value);
+      document.getElementById('val-alien-count').innerText = `${state.alienCount} Creatures`;
+      state.aliens = generatePixelAliens(state.alienCount);
+      render();
+    });
+
+    document.getElementById('select-palette').addEventListener('change', e => {
+      state.paletteTheme = e.target.value;
+      state.aliens = generatePixelAliens(state.alienCount);
+      render();
+    });
+
+    document.getElementById('input-top-text').addEventListener('input', e => {
+      state.topPhrase.text = e.target.value.toUpperCase();
+      render();
+    });
+
+    document.getElementById('input-bot-text').addEventListener('input', e => {
+      state.botPhrase.text = e.target.value.toUpperCase();
+      render();
+    });
+
+    document.getElementById('input-sub-text').addEventListener('input', e => {
+      state.subPhrase.text = e.target.value.toUpperCase();
+      render();
+    });
+
+    document.getElementById('btn-shape-square').addEventListener('click', () => {
+      state.shape = 'square';
+      document.getElementById('btn-shape-square').classList.add('active');
+      document.getElementById('btn-shape-circle').classList.remove('active');
+      render();
+    });
+
+    document.getElementById('btn-shape-circle').addEventListener('click', () => {
+      state.shape = 'circle';
+      document.getElementById('btn-shape-circle').classList.add('active');
+      document.getElementById('btn-shape-square').classList.remove('active');
+      render();
+    });
+
+    document.getElementById('btn-shuffle-phrase').addEventListener('click', () => {
+      const p = missionPhrases[Math.floor(Math.random() * missionPhrases.length)];
+      state.botPhrase.text = p;
+      document.getElementById('input-bot-text').value = p;
+      render();
+    });
+
+    document.getElementById('toggle-contrast').addEventListener('click', () => {
+      state.grayscale = !state.grayscale;
+      const f = state.grayscale ? 'grayscale(1) contrast(1.4)' : 'none';
+      mainSvg.style.filter = f;
+      preview35.style.filter = f;
+      previewMicro.style.filter = f;
+    });
+
+    // SHUFFLE GENERATOR (Randomizes between COMBA and DIGIBOP, changes non-static positions)
+    document.getElementById('btn-generate').addEventListener('click', () => {
+      state.seed = Math.floor(Math.random() * 99999) + 1000;
+
+      // 1. Alternate Font Family (COMBA and DIGIBOP both get showcased)[cite: 5]
+      const fonts = ['comba-bold', 'digibop-normal', 'digibop-italic'];
+      state.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+      document.getElementById('select-font-family').value = state.fontFamily;
+      const fontLabel = document.getElementById('select-font-family').options[document.getElementById('select-font-family').selectedIndex].text;
+      document.getElementById('hud-font').innerText = `FONT: ${fontLabel.toUpperCase()}`;
+
+      // 2. Randomize Palettes (includes pop-neon, rudnick-transit, acme-solar, cosmic-arcade, retro-astral)[cite: 5]
+      const palKeys = Object.keys(palettes);
+      state.paletteTheme = palKeys[Math.floor(Math.random() * palKeys.length)];
+      document.getElementById('select-palette').value = state.paletteTheme;
+
+      // 3. Randomize Pixel Archetype
+      const archetypes = ['pixel-rocket', 'pixel-mothership', 'pixel-shooting-star', 'pixel-saturn', 'pixel-cage'];
+      state.space.archetype = archetypes[Math.floor(Math.random() * archetypes.length)];
+      document.getElementById('select-space-archetype').value = state.space.archetype;
+      const archLabel = document.getElementById('select-space-archetype').options[document.getElementById('select-space-archetype').selectedIndex].text;
+      document.getElementById('hud-centerpiece').innerText = `PIXEL: ${archLabel.toUpperCase()}`;
+
+      // 4. Randomize Drift Mode & Scatter Distance
+      const driftModes = ['floating-scatter', 'orbital-sine', 'staggered-cascade', 'anchored-cluster'];
+      state.driftMode = driftModes[Math.floor(Math.random() * driftModes.length)];
+      document.getElementById('select-drift-mode').value = state.driftMode;
+
+      state.scatterDist = Math.floor(22 + Math.random() * 50);
+      document.getElementById('slider-scatter-dist').value = state.scatterDist;
+      document.getElementById('val-scatter-dist').innerText = `${state.scatterDist}px`;
+
+      // 5. Non-Static Layout: Staggered coordinates to guarantee BARUCH remains readable without overlapping
+      const layoutVariants = [
+        { bx: 400, by: 290, sx: 400, sy: 500 },
+        { bx: 400, by: 485, sx: 400, sy: 290 },
+        { bx: 370, by: 360, sx: 430, sy: 430 },
+        { bx: 420, by: 420, sx: 370, sy: 350 },
+        { bx: 400, by: 385, sx: 400, sy: 400 }
+      ];
+
+      const chosen = layoutVariants[Math.floor(Math.random() * layoutVariants.length)];
+      state.baruch.x = chosen.bx + Math.floor(Math.random() * 40 - 20);
+      state.baruch.y = chosen.by + Math.floor(Math.random() * 30 - 15);
+      state.baruch.scale = +(0.85 + Math.random() * 0.35).toFixed(2);
+
+      state.space.x = chosen.sx + Math.floor(Math.random() * 40 - 20);
+      state.space.y = chosen.sy + Math.floor(Math.random() * 30 - 15);
+      state.space.scale = +(0.85 + Math.random() * 0.3).toFixed(2);
+
+      document.getElementById('slider-baruch-x').value = state.baruch.x;
+      document.getElementById('slider-baruch-y').value = state.baruch.y;
+      document.getElementById('slider-baruch-s').value = state.baruch.scale;
+      document.getElementById('val-baruch-x').innerText = state.baruch.x;
+      document.getElementById('val-baruch-y').innerText = state.baruch.y;
+      document.getElementById('val-baruch-s').innerText = `${state.baruch.scale.toFixed(2)}x`;
+
+      document.getElementById('slider-space-x').value = state.space.x;
+      document.getElementById('slider-space-y').value = state.space.y;
+      document.getElementById('slider-space-s').value = state.space.scale;
+      document.getElementById('val-space-x').innerText = state.space.x;
+      document.getElementById('val-space-y').innerText = state.space.y;
+      document.getElementById('val-space-s').innerText = `${state.space.scale.toFixed(2)}x`;
+
+      // Sizable Phrases
+      state.topPhrase.y = Math.floor(85 + Math.random() * 45);
+      state.topPhrase.size = Math.floor(18 + Math.random() * 6);
+      state.botPhrase.y = Math.floor(660 + Math.random() * 45);
+      state.botPhrase.size = Math.floor(16 + Math.random() * 6);
+      state.subPhrase.y = state.botPhrase.y + 37;
+
+      document.getElementById('slider-top-y').value = state.topPhrase.y;
+      document.getElementById('slider-top-size').value = state.topPhrase.size;
+      document.getElementById('val-top-y').innerText = state.topPhrase.y;
+      document.getElementById('val-top-size').innerText = `${state.topPhrase.size}px`;
+
+      document.getElementById('slider-bot-y').value = state.botPhrase.y;
+      document.getElementById('slider-bot-size').value = state.botPhrase.size;
+      document.getElementById('val-bot-y').innerText = state.botPhrase.y;
+      document.getElementById('val-bot-size').innerText = `${state.botPhrase.size}px`;
+
+      // Recalculate letters & pixel organisms
+      state.baruch.letterOffsets = calculateFloatingLetters();
+      state.aliens = generatePixelAliens(state.alienCount);
+
+      // Alternate shape
+      state.shape = Math.random() > 0.45 ? 'square' : 'circle';
+      if (state.shape === 'square') {
+        document.getElementById('btn-shape-square').classList.add('active');
+        document.getElementById('btn-shape-circle').classList.remove('active');
+      } else {
+        document.getElementById('btn-shape-circle').classList.add('active');
+        document.getElementById('btn-shape-square').classList.remove('active');
+      }
+
+      // Shuffle Mission Phrase
+      const p = missionPhrases[Math.floor(Math.random() * missionPhrases.length)];
+      state.botPhrase.text = p;
+      document.getElementById('input-bot-text').value = p;
+
+      render();
+    });
+
+    // Direct Drag & Drop Interaction
+    mainSvg.addEventListener('mousedown', e => {
+      const pt = getSvgCoords(e);
+
+      // Check pixel creatures
+      for (let i = 0; i < state.aliens.length; i++) {
+        const al = state.aliens[i];
+        if (Math.hypot(pt.x - al.x, pt.y - al.y) < 32 * al.scale) {
+          dragTarget = 'alien';
+          dragIndex = i;
+          dragOffset = { x: pt.x - al.x, y: pt.y - al.y };
+          return;
+        }
+      }
+
+      // Check floating letters
+      for (let i = 0; i < state.baruch.letterOffsets.length; i++) {
+        const lo = state.baruch.letterOffsets[i];
+        const lx = state.baruch.x + lo.dx * state.baruch.scale;
+        const ly = state.baruch.y + lo.dy * state.baruch.scale;
+        if (Math.hypot(pt.x - lx, pt.y - ly) < 44 * state.baruch.scale) {
+          dragTarget = 'letter';
+          dragIndex = i;
+          dragOffset = { x: pt.x - lx, y: pt.y - ly };
+          return;
+        }
+      }
+
+      // Check Baruch Group Core
+      if (Math.hypot(pt.x - state.baruch.x, pt.y - state.baruch.y) < 140 * state.baruch.scale) {
+        dragTarget = 'baruch';
+        dragOffset = { x: pt.x - state.baruch.x, y: pt.y - state.baruch.y };
+        return;
+      }
+
+      // Check Space Centerpiece
+      if (Math.hypot(pt.x - state.space.x, pt.y - state.space.y) < 160 * state.space.scale) {
+        dragTarget = 'space';
+        dragOffset = { x: pt.x - state.space.x, y: pt.y - state.space.y };
+        return;
+      }
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!dragTarget) return;
+      const pt = getSvgCoords(e);
+
+      if (dragTarget === 'alien' && dragIndex >= 0) {
+        const c = clampPoint(pt.x - dragOffset.x, pt.y - dragOffset.y, 30);
+        state.aliens[dragIndex].x = Math.round(c.x);
+        state.aliens[dragIndex].y = Math.round(c.y);
+      } else if (dragTarget === 'letter' && dragIndex >= 0) {
+        const targetX = pt.x - dragOffset.x;
+        const targetY = pt.y - dragOffset.y;
+        state.baruch.letterOffsets[dragIndex].dx = Math.round((targetX - state.baruch.x) / state.baruch.scale);
+        state.baruch.letterOffsets[dragIndex].dy = Math.round((targetY - state.baruch.y) / state.baruch.scale);
+      } else if (dragTarget === 'baruch') {
+        const c = clampPoint(pt.x - dragOffset.x, pt.y - dragOffset.y, 40);
+        state.baruch.x = Math.round(c.x);
+        state.baruch.y = Math.round(c.y);
+        document.getElementById('slider-baruch-x').value = state.baruch.x;
+        document.getElementById('slider-baruch-y').value = state.baruch.y;
+        document.getElementById('val-baruch-x').innerText = state.baruch.x;
+        document.getElementById('val-baruch-y').innerText = state.baruch.y;
+      } else if (dragTarget === 'space') {
+        const c = clampPoint(pt.x - dragOffset.x, pt.y - dragOffset.y, 50);
+        state.space.x = Math.round(c.x);
+        state.space.y = Math.round(c.y);
+        document.getElementById('slider-space-x').value = state.space.x;
+        document.getElementById('slider-space-y').value = state.space.y;
+        document.getElementById('val-space-x').innerText = state.space.x;
+        document.getElementById('val-space-y').innerText = state.space.y;
+      }
+      render();
+    });
+
+    window.addEventListener('mouseup', () => {
+      dragTarget = null;
+      dragIndex = -1;
+    });
+
+    function getSvgCoords(e) {
+      const rect = mainSvg.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (800 / rect.width),
+        y: (e.clientY - rect.top) * (800 / rect.height)
+      };
+    }
+
+    // Export SVG[cite: 5]
+    document.getElementById('btn-export-svg').addEventListener('click', () => {
+      const serializer = new XMLSerializer();
+      const svgStr = serializer.serializeToString(mainSvg);
+      const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `baruch-space-mission-patch-#${state.seed}.svg`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Export 2400px Master PNG[cite: 5]
+    document.getElementById('btn-export-png').addEventListener('click', () => {
+      const size = 2400;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const serializer = new XMLSerializer();
+      const svgStr = serializer.serializeToString(mainSvg);
+      const img = new Image();
+      const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, size, size);
+        URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = `baruch-space-mission-patch-2400px.png`;
+        a.click();
+      };
+      img.src = url;
+    });
+
+    // Launch[cite: 5]
+    state.baruch.letterOffsets = calculateFloatingLetters();
+    state.aliens = generatePixelAliens(state.alienCount);
+    render();
+  </script>
+</body>
+</html>
