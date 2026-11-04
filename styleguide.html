@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Director Pt. 1: Style Guide — NEON KAWAII</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Adobe Typekit for Digibop & Google Fonts -->
+    <link rel="stylesheet" href="https://use.typekit.net/omn5lee.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bubblegum: '#FF3399',
+                        cybermint: '#00FFCC',
+                        lavender: '#E0D0FF',
+                        acidlemon: '#FAFF00',
+                        obsidian: '#121214',
+                        limeGreen: '#85A34A',
+                        crimsonRed: '#E62214',
+                        surface: '#1A1A1E',
+                        surfaceBorder: '#2E2E38'
+                    },
+                    fontFamily: {
+                        'dela': ['"Dela Gothic One"', 'sans-serif'],
+                        'space': ['"Space Grotesk"', 'sans-serif'],
+                        'digibop': ['digibop', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #121214;
+            color: #E0D0FF;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .heading-font {
+            font-family: 'Dela Gothic One', sans-serif;
+        }
+
+        .digibop-font {
+            font-family: digibop, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Brutalist retro-futuristic grid & border accents */
+        .brutalist-border {
+            border: 2px solid #2E2E38;
+            box-shadow: 4px 4px 0px 0px #00FFCC;
+            transition: all 0.2s ease-in-out;
+        }
+        .brutalist-border:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #FF3399;
+        }
+
+        .brutalist-card {
+            background: #1A1A1E;
+            border: 2px solid #2E2E38;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121214;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF3399;
+            border-radius: 4px;
+        }
+
+        /* Scanline overlay for Y2K cyber aesthetic */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+        }
+
+        /* Marquee ticker animation */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-ticker {
+            display: flex;
+            width: max-content;
+            animation: ticker 25s linear infinite;
+        }
+    </style>
+</head>
+<body class="selection:bg-bubblegum selection:text-white">
+
+    <!-- Subtle Scanlines Overlay -->
+    <div class="fixed inset-0 pointer-events-none scanlines z-50 opacity-40"></div>
+
+    <!-- Notification Toast for Copying Hex Codes -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-cybermint text-obsidian px-6 py-3 font-dela text-sm rounded shadow-lg border-2 border-obsidian flex items-center gap-3">
+        <span>📋</span> <span id="toast-msg">Copied to clipboard!</span>
+    </div>
+
+    <!-- Top Marquee Ticker -->
+    <div class="bg-bubblegum text-obsidian py-2 overflow-hidden border-b-2 border-obsidian font-dela text-xs tracking-wider uppercase select-none">
+        <div class="animate-ticker flex gap-8 items-center whitespace-nowrap">
+            <span>✦ CREATIVE DIRECTOR PT. 1: STYLE GUIDE</span>
+            <span>•</span>
+            <span>NEON KAWAII</span>
+            <span>•</span>
+            <span>LIME GREEN #85A34A</span>
+            <span>•</span>
+            <span>CRIMSON RED #E62214</span>
+            <span>•</span>
+            <span>DIGIBOP Y2K SPEC</span>
+            <span>•</span>
+            <span>✦ CREATIVE DIRECTOR PT. 1: STYLE GUIDE</span>
+            <span>•</span>
+            <span>NEON KAWAII</span>
+            <span>•</span>
+            <span>LIME GREEN #85A34A</span>
+            <span>•</span>
+            <span>CRIMSON RED #E62214</span>
+            <span>•</span>
+            <span>DIGIBOP Y2K SPEC</span>
+            <span>•</span>
+        </div>
+    </div>
+
+    <!-- Navigation / Header -->
+    <header class="sticky top-0 z-40 bg-obsidian/90 backdrop-blur-md border-b-2 border-surfaceBorder px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="#top" class="w-10 h-10 bg-bubblegum rounded flex items-center justify-center font-dela text-obsidian text-lg shadow-[2px_2px_0px_0px_#00FFCC]">NK</a>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-cybermint font-bold block">Creative Director Pt. 1</span>
+                    <h1 class="text-lg font-dela text-white tracking-wide">STYLE GUIDE</h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-4 md:gap-8 text-sm font-medium">
+                <a href="#brief" class="hover:text-bubblegum transition-colors">Brief</a>
+                <a href="#moodboard" class="hover:text-cybermint transition-colors">Moodboard</a>
+                <a href="#palette" class="hover:text-acidlemon transition-colors">Palette</a>
+                <a href="#typography" class="hover:text-lavender transition-colors">Typography</a>
+                <a href="#logomark" class="hover:text-bubblegum transition-colors">Logomark</a>
+                <a href="index.html" class="px-3 py-1.5 bg-surface border border-surfaceBorder hover:border-cybermint rounded text-xs font-bold uppercase tracking-wider transition-all">← Portfolio Root</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="top" class="max-w-7xl mx-auto px-6 py-12 space-y-24">
+
+        <!-- Hero Section: Campaign Title & Brief -->
+        <section id="brief" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-8">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-surface border border-surfaceBorder text-cybermint text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-cybermint animate-pulse"></span> Campaign Style Guide // Ver 2.1
+                </div>
+                <h2 class="digibop-font text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white leading-none uppercase">
+                    NEON <span class="text-bubblegum underline decoration-cybermint decoration-4 underline-offset-8">KAWAII</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 font-light leading-relaxed">
+                    A high-concept product launch campaign merging surreal dreamcore atmospheres with hyper-stylized Y2K kawaii aesthetics. Featuring collectible art toys, nocturnal cyber subcultures, and ethereal digital vulnerability.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <div class="brutalist-card p-4 rounded flex-1 min-w-[200px]">
+                        <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Discipline</span>
+                        <span class="digibop-font text-base text-cybermint">Art Direction & Worldbuilding</span>
+                    </div>
+                    <div class="brutalist-card p-4 rounded flex-1 min-w-[200px]">
+                        <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Target Medium</span>
+                        <span class="digibop-font text-base text-bubblegum">Physical Collectibles + Digital Zine</span>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-5">
+                <div class="brutalist-border rounded-lg bg-surface p-6 relative overflow-hidden group">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-bubblegum/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <span class="text-xs uppercase font-mono tracking-widest text-acidlemon block mb-4">/// CAMPAIGN MANIFESTO</span>
+                    <blockquote class="text-base sm:text-lg italic text-gray-200 border-l-4 border-cybermint pl-4 my-4 font-light">
+                        "We exist in the friction between infantile sweetness and cold cybernetic neon. Soft figures in hard void."
+                    </blockquote>
+                    <div class="mt-6 pt-4 border-t border-surfaceBorder flex justify-between items-center text-xs text-gray-400">
+                        <span>ASSET: styleguide.html</span>
+                        <span class="text-cybermint font-mono">STATUS: STABLE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Moodboard Section -->
+        <section id="moodboard" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-bubblegum font-bold">Visual Curation</span>
+                    <h3 class="text-3xl font-dela text-white mt-1">MOODBOARD & REFERENCES</h3>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Collaged street style magazines, vinyl collectible figures, glossy cyber textures, and holographic accents[cite: 4].
+                </p>
+            </div>
+
+            <!-- Primary Moodboard Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Main Uploaded Moodboard Image Showcase -->
+                <div class="md:col-span-12 brutalist-border rounded-lg overflow-hidden bg-surface group relative">
+                    <img src="creativedirector_moodboard.jpeg" 
+                         alt="Neon Kawaii Campaign Moodboard Collage" 
+                         class="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                         onerror="this.src='https://placehold.co/1200x800/121214/FF3399?text=creativedirector_moodboard.jpeg+Loading+Fallback'">
+                </div>
+            </div>
+        </section>
+
+        <!-- Color Palette Section -->
+        <section id="palette" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-cybermint font-bold">Brand System</span>
+                    <h3 class="text-3xl font-dela text-white mt-1">CAMPAIGN COLOR PALETTE</h3>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Click any swatch to instantly copy its exact named hex code to your clipboard.
+                </p>
+            </div>
+
+            <!-- Swatches Grid (7 Colors with exact requested names) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+                
+                <!-- Electric Bubblegum Pink -->
+                <div onclick="copyColor('#FF3399', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#FF3399] w-full relative flex items-end p-2">
+                        <span class="bg-obsidian/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">#FF3399</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-bubblegum transition-colors">Electric Bubblegum</h4>
+                        <p class="text-[10px] text-gray-400">Primary Accent</p>
+                    </div>
+                </div>
+
+                <!-- Cyber Mint -->
+                <div onclick="copyColor('#00FFCC', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#00FFCC] w-full relative flex items-end p-2">
+                        <span class="bg-obsidian/80 text-obsidian font-bold text-[10px] px-1.5 py-0.5 rounded font-mono">#00FFCC</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-cybermint transition-colors">Cyber Mint</h4>
+                        <p class="text-[10px] text-gray-400">Digital Highlight</p>
+                    </div>
+                </div>
+
+                <!-- Dream Lavender -->
+                <div onclick="copyColor('#E0D0FF', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#E0D0FF] w-full relative flex items-end p-2">
+                        <span class="bg-obsidian/80 text-obsidian font-bold text-[10px] px-1.5 py-0.5 rounded font-mono">#E0D0FF</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-lavender transition-colors">Dream Lavender</h4>
+                        <p class="text-[10px] text-gray-400">Ethereal Tone</p>
+                    </div>
+                </div>
+
+                <!-- Acid Lemon -->
+                <div onclick="copyColor('#FAFF00', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#FAFF00] w-full relative flex items-end p-2">
+                        <span class="bg-obsidian/80 text-obsidian font-bold text-[10px] px-1.5 py-0.5 rounded font-mono">#FAFF00</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-acidlemon transition-colors">Acid Lemon</h4>
+                        <p class="text-[10px] text-gray-400">Pop Accent</p>
+                    </div>
+                </div>
+
+                <!-- Void Obsidian -->
+                <div onclick="copyColor('#121214', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#121214] border-b border-surfaceBorder w-full relative flex items-end p-2">
+                        <span class="bg-surface text-white text-[10px] px-1.5 py-0.5 rounded font-mono border border-surfaceBorder">#121214</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-gray-300 transition-colors">Void Obsidian</h4>
+                        <p class="text-[10px] text-gray-400">Cinematic Base</p>
+                    </div>
+                </div>
+
+                <!-- Lime Green -->
+                <div onclick="copyColor('#85A34A', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#85A34A] w-full relative flex items-end p-2">
+                        <span class="bg-obsidian/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">#85A34A</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-limeGreen transition-colors">Lime Green</h4>
+                        <p class="text-[10px] text-gray-400">Moss Tone</p>
+                    </div>
+                </div>
+
+                <!-- Crimson Red -->
+                <div onclick="copyColor('#E62214', this)" class="brutalist-card rounded-lg overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all">
+                    <div class="h-28 bg-[#E62214] w-full relative flex items-end p-2">
+                        <span class="bg-obsidian/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">#E62214</span>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <h4 class="font-dela text-xs text-white group-hover:text-crimsonRed transition-colors">Crimson Red</h4>
+                        <p class="text-[10px] text-gray-400">Poster Red</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Typography Section -->
+        <section id="typography" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-lavender font-bold">Type System</span>
+                    <h3 class="text-3xl font-dela text-white mt-1">BRAND CAMPAIGN FONTS</h3>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Loaded directly via Adobe Typekit for <code class="text-cybermint font-mono">digibop</code> and Google Fonts for headers.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Primary Display Specimen: Digibop -->
+                <div class="brutalist-card p-6 sm:p-8 rounded-lg space-y-6">
+                    <div class="flex justify-between items-center border-b border-surfaceBorder pb-4">
+                        <div>
+                            <span class="text-xs text-cybermint font-mono uppercase">Primary Headline Font</span>
+                            <h4 class="font-dela text-xl text-white">Digibop</h4>
+                        </div>
+                        <span class="px-2.5 py-1 bg-surface border border-surfaceBorder text-xs rounded font-mono">WEIGHT: 400</span>
+                    </div>
+                    <div class="py-6 bg-obsidian rounded p-4 border border-surfaceBorder">
+                        <p class="digibop-font text-3xl sm:text-5xl text-white tracking-wide leading-tight uppercase">
+                            NEON KAWAII SYSTEM
+                        </p>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Applied via <code class="text-cybermint font-mono">font-family: digibop, sans-serif; font-weight: 400; font-style: normal;</code>. Delivers the signature Y2K retro-futuristic aesthetic.
+                    </p>
+                </div>
+
+                <!-- Secondary Display Specimen: Dela Gothic One -->
+                <div class="brutalist-card p-6 sm:p-8 rounded-lg space-y-6">
+                    <div class="flex justify-between items-center border-b border-surfaceBorder pb-4">
+                        <div>
+                            <span class="text-xs text-bubblegum font-mono uppercase">Editorial & Subhead Font</span>
+                            <h4 class="font-dela text-xl text-white">Dela Gothic One</h4>
+                        </div>
+                        <span class="px-2.5 py-1 bg-surface border border-surfaceBorder text-xs rounded font-mono">GOOGLE FONTS</span>
+                    </div>
+                    <div class="py-6 bg-obsidian rounded p-4 border border-surfaceBorder">
+                        <p class="font-dela text-2xl sm:text-3xl text-bubblegum tracking-tight uppercase">
+                            BRUTALIST ARCHIVAL GRID
+                        </p>
+                        <p class="font-space text-sm text-gray-300 mt-2">
+                            Heavy geometric structure paired with Space Grotesk for technical metadata and body specs.
+                        </p>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Used for bold subheadings and structural section headers throughout the style guide documentation.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logomark Section -->
+        <section id="logomark" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-acidlemon font-bold">Identity & Monogram</span>
+                    <h3 class="text-3xl font-dela text-white mt-1">LOGOMARK: KAWAIICORE STAR</h3>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Custom vector star motif inspired by Maruiji handwritten star letterforms, framed inside an archival brutalist container.
+                </p>
+            </div>
+
+            <!-- Logomark Showcase Container -->
+            <div class="brutalist-border rounded-lg bg-surface p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Logomark Display Monogram -->
+                <div class="lg:col-span-5 flex flex-col items-center justify-center p-8 bg-obsidian rounded-lg border-2 border-surfaceBorder relative">
+                    <div class="absolute top-3 left-3 text-[10px] font-mono text-gray-500 uppercase">FIG 01.0 // STAR MARUIJI MARK</div>
+                    
+                    <!-- Museum-Grade Monogram SVG Container with Handwritten Maruiji Star -->
+                    <div class="w-44 h-44 sm:w-56 sm:h-56 border-4 border-cybermint rounded-2xl flex flex-col items-center justify-center bg-surface relative shadow-[0_0_30px_rgba(0,255,204,0.15)] group">
+                        <div class="absolute inset-2 border border-surfaceBorder pointer-events-none rounded-lg"></div>
+                        
+                        <!-- Maruiji-Style Handwritten Star SVG -->
+                        <svg class="w-24 h-24 text-bubblegum group-hover:rotate-12 transition-transform duration-300 drop-shadow-[0_0_12px_rgba(255,51,153,0.6)]" viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M50 2 C54 32, 68 46, 98 50 C68 54, 54 68, 50 98 C46 68, 32 54, 2 50 C32 46, 46 32, 50 2 Z" />
+                            <circle cx="50" cy="50" r="12" fill="#FAFF00" />
+                        </svg>
+                        
+                        <div class="mt-3 text-[11px] font-mono tracking-widest text-cybermint uppercase digibop-font">
+                            NEON KAWAII
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <span class="text-xs text-gray-400 uppercase tracking-widest font-mono">Maruiji Star Monogram</span>
+                    </div>
+                </div>
+
+                <!-- Logomark Breakdown & Rationale -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div>
+                        <span class="text-xs text-acidlemon font-mono uppercase tracking-widest block mb-2">DESIGN ARCHITECTURE</span>
+                        <h4 class="font-dela text-2xl text-white">The Maruiji Handwritten Star Glyph</h4>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                        This logomark fuses whimsical Y2K handwritten sticker aesthetics (Maruiji style) with severe brutalist museum framing. The asymmetrical, soft-edged star represents the playful, handmade vulnerability of the collectible toy characters, while the precise neon border anchors it in nocturnal cyberpunk culture.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 bg-obsidian rounded border border-surfaceBorder">
+                            <h5 class="font-dela text-xs text-cybermint uppercase mb-1">Archival Frame</h5>
+                            <p class="text-xs text-gray-400">Strict industrial pill container with cyber-mint border.</p>
+                        </div>
+                        <div class="p-4 bg-obsidian rounded border border-surfaceBorder">
+                            <h5 class="font-dela text-xs text-bubblegum uppercase mb-1">Star Motif</h5>
+                            <p class="text-xs text-gray-400">Maruiji handwritten puffy star vector with acid lemon core.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-obsidian border-t-2 border-surfaceBorder mt-24 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-cybermint rounded flex items-center justify-center font-dela text-obsidian text-xs">NK</div>
+                <span class="font-dela text-sm text-white">NEON KAWAII STYLE GUIDE</span>
+            </div>
+            <p class="text-xs text-gray-400 font-mono text-center">
+                STYLEGUIDE.HTML // CREATED FOR GITHUB DEPLOYMENT
+            </p>
+            <a href="index.html" class="text-xs text-cybermint hover:text-bubblegum font-mono uppercase transition-colors">
+                ← Return to Portfolio Root
+            </a>
+        </div>
+    </footer>
+
+    <!-- Interactive Copy Script -->
+    <script>
+        function copyColor(hexCode, element) {
+            const textarea = document.createElement('textarea');
+            textarea.value = hexCode;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(`Copied hex code: ${hexCode}`);
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            }
+            document.body.removeChild(textarea);
+
+            element.classList.add('ring-2', 'ring-cybermint');
+            setTimeout(() => {
+                element.classList.remove('ring-2', 'ring-cybermint');
+            }, 500);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+```[cite: 4]
