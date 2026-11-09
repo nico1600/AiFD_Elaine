@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Director Pt. 2: Logo + Dynamic Hero — A.I. FOR DESIGNERS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Fredoka', Arial, sans-serif;
+      min-height: 100vh;
+      color: #222;
+      background: linear-gradient(135deg, #fffefc 0%, #fff9f0 20%, #f9efe4 45%, #f2e6d8 70%, #f7f3ec 100%);
+      overflow-x: hidden;
+      position: relative;
+    }
+    body:before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 15% 20%, rgba(255, 210, 230, .35), transparent 30%),
+                  radial-gradient(circle at 80% 25%, rgba(180, 220, 255, .25), transparent 30%),
+                  radial-gradient(circle at 75% 80%, rgba(255, 240, 180, .22), transparent 25%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .floating {
+      position: fixed;
+      color: #FFE566;
+      opacity: .7;
+      z-index: 1;
+      animation: float 18s linear infinite;
+      font-size: 2rem;
+      pointer-events: none;
+    }
+    .f1 { left: 8%; }
+    .f2 { left: 30%; animation-duration: 22s; }
+    .f3 { left: 55%; animation-duration: 16s; }
+    .f4 { left: 82%; animation-duration: 20s; }
+    .f5 { left: 18%; animation-duration: 25s; }
+    .f6 { left: 70%; animation-duration: 14s; }
+
+    @keyframes float {
+      from { transform: translateY(110vh) rotate(0); }
+      to { transform: translateY(-120vh) rotate(360deg); }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2.5rem;
+      font-weight: 600;
+      color: #ff5c8a;
+      text-decoration: none;
+      font-size: 1.05rem;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    header {
+      margin-bottom: 3.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      line-height: 0.95;
+      font-weight: 700;
+      color: #2b2d42;
+      margin-bottom: 0.8rem;
+    }
+
+    .subtitle {
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      font-weight: 500;
+      color: #6c757d;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 28px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(43, 45, 66, 0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 50px rgba(43, 45, 66, 0.1);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .label-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #ffb8dc;
+      color: #7b2cbf;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .badge-icon {
+      font-size: 1.1rem;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .iframe-wrapper {
+      width: 100%;
+      height: 540px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 184, 220, 0.4);
+      background: #fff;
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .logomark-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #faf8f5;
+      border-radius: 20px;
+      padding: 3rem;
+      border: 2px solid rgba(199, 235, 255, 0.6);
+      min-height: 480px;
+    }
+
+    .logomark-container img {
+      max-width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .logomark-container img:hover {
+      transform: scale(1.03);
+    }
+
+    footer {
+      margin-top: 5rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #6c757d;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem 4rem;
+      }
+      .section-card {
+        padding: 1.5rem;
+      }
+      .iframe-wrapper {
+        height: 420px;
+      }
+      .logomark-container {
+        padding: 1.5rem;
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating f1">✦</div>
+  <div class="floating f2">●</div>
+  <div class="floating f3">■</div>
+  <div class="floating f4">✦</div>
+  <div class="floating f5">■</div>
+  <div class="floating f6">●</div>
+
+  <div class="container">
+    <a href="index.html" class="back-link">← Back to Index</a>
+
+    <header>
+      <h1>Creative Director Pt. 2</h1>
+      <div class="subtitle">Logo + Dynamic Hero Showcase · Elaine Chen · ART 3041</div>
+    </header>
+
+    <div class="showcase-grid">
+      <!-- Hero Image Block -->
+      <section class="section-card">
+        <div class="section-header">
+          <div class="label-badge">
+            <span class="badge-icon">✨</span> Hero Image
+          </div>
+          <span class="section-desc" style="margin-bottom:0;">Embedded Interactive Three.js Experience</span>
+        </div>
+        <p class="section-desc">
+          Featuring "ODDINARY" — an interactive 3D pixel displacement collectible scene with floating Kawaii typography and dynamic lighting.
+        </p>
+        <div class="iframe-wrapper">
+          <iframe src="heroanimation.html" title="Hero Animation"></iframe>
+        </div>
+      </section>
+
+      <!-- Logomark Block -->
+      <section class="section-card">
+        <div class="section-header">
+          <div class="label-badge" style="background: #c7ebff; color: #0056b3;">
+            <span class="badge-icon">⭐</span> Logomark
+          </div>
+          <span class="section-desc" style="margin-bottom:0;">Brand Identity Asset</span>
+        </div>
+        <p class="section-desc">
+          Official Maruiji-inspired neon kawaii star logomark for the Pop Mart designer toy line campaign.
+        </p>
+        <div class="logomark-container">
+          <img src="logomark.jpeg" alt="Logomark">
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      ART 3041 · A.I. for Designers · Fall 2026 · Baruch College
+    </footer>
+  </div>
+</body>
+</html>

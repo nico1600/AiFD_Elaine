@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODDINARY - Pixel Displacement Collectible</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffccd5 0%, #e2d9f3 50%, #cce0ff 100%);
+            touch-action: none;
+        }
+        /* Freely floating Kawaii Japanese words and elements with active drift animations */
+        .jp-float {
+            position: absolute;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 
+                -2px -2px 0 #ff5c8a,  
+                 2px -2px 0 #ff5c8a,
+                -2px  2px 0 #ff5c8a,
+                 2px  2px 0 #ff5c8a,
+                 0 0 14px rgba(255, 92, 138, 0.9),
+                 0 0 22px rgba(155, 246, 255, 0.7);
+            pointer-events: none;
+            user-select: none;
+            opacity: 0;
+            transform: scale(0.3);
+            transition: opacity 1.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 5;
+        }
+        .jp-float.visible {
+            opacity: 1;
+            transform: scale(1);
+            animation: driftKawaii 10s ease-in-out infinite alternate;
+        }
+        @keyframes driftKawaii {
+            0% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
+            33% { transform: translate(35px, -25px) rotate(6deg) scale(1.05); }
+            66% { transform: translate(-25px, 20px) rotate(-6deg) scale(0.98); }
+            100% { transform: translate(15px, -15px) rotate(4deg) scale(1.03); }
+        }
+        .kawaii-element {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0;
+            transform: scale(0.2);
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            z-index: 4;
+        }
+        .kawaii-element.visible {
+            opacity: 0.88;
+            transform: scale(1);
+            animation: driftElement 12s ease-in-out infinite alternate;
+        }
+        @keyframes driftElement {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-40px, 35px) rotate(25deg); }
+            100% { transform: translate(30px, -30px) rotate(-15deg); }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+        .delayed-reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .delayed-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="w-screen h-screen relative select-none">
+
+    <!-- Freely Floating Kawaii Japanese Words -->
+    <div id="jp1" class="jp-float text-3xl md:text-4xl" style="top: 15%; left: 8%;">きらきら</div>
+    <div id="jp2" class="jp-float text-2xl md:text-3xl" style="top: 75%; left: 12%;">ふわふわ</div>
+    <div id="jp3" class="jp-float text-4xl md:text-5xl" style="top: 82%; left: 52%;">わくわく</div>
+    <div id="jp4" class="jp-float text-3xl md:text-4xl" style="top: 12%; left: 42%;">だいすき</div>
+    <div id="jp5" class="jp-float text-2xl md:text-3xl" style="top: 48%; left: 3%;">ぴょん</div>
+    <div id="jp6" class="jp-float text-3xl md:text-4xl" style="top: 22%; left: 82%;">どきどき</div>
+    <div id="jp7" class="jp-float text-2xl md:text-3xl" style="top: 68%; left: 85%;">きゅん</div>
+    <div id="jp8" class="jp-float text-3xl md:text-4xl" style="top: 88%; left: 25%;">ぱふっ</div>
+    <div id="jp9" class="jp-float text-2xl md:text-3xl" style="top: 35%; left: 90%;">キラ✨</div>
+    <div id="jp10" class="jp-float text-3xl md:text-4xl" style="top: 55%; left: 92%;">キュート</div>
+
+    <!-- Freely Floating Kawaii Elements -->
+    <div id="kw1" class="kawaii-element text-3xl" style="top: 18%; left: 22%;">🌸</div>
+    <div id="kw2" class="kawaii-element text-2xl" style="top: 65%; left: 28%;">⭐</div>
+    <div id="kw3" class="kawaii-element text-3xl" style="top: 28%; left: 68%;">💖</div>
+    <div id="kw4" class="kawaii-element text-4xl" style="top: 78%; left: 75%;">🌸</div>
+    <div id="kw5" class="kawaii-element text-2xl" style="top: 42%; left: 15%;">✨</div>
+    <div id="kw6" class="kawaii-element text-3xl" style="top: 82%; left: 42%;">⭐</div>
+    <div id="kw7" class="kawaii-element text-2xl" style="top: 10%; left: 60%;">💖</div>
+    <div id="kw8" class="kawaii-element text-3xl" style="top: 58%; left: 88%;">🌸</div>
+
+    <!-- Main Hero Content Container (CTAs Removed) -->
+    <div class="absolute inset-0 flex flex-col lg:flex-row items-center justify-between px-6 lg:px-20 py-10 z-10 pointer-events-none">
+        <div class="flex flex-col items-start max-w-xl pointer-events-auto mt-12 lg:mt-0 delayed-reveal" id="heroContent">
+            
+            <div class="glass-panel px-4 py-1.5 rounded-full text-xs md:text-sm font-bold text-pink-600 mb-6 flex items-center gap-2 shadow-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></span>
+                PIXEL DISPLACEMENT COLLECTIBLE
+            </div>
+
+            <h1 class="text-6xl md:text-8xl font-black tracking-tight text-pink-600 mb-4 drop-shadow-sm" style="text-shadow: 3px 3px 0px rgba(255,255,255,0.9);">
+                ODDINARY
+            </h1>
+
+            <p class="text-xl md:text-2xl font-medium text-slate-700 mb-8 leading-relaxed">
+                A little weird. A lot of wonder.
+            </p>
+        </div>
+
+        <div class="hidden lg:block w-1/2 h-full"></div>
+    </div>
+
+    <!-- Three.js Canvas Viewport -->
+    <div id="canvasContainer" class="absolute inset-0 w-full h-full z-0"></div>
+
+    <script>
+        let scene, camera, renderer, characterGroup, flowerGroup, pixelParticles, leftEyeMesh, rightEyeMesh;
+        let clock = new THREE.Clock();
+        let mouseX = 0, mouseY = 0;
+        let targetRotationX = 0, targetRotationY = 0;
+        let contentRevealed = false;
+
+        function initThree() {
+            const container = document.getElementById('canvasContainer');
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 15);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xfff0f5, 1.3);
+            directionalLight.position.set(5, 10, 7);
+            scene.add(directionalLight);
+
+            const pinkPoint = new THREE.PointLight(0xff5c8a, 2.5, 12);
+            pinkPoint.position.set(-3, 2, 4);
+            scene.add(pinkPoint);
+
+            createLargeCenteredFlower();
+            createDesignerToyCharacter();
+            createScatteredPixelFlakes();
+
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('touchmove', onTouchMove, { passive: true });
+
+            animate();
+        }
+
+        function createLargeCenteredFlower() {
+            flowerGroup = new THREE.Group();
+            const petalMat = new THREE.MeshStandardMaterial({ color: 0xff8fab, roughness: 0.3, side: THREE.DoubleSide });
+            const centerMat = new THREE.MeshStandardMaterial({ color: 0xffd166, roughness: 0.4 });
+
+            const centerGeo = new THREE.SphereGeometry(1.4, 16, 16);
+            const centerMesh = new THREE.Mesh(centerGeo, centerMat);
+            flowerGroup.add(centerMesh);
+
+            for (let i = 0; i < 8; i++) {
+                const petalGeo = new THREE.ConeGeometry(1.4, 4.2, 5);
+                petalGeo.rotateX(Math.PI / 2);
+                const petal = new THREE.Mesh(petalGeo, petalMat);
+                const angle = (i / 8) * Math.PI * 2;
+                petal.position.set(Math.cos(angle) * 2.0, Math.sin(angle) * 2.0, -0.6);
+                petal.rotation.z = angle;
+                flowerGroup.add(petal);
+            }
+
+            flowerGroup.position.set(0, 0, 0);
+            scene.add(flowerGroup);
+        }
+
+        function createDesignerToyCharacter() {
+            characterGroup = new THREE.Group();
+
+            const skinMat = new THREE.MeshStandardMaterial({ color: 0xfff0f5, roughness: 0.2 });
+            const hairMainMat = new THREE.MeshStandardMaterial({ color: 0xffb3c6, roughness: 0.35 });
+            const hairAccentMat = new THREE.MeshStandardMaterial({ color: 0x9bf6ff, roughness: 0.25 });
+            const outfitTopMat = new THREE.MeshStandardMaterial({ color: 0x2b2d42, roughness: 0.5 });
+            const skirtMat = new THREE.MeshStandardMaterial({ color: 0xff5c8a, roughness: 0.3 });
+            const cyberLegMat = new THREE.MeshPhysicalMaterial({ color: 0xc5a3ff, roughness: 0.1, transmission: 0.65, transparent: true, opacity: 0.9 });
+            const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe0e0e0, metalness: 0.9, roughness: 0.1 });
+            const accessoryMat = new THREE.MeshStandardMaterial({ color: 0xffd166, metalness: 0.7, roughness: 0.2 });
+
+            // Head & Smaller Eyes
+            const headGeo = new THREE.SphereGeometry(0.72, 32, 32);
+            headGeo.scale(1, 1.05, 1);
+            const head = new THREE.Mesh(headGeo, skinMat);
+            head.position.set(0, 2.2, 0);
+            characterGroup.add(head);
+
+            const eyeGeo = new THREE.SphereGeometry(0.055, 16, 16);
+            eyeGeo.scale(1.2, 1.8, 1);
+            leftEyeMesh = new THREE.Mesh(eyeGeo, new THREE.MeshBasicMaterial({ color: 0x7b2cbf }));
+            leftEyeMesh.position.set(0.24, 2.22, 0.68);
+            rightEyeMesh = new THREE.Mesh(eyeGeo, new THREE.MeshBasicMaterial({ color: 0x7b2cbf }));
+            rightEyeMesh.position.set(-0.24, 2.22, 0.68);
+            characterGroup.add(leftEyeMesh);
+            characterGroup.add(rightEyeMesh);
+
+            // Rockstar-Loli Twin-Tails & Chains
+            const baseHairGeo = new THREE.CylinderGeometry(0.78, 0.72, 1.0, 16);
+            const baseHair = new THREE.Mesh(baseHairGeo, hairMainMat);
+            baseHair.position.set(0, 2.3, -0.05);
+            characterGroup.add(baseHair);
+
+            for (let side of [-1, 1]) {
+                const twintailGeo = new THREE.ConeGeometry(0.35, 5.2, 16);
+                const twintail = new THREE.Mesh(twintailGeo, hairAccentMat);
+                twintail.position.set(side * 0.95, 1.2, -0.3);
+                twintail.rotation.z = side * 0.35;
+                twintail.rotation.x = -0.15;
+                characterGroup.add(twintail);
+
+                const tieGeo = new THREE.TorusGeometry(0.22, 0.07, 16, 32);
+                const tie = new THREE.Mesh(tieGeo, accessoryMat);
+                tie.position.set(side * 0.82, 2.25, 0.15);
+                tie.rotation.y = Math.PI / 2;
+                characterGroup.add(tie);
+            }
+
+            // Torso & Clothing with Chains & Buckles
+            const torsoGeo = new THREE.CylinderGeometry(0.34, 0.44, 1.2, 16);
+            const torso = new THREE.Mesh(torsoGeo, outfitTopMat);
+            torso.position.set(0, 0.95, 0);
+            characterGroup.add(torso);
+
+            const chainGeo = new THREE.TorusGeometry(0.45, 0.03, 8, 24);
+            const chain = new THREE.Mesh(chainGeo, chromeMat);
+            chain.position.set(0, 1.25, 0.2);
+            chain.rotation.x = Math.PI / 3;
+            characterGroup.add(chain);
+
+            const skirtGeo = new THREE.ConeGeometry(0.8, 0.65, 16);
+            const skirt = new THREE.Mesh(skirtGeo, skirtMat);
+            skirt.position.set(0, 0.32, 0);
+            characterGroup.add(skirt);
+
+            // Hands (Mitten/Stump-style matching legs)
+            for (let side of [-1, 1]) {
+                const handGeo = new THREE.SphereGeometry(0.12, 16, 16);
+                const hand = new THREE.Mesh(handGeo, skinMat);
+                hand.position.set(side * 0.55, 0.95, 0.1);
+                characterGroup.add(hand);
+            }
+
+            // Normal Leg & Segmented Cyber Prosthetic Leg
+            const normalLegGeo = new THREE.CylinderGeometry(0.14, 0.12, 1.3, 16);
+            const normalLeg = new THREE.Mesh(normalLegGeo, skinMat);
+            normalLeg.position.set(0.2, -0.45, 0);
+            characterGroup.add(normalLeg);
+
+            const cyberLegGeo = new THREE.CylinderGeometry(0.13, 0.09, 1.3, 16);
+            const cyberLeg = new THREE.Mesh(cyberLegGeo, cyberLegMat);
+            cyberLeg.position.set(-0.2, -0.45, 0);
+            characterGroup.add(cyberLeg);
+
+            const jointGeo = new THREE.SphereGeometry(0.14, 16, 16);
+            const joint = new THREE.Mesh(jointGeo, chromeMat);
+            joint.position.set(-0.2, -1.05, 0);
+            characterGroup.add(joint);
+
+            characterGroup.position.set(0, 0, 0);
+            characterGroup.scale.set(0.01, 0.01, 0.01);
+            scene.add(characterGroup);
+        }
+
+        function createScatteredPixelFlakes() {
+            const particleCount = 200;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            const colorPalette = [
+                new THREE.Color(0xff5c8a),
+                new THREE.Color(0xc5a3ff),
+                new THREE.Color(0x9bf6ff),
+                new THREE.Color(0xffd166)
+            ];
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 16;
+                positions[i+1] = (Math.random() - 0.5) * 12;
+                positions[i+2] = (Math.random() - 0.5) * 6;
+
+                const col = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                colors[i] = col.r;
+                colors[i+1] = col.g;
+                colors[i+2] = col.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.12,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.85
+            });
+
+            pixelParticles = new THREE.Points(geometry, material);
+            pixelParticles.position.set(0, 0, 0);
+            scene.add(pixelParticles);
+        }
+
+        function onMouseMove(event) {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function onTouchMove(event) {
+            if (event.touches.length > 0) {
+                mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function revealKawaiiElements() {
+            if (contentRevealed) return;
+            contentRevealed = true;
+
+            document.getElementById('heroContent').classList.add('revealed');
+
+            for (let i = 1; i <= 10; i++) {
+                setTimeout(() => {
+                    const el = document.getElementById('jp' + i);
+                    if (el) el.classList.add('visible');
+                }, i * 140);
+            }
+            for (let i = 1; i <= 8; i++) {
+                setTimeout(() => {
+                    const el = document.getElementById('kw' + i);
+                    if (el) el.classList.add('visible');
+                }, i * 160);
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            if (elapsedTime < 1.5) {
+                const p = elapsedTime / 1.5;
+                flowerGroup.scale.setScalar(p * 1.2);
+                flowerGroup.rotation.z = elapsedTime * 1.2;
+            } else if (elapsedTime >= 1.5 && elapsedTime < 3.2) {
+                const t = (elapsedTime - 1.5) / 1.7;
+                characterGroup.position.x = Math.sin(t * Math.PI) * 5.5;
+                characterGroup.position.y = Math.cos(t * Math.PI * 0.8) * -1.5 + Math.sin(t * Math.PI) * 2.0;
+                const scale = THREE.MathUtils.lerp(0.01, 1.1, t);
+                characterGroup.scale.set(scale, scale, scale);
+                flowerGroup.scale.subScalar(0.03);
+                if (flowerGroup.scale.x < 0) flowerGroup.visible = false;
+            } else if (elapsedTime >= 3.2 && elapsedTime < 5.0) {
+                characterGroup.position.x = THREE.MathUtils.lerp(characterGroup.position.x, 2.2, 0.08);
+                characterGroup.position.y = THREE.MathUtils.lerp(characterGroup.position.y, -0.2, 0.08);
+            } else {
+                characterGroup.position.x = THREE.MathUtils.lerp(characterGroup.position.x, 2.2, 0.08);
+                characterGroup.position.y = THREE.MathUtils.lerp(characterGroup.position.y, -0.2, 0.08);
+                characterGroup.scale.lerp(new THREE.Vector3(1.1, 1.1, 1.1), 0.08);
+
+                targetRotationY = 0.0 + mouseX * 0.2;
+                targetRotationX = -mouseY * 0.15;
+                characterGroup.rotation.y = THREE.MathUtils.lerp(characterGroup.rotation.y, targetRotationY, 0.08);
+                characterGroup.rotation.x = THREE.MathUtils.lerp(characterGroup.rotation.x, targetRotationX, 0.08);
+
+                if ((elapsedTime > 5.2 && elapsedTime < 5.8) || (elapsedTime > 6.4 && elapsedTime < 7.0)) {
+                    if (leftEyeMesh && rightEyeMesh) {
+                        leftEyeMesh.scale.set(1.2, 0.3, 1);
+                        rightEyeMesh.scale.set(1.2, 0.3, 1);
+                    }
+                } else {
+                    if (leftEyeMesh && rightEyeMesh) {
+                        leftEyeMesh.scale.set(1.2, 1.8, 1);
+                        rightEyeMesh.scale.set(1.2, 1.8, 1);
+                    }
+                }
+
+                if (elapsedTime > 5.5) {
+                    revealKawaiiElements();
+                }
+            }
+
+            if (pixelParticles) {
+                pixelParticles.rotation.y = elapsedTime * 0.1;
+                const positions = pixelParticles.geometry.attributes.position.array;
+                for (let i = 1; i < positions.length; i += 3) {
+                    positions[i] += Math.sin(elapsedTime * 0.7 + i) * 0.0025;
+                }
+                pixelParticles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = function() {
+            initThree();
+        };
+    </script>
+</body>
+</html>
