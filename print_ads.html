@@ -146,7 +146,7 @@
       margin: 0 auto;
       padding: 2.25rem 2rem 4rem;
       display: grid;
-      grid-template-columns: 1.35fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 2.25rem;
       align-items: start;
     }
@@ -198,18 +198,11 @@
       letter-spacing: 0.08em;
     }
 
-    /* Left Column: Equal-Sized Grid for All 5 Generated Ads */
-    .ads-grid {
+    /* Equal-Sized Grid for Both Left and Right Columns */
+    .assets-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1.35rem;
-    }
-
-    /* Right Column: 2 Ad Mockups Stack */
-    .mockups-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
     }
 
     /* Clean Unlabeled Asset Card Styling */
@@ -240,10 +233,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    /* Uniform poster aspect ratio so all 5 left images match in size */
-    .ads-grid .image-frame {
       aspect-ratio: 3 / 4;
     }
 
@@ -253,10 +242,6 @@
       display: block;
       object-fit: cover;
       transition: transform 0.25s ease;
-    }
-
-    .mockups-panel .image-frame img {
-      height: auto;
     }
 
     .asset-card:hover .image-frame img {
@@ -271,7 +256,7 @@
       justify-content: center;
       text-align: center;
       padding: 2rem 1rem;
-      min-height: 260px;
+      min-height: 200px;
       width: 100%;
       height: 100%;
       color: var(--dream-lavender);
@@ -378,7 +363,7 @@
       color: var(--acid-lemon);
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
       main.split-showcase {
         grid-template-columns: 1fr;
       }
@@ -388,7 +373,7 @@
     }
 
     @media (max-width: 600px) {
-      .ads-grid {
+      .assets-grid {
         grid-template-columns: 1fr;
       }
       header.campaign-header,
@@ -419,17 +404,17 @@
   </header>
 
   <main class="split-showcase">
-    <!-- LEFT COLUMN: GENERATED ADS -->
+    <!-- LEFT COLUMN: GENERATED ADS (5 IMAGES) -->
     <section id="generated-ads" class="column-panel ads-panel" aria-labelledby="generated-ads-heading">
       <div class="panel-header">
         <h2 id="generated-ads-heading">Generated Ads</h2>
         <span class="count-badge">05 Posters</span>
       </div>
 
-      <div class="ads-grid">
+      <div class="assets-grid">
         <article class="asset-card" data-src="ad_posters/ad1.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/ad1.jpeg" alt="ODDINARY Generated Ad 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/ad1.jpeg" alt="Generated Ad 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/ad1.jpeg</code>
@@ -439,7 +424,7 @@
 
         <article class="asset-card" data-src="ad_posters/ad2.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/ad2.jpeg" alt="ODDINARY Generated Ad 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/ad2.jpeg" alt="Generated Ad 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/ad2.jpeg</code>
@@ -449,7 +434,7 @@
 
         <article class="asset-card" data-src="ad_posters/ad3.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/ad3.jpeg" alt="ODDINARY Generated Ad 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/ad3.jpeg" alt="Generated Ad 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/ad3.jpeg</code>
@@ -459,7 +444,7 @@
 
         <article class="asset-card" data-src="ad_posters/ad4.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/ad4.jpeg" alt="ODDINARY Generated Ad 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/ad4.jpeg" alt="Generated Ad 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/ad4.jpeg</code>
@@ -469,7 +454,7 @@
 
         <article class="asset-card" data-src="ad_posters/ad5.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/ad5.jpeg" alt="ODDINARY Generated Ad 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/ad5.jpeg" alt="Generated Ad 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/ad5.jpeg</code>
@@ -479,17 +464,17 @@
       </div>
     </section>
 
-    <!-- RIGHT COLUMN: AD MOCKUPS -->
+    <!-- RIGHT COLUMN: AD MOCKUPS (5 IMAGES) -->
     <section id="ad-mockups" class="column-panel mockups-panel" aria-labelledby="ad-mockups-heading">
       <div class="panel-header">
         <h2 id="ad-mockups-heading">Ad Mockups</h2>
-        <span class="count-badge">02 Placements</span>
+        <span class="count-badge">05 Mockups</span>
       </div>
 
-      <div class="mockups-stack">
+      <div class="assets-grid">
         <article class="asset-card" data-src="ad_posters/mockup1.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/mockup1.jpeg" alt="ODDINARY Ad Mockup 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/mockup1.jpeg" alt="Ad Mockup 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/mockup1.jpeg</code>
@@ -499,10 +484,40 @@
 
         <article class="asset-card" data-src="ad_posters/mockup2.jpeg">
           <div class="image-frame">
-            <img src="ad_posters/mockup2.jpeg" alt="ODDINARY Ad Mockup 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <img src="ad_posters/mockup2.jpeg" alt="Ad Mockup 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
             <div class="img-fallback">
               <span>Asset not loaded</span>
               <code>ad_posters/mockup2.jpeg</code>
+            </div>
+          </div>
+        </article>
+
+        <article class="asset-card" data-src="ad_posters/mockup3.jpeg">
+          <div class="image-frame">
+            <img src="ad_posters/mockup3.jpeg" alt="Ad Mockup 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="img-fallback">
+              <span>Asset not loaded</span>
+              <code>ad_posters/mockup3.jpeg</code>
+            </div>
+          </div>
+        </article>
+
+        <article class="asset-card" data-src="ad_posters/mockup4.jpeg">
+          <div class="image-frame">
+            <img src="ad_posters/mockup4.jpeg" alt="Ad Mockup 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="img-fallback">
+              <span>Asset not loaded</span>
+              <code>ad_posters/mockup4.jpeg</code>
+            </div>
+          </div>
+        </article>
+
+        <article class="asset-card" data-src="ad_posters/mockup5.jpeg">
+          <div class="image-frame">
+            <img src="ad_posters/mockup5.jpeg" alt="Ad Mockup 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="img-fallback">
+              <span>Asset not loaded</span>
+              <code>ad_posters/mockup5.jpeg</code>
             </div>
           </div>
         </article>
