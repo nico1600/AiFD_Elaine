@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Ads Showcase — ZOZI Campaign</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Adobe Typekit for Digibop & Google Fonts -->
+    <link rel="stylesheet" href="https://use.typekit.net/omn5lee.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bubblegum: '#FF5C8A',
+                        cybermint: '#B4DCFF',
+                        lavender: '#E2D4F0',
+                        neonpink: '#FF2A85',
+                        darkneonpurple: '#6B00D7',
+                        neonblue: '#00D4FF',
+                        surface: '#1F1B2E',
+                        surfaceBorder: '#3B2D5E',
+                        deepbase: '#161224'
+                    },
+                    fontFamily: {
+                        'audiowide': ['"Audiowide"', 'sans-serif'],
+                        'space': ['"Space Grotesk"', 'sans-serif'],
+                        'digibop': ['digibop', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #161224;
+            color: #E2D4F0;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .audiowide-regular {
+            font-family: "Audiowide", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .digibop-font {
+            font-family: digibop, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Brutalist retro-futuristic grid & border accents */
+        .brutalist-border {
+            border: 2px solid #3B2D5E;
+            box-shadow: 4px 4px 0px 0px #00D4FF;
+            transition: all 0.2s ease-in-out;
+        }
+        .brutalist-border:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #FF2A85;
+        }
+
+        .brutalist-card {
+            background: #1F1B2E;
+            border: 2px solid #3B2D5E;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #161224;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF2A85;
+            border-radius: 4px;
+        }
+
+        /* Scanline overlay for Y2K cyber aesthetic */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.25) 50%,
+                rgba(0, 0, 0, 0.25)
+            );
+            background-size: 100% 4px;
+        }
+
+        /* Marquee ticker animation */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-ticker {
+            display: flex;
+            width: max-content;
+            animation: ticker 25s linear infinite;
+        }
+    </style>
+</head>
+<body class="selection:bg-neonpink selection:text-white">
+
+    <!-- Subtle Scanlines Overlay -->
+    <div class="fixed inset-0 pointer-events-none scanlines z-50 opacity-40"></div>
+
+    <!-- Lightbox Modal for Full-Screen Ad Inspection -->
+    <div id="lightbox" class="fixed inset-0 z-50 hidden bg-deepbase/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8" onclick="closeLightbox()">
+        <div class="max-w-5xl w-full brutalist-border bg-surface rounded-lg overflow-hidden relative" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between px-6 py-3 bg-deepbase border-b-2 border-surfaceBorder">
+                <div class="flex items-center gap-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-neonpink animate-pulse"></span>
+                    <span id="lightbox-title" class="audiowide-regular text-xs sm:text-sm text-white uppercase tracking-wider">ASSET PREVIEW</span>
+                </div>
+                <button onclick="closeLightbox()" class="px-3 py-1 bg-neonpink hover:bg-bubblegum text-white audiowide-regular text-xs rounded transition-colors cursor-pointer">
+                    CLOSE [ESC]
+                </button>
+            </div>
+            <div class="p-4 sm:p-6 flex items-center justify-center bg-deepbase/60 max-h-[80vh] overflow-auto">
+                <img id="lightbox-img" src="" alt="Enlarged Digital Ad" class="max-h-[72vh] w-auto object-contain rounded border border-surfaceBorder">
+            </div>
+            <div class="px-6 py-3 bg-surface border-t border-surfaceBorder flex flex-wrap justify-between items-center gap-2 text-xs font-mono text-gray-400">
+                <span id="lightbox-path" class="text-neonblue">PATH: ad_posters/digitalad_1.png</span>
+                <span id="lightbox-meta">FORMAT: DIGITAL DISPLAY // ZOZI CAMPAIGN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Marquee Ticker -->
+    <div class="bg-neonpink text-white py-2 overflow-hidden border-b-2 border-deepbase audiowide-regular text-xs tracking-wider uppercase select-none">
+        <div class="animate-ticker flex gap-8 items-center whitespace-nowrap">
+            <span>✦ DIGITAL CAMPAIGN ARCHIVE: SOCIAL & DISPLAY ADS</span>
+            <span>•</span>
+            <span>ZOZI</span>
+            <span>•</span>
+            <span>DIRECTORY: /AD_POSTERS</span>
+            <span>•</span>
+            <span>NEON BLUE #00D4FF</span>
+            <span>•</span>
+            <span>DIGIBOP Y2K SPEC</span>
+            <span>•</span>
+            <span>✦ DIGITAL CAMPAIGN ARCHIVE: SOCIAL & DISPLAY ADS</span>
+            <span>•</span>
+            <span>ZOZI</span>
+            <span>•</span>
+            <span>DIRECTORY: /AD_POSTERS</span>
+            <span>•</span>
+            <span>NEON BLUE #00D4FF</span>
+            <span>•</span>
+            <span>DIGIBOP Y2K SPEC</span>
+            <span>•</span>
+        </div>
+    </div>
+
+    <!-- Navigation / Header -->
+    <header class="sticky top-0 z-40 bg-deepbase/90 backdrop-blur-md border-b-2 border-surfaceBorder px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="#top" class="w-10 h-10 bg-neonpink rounded flex items-center justify-center audiowide-regular text-white text-lg shadow-[2px_2px_0px_0px_#00D4FF]">ZZ</a>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neonblue font-bold block">Campaign Rollout</span>
+                    <h1 class="text-lg audiowide-regular text-white tracking-wide">DIGITAL ADS</h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-4 md:gap-8 text-sm font-medium">
+                <a href="#featured" class="hover:text-neonpink transition-colors">Hero Ad</a>
+                <a href="#gallery" class="hover:text-neonblue transition-colors">Ad Suite (01–05)</a>
+                <a href="#specs" class="hover:text-bubblegum transition-colors">Media Specs</a>
+                <a href="styleguide.html" class="hover:text-lavender transition-colors">Style Guide</a>
+                <a href="index.html" class="px-3 py-1.5 bg-surface border border-surfaceBorder hover:border-neonblue rounded text-xs font-bold uppercase tracking-wider transition-all">← Portfolio Root</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="top" class="max-w-7xl mx-auto px-6 py-12 space-y-24">
+
+        <!-- Hero Section: Digital Campaign Overview -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-surface border border-surfaceBorder text-neonblue text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-neonblue animate-pulse"></span> Campaign Media Suite // Ver 2.1
+                </div>
+                <h2 class="digibop-font text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white leading-none uppercase">
+                    DIGITAL <span class="text-neonpink underline decoration-neonblue decoration-4 underline-offset-8">ADS</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 font-light leading-relaxed">
+                    Multi-channel digital advertising assets engineered for social feeds, interactive web banners, and urban digital displays. Built with ZOZI's signature Y2K cyber-dreamcore palette, chrome iconography, and brutalist archival framing.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <div class="brutalist-card p-4 rounded flex-1 min-w-[200px]">
+                        <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Asset Directory</span>
+                        <span class="digibop-font text-base text-neonblue">ad_posters/</span>
+                    </div>
+                    <div class="brutalist-card p-4 rounded flex-1 min-w-[200px]">
+                        <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Suite Lineup</span>
+                        <span class="digibop-font text-base text-neonpink">digitalad_1.png → digitalad_5.png</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5">
+                <div class="brutalist-border rounded-lg bg-surface p-6 relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-neonblue/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <span class="text-xs uppercase font-mono tracking-widest text-neonpink block mb-4">/// CAMPAIGN DEPLOYMENT LOG</span>
+                    <div class="space-y-3 text-sm text-gray-300 font-light">
+                        <p>
+                            Each creative unit translates ZOZI's tactile collectible universe into scroll-stopping digital touchpoints—pairing iridescent 3D renders with high-contrast <span class="text-neonblue font-mono">#00D4FF</span> and <span class="text-neonpink font-mono">#FF2A85</span> callouts.
+                        </p>
+                        <div class="bg-deepbase p-3 rounded border border-surfaceBorder font-mono text-xs space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">ASSET RANGE:</span>
+                                <span class="text-neonblue">digitalad_1 – digitalad_5.png</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">SOURCE FOLDER:</span>
+                                <span class="text-lavender">/ad_posters</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">VISUAL SYSTEM:</span>
+                                <span class="text-neonpink">ZOZI STYLE GUIDE v2.1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-surfaceBorder flex justify-between items-center text-xs text-gray-400">
+                        <span>ASSET: digital_ads.html</span>
+                        <span class="text-neonblue font-mono">5 UNITS ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Primary Creative: digitalad_1.png -->
+        <section id="featured" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neonpink font-bold">Lead Campaign Creative</span>
+                    <h3 class="text-3xl audiowide-regular text-white mt-1">FEATURED AD // 01</h3>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Click the creative frame to inspect full-resolution artwork in lightbox mode.
+                </p>
+            </div>
+
+            <div class="brutalist-border rounded-lg bg-surface p-6 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Image Frame -->
+                <div class="lg:col-span-7">
+                    <div onclick="openLightbox('ad_posters/digitalad_1.png', 'DIGITAL AD 01 // LEAD LAUNCH CREATIVE', 'ad_posters/digitalad_1.png')" 
+                         class="cursor-pointer rounded-lg overflow-hidden border-2 border-surfaceBorder bg-deepbase relative group">
+                        <div class="flex items-center justify-between px-4 py-2 bg-deepbase border-b border-surfaceBorder text-[11px] font-mono text-gray-400">
+                            <span class="text-neonblue">FILE: ad_posters/digitalad_1.png</span>
+                            <span class="group-hover:text-neonpink transition-colors">[CLICK TO EXPAND ⤢]</span>
+                        </div>
+                        <div class="p-4 flex items-center justify-center bg-[#120E1D]">
+                            <img src="ad_posters/digitalad_1.png" 
+                                 alt="ZOZI Digital Ad 1" 
+                                 class="w-full h-auto max-h-[620px] object-contain rounded group-hover:scale-[1.01] transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/900x900/1F1B2E/00D4FF?text=ad_posters%2Fdigitalad_1.png'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Creative Breakdown -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="inline-block px-2.5 py-1 bg-deepbase border border-neonpink text-neonpink text-xs font-mono rounded">
+                        UNIT ID: AD-01 // HERO LAUNCH
+                    </div>
+                    <h4 class="audiowide-regular text-2xl text-white leading-snug">
+                        WELCOME TO ZOZI — DIGITAL DROP
+                    </h4>
+                    <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                        Designed as the flagship anchor for the ZOZI blind-box series launch across Instagram, TikTok, and digital out-of-home screens. Combines dreamcore character styling, metallic chrome framing, and high-visibility Digibop display typography.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-deepbase p-4 rounded border border-surfaceBorder">
+                            <span class="text-[11px] text-neonblue font-bold uppercase block mb-1">Placement</span>
+                            <p class="text-xs text-gray-300">Instagram Feed / Paid Social Hero</p>
+                        </div>
+                        <div class="bg-deepbase p-4 rounded border border-surfaceBorder">
+                            <span class="text-[11px] text-neonpink font-bold uppercase block mb-1">Call to Action</span>
+                            <p class="text-xs text-gray-300">Explore Blind Box Drop & 3D Web</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-surfaceBorder flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded text-xs font-mono text-cybermint">#B4DCFF</span>
+                        <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded text-xs font-mono text-neonpink">#FF2A85</span>
+                        <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded text-xs font-mono text-neonblue">#00D4FF</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-Ad Campaign Gallery (digitalad_1.png to digitalad_5.png) -->
+        <section id="gallery" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neonblue font-bold">Complete Asset Lineup</span>
+                    <h3 class="text-3xl audiowide-regular text-white mt-1">DIGITAL AD SUITE (01–05)</h3>
+                </div>
+                <div class="flex flex-wrap gap-2" id="filter-buttons">
+                    <button onclick="filterAds('all', this)" class="filter-btn px-3 py-1.5 bg-neonpink text-white audiowide-regular text-xs rounded border border-neonpink cursor-pointer">ALL UNITS (5)</button>
+                    <button onclick="filterAds('social', this)" class="filter-btn px-3 py-1.5 bg-surface text-gray-300 hover:border-neonblue audiowide-regular text-xs rounded border border-surfaceBorder cursor-pointer">SOCIAL FEED</button>
+                    <button onclick="filterAds('story', this)" class="filter-btn px-3 py-1.5 bg-surface text-gray-300 hover:border-neonblue audiowide-regular text-xs rounded border border-surfaceBorder cursor-pointer">STORY / VERTICAL</button>
+                    <button onclick="filterAds('banner', this)" class="filter-btn px-3 py-1.5 bg-surface text-gray-300 hover:border-neonblue audiowide-regular text-xs rounded border border-surfaceBorder cursor-pointer">WEB & DOOH</button>
+                </div>
+            </div>
+
+            <!-- Ads Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="ads-grid">
+
+                <!-- Ad Card 1: digitalad_1.png -->
+                <article data-category="social" class="ad-card brutalist-border rounded-lg bg-surface overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="px-4 py-2.5 bg-deepbase border-b border-surfaceBorder flex justify-between items-center text-xs font-mono">
+                            <span class="text-neonblue">01 // digitalad_1.png</span>
+                            <span class="px-2 py-0.5 bg-neonpink/20 text-neonpink rounded text-[10px]">SOCIAL FEED</span>
+                        </div>
+                        <div onclick="openLightbox('ad_posters/digitalad_1.png', 'AD UNIT 01 // SERIES LAUNCH', 'ad_posters/digitalad_1.png')" 
+                             class="aspect-square bg-[#120E1D] overflow-hidden cursor-pointer relative flex items-center justify-center p-3">
+                            <img src="ad_posters/digitalad_1.png" 
+                                 alt="Digital Ad 1" 
+                                 class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/800x800/1F1B2E/FF2A85?text=ad_posters%2Fdigitalad_1.png'">
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-2 border-t border-surfaceBorder">
+                        <h4 class="audiowide-regular text-base text-white group-hover:text-neonpink transition-colors">Series Launch Square</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Primary 1:1 social ad introducing the ZOZI blind-box collection with dreamcore character framing and bold neon accents.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Ad Card 2: digitalad_2.png -->
+                <article data-category="story" class="ad-card brutalist-border rounded-lg bg-surface overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="px-4 py-2.5 bg-deepbase border-b border-surfaceBorder flex justify-between items-center text-xs font-mono">
+                            <span class="text-neonblue">02 // digitalad_2.png</span>
+                            <span class="px-2 py-0.5 bg-neonblue/20 text-neonblue rounded text-[10px]">STORY / 9:16</span>
+                        </div>
+                        <div onclick="openLightbox('ad_posters/digitalad_2.png', 'AD UNIT 02 // VERTICAL STORY', 'ad_posters/digitalad_2.png')" 
+                             class="aspect-square bg-[#120E1D] overflow-hidden cursor-pointer relative flex items-center justify-center p-3">
+                            <img src="ad_posters/digitalad_2.png" 
+                                 alt="Digital Ad 2" 
+                                 class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/800x800/1F1B2E/00D4FF?text=ad_posters%2Fdigitalad_2.png'">
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-2 border-t border-surfaceBorder">
+                        <h4 class="audiowide-regular text-base text-white group-hover:text-neonblue transition-colors">Vertical Story Teaser</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Full-bleed mobile placement built for Instagram Reels, TikTok, and Stories with kinetic Y2K sticker overlays.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Ad Card 3: digitalad_3.png -->
+                <article data-category="banner" class="ad-card brutalist-border rounded-lg bg-surface overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="px-4 py-2.5 bg-deepbase border-b border-surfaceBorder flex justify-between items-center text-xs font-mono">
+                            <span class="text-neonblue">03 // digitalad_3.png</span>
+                            <span class="px-2 py-0.5 bg-lavender/20 text-lavender rounded text-[10px]">WEB BANNER</span>
+                        </div>
+                        <div onclick="openLightbox('ad_posters/digitalad_3.png', 'AD UNIT 03 // DISPLAY BANNER', 'ad_posters/digitalad_3.png')" 
+                             class="aspect-square bg-[#120E1D] overflow-hidden cursor-pointer relative flex items-center justify-center p-3">
+                            <img src="ad_posters/digitalad_3.png" 
+                                 alt="Digital Ad 3" 
+                                 class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/800x800/1F1B2E/E2D4F0?text=ad_posters%2Fdigitalad_3.png'">
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-2 border-t border-surfaceBorder">
+                        <h4 class="audiowide-regular text-base text-white group-hover:text-bubblegum transition-colors">Interactive Web Display</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            High-contrast web banner unit driving traffic to the Three.js collectible showcase and NYC launch pop-up.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Ad Card 4: digitalad_4.png -->
+                <article data-category="social" class="ad-card brutalist-border rounded-lg bg-surface overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="px-4 py-2.5 bg-deepbase border-b border-surfaceBorder flex justify-between items-center text-xs font-mono">
+                            <span class="text-neonblue">04 // digitalad_4.png</span>
+                            <span class="px-2 py-0.5 bg-bubblegum/20 text-bubblegum rounded text-[10px]">CHARACTER SPOTLIGHT</span>
+                        </div>
+                        <div onclick="openLightbox('ad_posters/digitalad_4.png', 'AD UNIT 04 // CHARACTER DROP', 'ad_posters/digitalad_4.png')" 
+                             class="aspect-square bg-[#120E1D] overflow-hidden cursor-pointer relative flex items-center justify-center p-3">
+                            <img src="ad_posters/digitalad_4.png" 
+                                 alt="Digital Ad 4" 
+                                 class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/800x800/1F1B2E/FF5C8A?text=ad_posters%2Fdigitalad_4.png'">
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-2 border-t border-surfaceBorder">
+                        <h4 class="audiowide-regular text-base text-white group-hover:text-neonpink transition-colors">Character Lineup Promo</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Collectible figure spotlight highlighting secret edition odds, holographic packaging details, and cyber-pastel textures.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Ad Card 5: digitalad_5.png -->
+                <article data-category="banner" class="ad-card brutalist-border rounded-lg bg-surface overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="px-4 py-2.5 bg-deepbase border-b border-surfaceBorder flex justify-between items-center text-xs font-mono">
+                            <span class="text-neonblue">05 // digitalad_5.png</span>
+                            <span class="px-2 py-0.5 bg-cybermint/20 text-cybermint rounded text-[10px]">DIGITAL POSTER</span>
+                        </div>
+                        <div onclick="openLightbox('ad_posters/digitalad_5.png', 'AD UNIT 05 // CAMPAIGN FINALE', 'ad_posters/digitalad_5.png')" 
+                             class="aspect-square bg-[#120E1D] overflow-hidden cursor-pointer relative flex items-center justify-center p-3">
+                            <img src="ad_posters/digitalad_5.png" 
+                                 alt="Digital Ad 5" 
+                                 class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                 onerror="this.src='https://placehold.co/800x800/1F1B2E/B4DCFF?text=ad_posters%2Fdigitalad_5.png'">
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-2 border-t border-surfaceBorder">
+                        <h4 class="audiowide-regular text-base text-white group-hover:text-neonblue transition-colors">Digital Screen & DOOH Poster</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            High-impact digital poster built for storefront screens, transit kiosks, and flagship launch announcements.
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Digital Media Specifications Section -->
+        <section id="specs" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-lavender font-bold">Production Standards</span>
+                    <h3 class="text-3xl audiowide-regular text-white mt-1">CHANNEL & ASSET SPECS</h3>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Standardized export parameters for all files stored inside <code class="text-neonblue font-mono">ad_posters/</code>.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="brutalist-card p-6 rounded-lg space-y-3">
+                    <span class="text-xs font-mono text-neonpink uppercase">01 // Social Feed</span>
+                    <h4 class="audiowide-regular text-lg text-white">1080 × 1080 PX</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        1:1 aspect ratio optimized for Instagram grid carousels and sponsored social cards. Safe zone margin of 80px maintained around Digibop headlines.
+                    </p>
+                </div>
+
+                <div class="brutalist-card p-6 rounded-lg space-y-3">
+                    <span class="text-xs font-mono text-neonblue uppercase">02 // Mobile Vertical</span>
+                    <h4 class="audiowide-regular text-lg text-white">1080 × 1920 PX</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        9:16 vertical format tailored for Stories and short-form video bumpers, keeping upper/lower UI overlays clear of the ZOZI iridescent star emblem.
+                    </p>
+                </div>
+
+                <div class="brutalist-card p-6 rounded-lg space-y-3">
+                    <span class="text-xs font-mono text-bubblegum uppercase">03 // Web & DOOH</span>
+                    <h4 class="audiowide-regular text-lg text-white">RGB // PNG-24</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Lossless PNG exports preserving sharp pixel edges, chrome gradients, and high contrast against deep ultraviolet backgrounds (<code class="text-neonblue">#161224</code>).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t-2 border-surfaceBorder bg-deepbase py-12 px-6 mt-24">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-neonpink rounded flex items-center justify-center audiowide-regular text-white text-sm">ZZ</div>
+                <span class="audiowide-regular text-sm text-white tracking-wider">ZOZI // DIGITAL ADS</span>
+            </div>
+            <p class="text-xs text-gray-400 font-mono">
+                ASSETS LOADED FROM /AD_POSTERS • BUILT WITH TAILWIND CSS, DIGIBOP & AUDIOWIDE
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive Lightbox & Filter Script -->
+    <script>
+        function openLightbox(src, title, pathText) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            const titleEl = document.getElementById('lightbox-title');
+            const pathEl = document.getElementById('lightbox-path');
+
+            img.src = src;
+            titleEl.textContent = title;
+            pathEl.textContent = `SOURCE: ${pathText}`;
+
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        function filterAds(category, btn) {
+            const cards = document.querySelectorAll('.ad-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(b => {
+                b.classList.remove('bg-neonpink', 'text-white', 'border-neonpink');
+                b.classList.add('bg-surface', 'text-gray-300', 'border-surfaceBorder');
+            });
+
+            btn.classList.remove('bg-surface', 'text-gray-300', 'border-surfaceBorder');
+            btn.classList.add('bg-neonpink', 'text-white', 'border-neonpink');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
