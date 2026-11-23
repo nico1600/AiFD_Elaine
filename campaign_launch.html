@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZOZI: AFTER DARK SERIES — Official Campaign Launch | POP MART</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Space Grotesk for high-fashion editorial + POP MART e-commerce precision -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --pop-red: #e60012;
+      --pop-red-dark: #c4000f;
+      --ink-dark: #111111;
+      --ink-muted: #555555;
+      --dream-lavender: #f3e8ff;
+      --dream-pink: #fce7f3;
+      --dream-mint: #d1fae5;
+      --dream-sky: #e0f2fe;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink-dark);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      /* Soft luminous dreamcore pastel gradient stripes with high legibility contrast */
+      background-color: #faf7ff;
+      background-image:
+        radial-gradient(circle at 12% 14%, rgba(233, 213, 255, 0.55) 0%, transparent 44%),
+        radial-gradient(circle at 88% 18%, rgba(251, 207, 232, 0.55) 0%, transparent 44%),
+        radial-gradient(circle at 75% 86%, rgba(167, 243, 208, 0.45) 0%, transparent 48%),
+        radial-gradient(circle at 22% 84%, rgba(186, 230, 253, 0.45) 0%, transparent 46%),
+        repeating-linear-gradient(
+          -28deg,
+          rgba(243, 232, 255, 0.58) 0px,
+          rgba(243, 232, 255, 0.58) 36px,
+          rgba(255, 255, 255, 0.88) 36px,
+          rgba(255, 255, 255, 0.88) 72px,
+          rgba(252, 231, 243, 0.58) 72px,
+          rgba(252, 231, 243, 0.58) 108px,
+          rgba(224, 242, 254, 0.58) 108px,
+          rgba(224, 242, 254, 0.58) 144px,
+          rgba(209, 250, 229, 0.55) 144px,
+          rgba(209, 250, 229, 0.55) 180px
+        );
+      background-attachment: fixed;
+    }
+
+    .font-display {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+
+    /* Subtle twinkling four-point dreamcore stars */
+    @keyframes twinkleSlow {
+      0%, 100% {
+        opacity: 0.35;
+        transform: scale(0.88) rotate(0deg);
+      }
+      50% {
+        opacity: 0.95;
+        transform: scale(1.14) rotate(12deg);
+      }
+    }
+
+    @keyframes floatGentle {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    @keyframes heroKenBurns {
+      0% {
+        transform: scale(1.01) translate(0px, 0px);
+      }
+      50% {
+        transform: scale(1.06) translate(-6px, -4px);
+      }
+      100% {
+        transform: scale(1.01) translate(0px, 0px);
+      }
+    }
+
+    @keyframes marqueeScroll {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .star-twinkle {
+      animation: twinkleSlow 4.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .moon-float {
+      animation: floatGentle 6.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .hero-dynamic-motion {
+      animation: heroKenBurns 18s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 32s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Seamless white blending so 3D figure renders sit naturally on pure #FFFFFF */
+    .figure-blend {
+      mix-blend-mode: multiply;
+      background-color: #ffffff;
+    }
+
+    /* Enlarged figure framing so characters fill their tall single-row cards */
+    .figure-zoom {
+      transform: scale(1.24);
+      transform-origin: center center;
+    }
+    .group:hover .figure-zoom {
+      transform: scale(1.34);
+    }
+
+    /* Custom horizontal scrollbar for single-row figure lineup on compact viewports */
+    .lineup-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+    .lineup-scroll::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 9999px;
+    }
+    .lineup-scroll::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 9999px;
+    }
+    .lineup-scroll::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+
+    /* Iridescent Secret Badge */
+    .secret-holo {
+      background: linear-gradient(120deg, #fef3c7 0%, #fce7f3 35%, #e0e7ff 70%, #f3e8ff 100%);
+    }
+
+    /* POP MART Signature CTA Buttons */
+    .btn-pop-red {
+      background-color: var(--pop-red);
+      color: #ffffff;
+      transition: all 0.18s ease;
+    }
+    .btn-pop-red:hover {
+      background-color: var(--pop-red-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(230, 0, 18, 0.25);
+    }
+
+    .btn-pop-secondary {
+      background-color: #ffffff;
+      color: #111111;
+      border: 2px solid #111111;
+      transition: all 0.18s ease;
+    }
+    .btn-pop-secondary:hover {
+      background-color: #111111;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(17, 17, 17, 0.15);
+    }
+
+    /* Glassmorphic Campaign Cards */
+    .campaign-card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(216, 180, 254, 0.65);
+      box-shadow: 0 14px 38px rgba(168, 85, 247, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col relative selection:bg-pink-200 selection:text-black">
+
+  <!-- Ambient Dreamcore Sparkles, Crescent Moons & Soft Bokeh Glows (Strictly behind UI for 100% legibility) -->
+  <div aria-hidden="true" class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute top-24 left-[6%] w-48 h-48 rounded-full bg-purple-300/30 blur-3xl"></div>
+    <div class="absolute bottom-20 right-[8%] w-56 h-56 rounded-full bg-pink-300/30 blur-3xl"></div>
+    <div class="absolute top-[52%] left-[44%] w-52 h-52 rounded-full bg-sky-200/30 blur-3xl"></div>
+    <div class="absolute bottom-32 left-[18%] w-40 h-40 rounded-full bg-emerald-200/25 blur-3xl"></div>
+
+    <!-- Twinkling 4-point stars -->
+    <svg class="star-twinkle absolute top-24 left-[4%] w-6 h-6 text-purple-300" style="animation-delay: 0s;" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+    </svg>
+    <svg class="star-twinkle absolute top-32 right-[6%] w-7 h-7 text-pink-300" style="animation-delay: 1.2s;" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+    </svg>
+    <svg class="star-twinkle absolute bottom-28 left-[9%] w-5 h-5 text-teal-300" style="animation-delay: 2.1s;" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+    </svg>
+    <svg class="star-twinkle absolute top-[58%] right-[3%] w-5 h-5 text-indigo-300" style="animation-delay: 0.8s;" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+    </svg>
+    <svg class="star-twinkle absolute bottom-14 right-[30%] w-6 h-6 text-purple-300" style="animation-delay: 1.7s;" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+    </svg>
+
+    <!-- Subtle Dreamcore Crescent Moons -->
+    <svg class="moon-float absolute top-44 left-[2%] w-7 h-7 text-purple-300/70" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+    <svg class="moon-float absolute bottom-36 right-[4%] w-6 h-6 text-pink-300/75" style="animation-delay: 2s;" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </div>
+
+  <!-- STICKY GLOBAL CAMPAIGN + POP MART HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200/90">
+    <!-- Top Announcement Strip -->
+    <div class="bg-[#111111] text-white text-[11px] sm:text-xs py-1.5 px-4 text-center font-medium tracking-wide">
+      GLOBAL LAUNCH CAMPAIGN • ZOZI: AFTER DARK SERIES • POP NOW™ DROP LIVE NOW
+    </div>
+
+    <div class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between gap-4">
+      <!-- Left: Signature Red POP MART Wordmark + Campaign Anchor Nav -->
+      <div class="flex items-center gap-5 lg:gap-8">
+        <a href="#hero-launch" class="flex items-center gap-2.5 select-none group" aria-label="ZOZI After Dark Campaign Home">
+          <span class="bg-[#e60012] text-white font-black tracking-tighter text-lg sm:text-xl px-2.5 py-1 rounded-xs uppercase leading-none group-hover:bg-[#c4000f] transition-colors">
+            POP MART
+          </span>
+          <span class="hidden sm:inline-flex items-center bg-purple-100 text-purple-950 text-[10px] font-black tracking-wider px-2.5 py-0.5 rounded-full uppercase">
+            ZOZI • AFTER DARK
+          </span>
+        </a>
+
+        <nav aria-label="Campaign Sections" class="hidden md:flex items-center gap-5 lg:gap-7 text-[12px] lg:text-[13px] font-bold tracking-wide text-[#111111]">
+          <a href="#hero-launch" class="hover:text-[#e60012] transition-colors">01. HERO</a>
+          <a href="#collection-lineup" class="hover:text-[#e60012] transition-colors">02. LINEUP</a>
+          <a href="#print-ooh-campaign" class="hover:text-[#e60012] transition-colors">03. PRINT &amp; OOH</a>
+          <a href="#digital-campaign" class="hover:text-[#e60012] transition-colors">04. DIGITAL</a>
+          <a href="#experimental-popnow" class="text-[#e60012] relative py-5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-[#e60012] after:rounded-t-full">
+            05. POP NOW DROP
+          </a>
+        </nav>
+      </div>
+
+      <!-- Right: Quick Drop Jump & Bag -->
+      <div class="flex items-center gap-3">
+        <a
+          href="#experimental-popnow"
+          class="hidden sm:inline-flex items-center gap-1.5 bg-purple-100 hover:bg-purple-200 text-purple-950 text-xs font-extrabold px-3.5 py-1.5 rounded-full transition-colors"
+        >
+          <span>Shop Blind Box</span>
+          <span class="text-[#e60012]">$14.99</span>
+        </a>
+
+        <button
+          type="button"
+          onclick="openQuickDrawer('bag')"
+          class="relative p-2.5 rounded-full hover:bg-gray-100 text-[#111111] transition-colors flex items-center gap-1.5 cursor-pointer"
+          aria-label="Shopping Bag"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <span id="bagCountBadge" class="bg-[#e60012] text-white text-[11px] font-extrabold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CAMPAIGN FLOW: IN EXACT SEQUENTIAL ORDER -->
+  <main class="relative z-10 flex-1">
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 1: DYNAMIC HERO IMAGE (./campaign_assets/heroimage.jpeg)      -->
+    <!-- ===================================================================== -->
+    <section id="hero-launch" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 pt-6 sm:pt-10 pb-12">
+      <div class="campaign-card rounded-3xl overflow-hidden relative">
+        <!-- Editorial Top Strip -->
+        <div class="flex flex-wrap items-center justify-between gap-2 px-5 sm:px-8 py-3.5 bg-white/90 border-b border-purple-100 text-[11px] font-extrabold uppercase tracking-widest text-[#555555]">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#e60012] animate-pulse"></span>
+            <span class="text-[#111111]">CAMPAIGN LAUNCH 01 // VISUAL OVERTURE</span>
+          </div>
+          <span class="font-mono text-[11px] text-purple-900 bg-purple-100/80 px-2.5 py-0.5 rounded-full">
+            ./campaign_assets/heroimage.jpeg
+          </span>
+        </div>
+
+        <!-- Interactive Parallax + Ken Burns Hero Stage -->
+        <div
+          id="heroInteractiveStage"
+          class="relative w-full min-h-[540px] sm:min-h-[640px] lg:min-h-[720px] bg-[#120c24] overflow-hidden flex items-end"
+        >
+          <!-- Hero Image Linked to ./campaign_assets/heroimage.jpeg -->
+          <img
+            id="hero-main-img"
+            src="./campaign_assets/heroimage.jpeg"
+            alt="ZOZI: After Dark Series Official Campaign Hero Visual"
+            class="hero-dynamic-motion absolute inset-0 w-full h-full object-cover object-center transition-transform duration-300 ease-out"
+            onerror="handleCampaignAssetFallback(this, './campaign_assets/heroimage.jpeg', 'CAMPAIGN HERO KEY VISUAL', '16:9 Key Art • ZOZI: After Dark Series', true)"
+          />
+
+          <!-- Atmospheric Dreamcore Vignette Overlays for High-Contrast Typography -->
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0d081a]/95 via-[#120c24]/45 to-transparent pointer-events-none"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#0d081a]/80 via-transparent to-transparent pointer-events-none"></div>
+
+          <!-- Top Floating Moodboard Pill Badges -->
+          <div class="absolute top-6 left-6 sm:left-10 right-6 sm:right-10 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
+            <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/25 text-white text-[11px] font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full">
+              ✦ MIDNIGHT DREAMCORE EDITION
+            </span>
+            <span class="inline-flex items-center gap-2 bg-black/45 backdrop-blur-md border border-white/20 text-pink-200 text-[11px] font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full">
+              6 REGULARS + 1 ULTRA-RARE SECRET (1:72)
+            </span>
+          </div>
+
+          <!-- Hero Editorial Copy & Primary Launch CTAs -->
+          <div class="relative z-10 w-full p-6 sm:p-10 lg:p-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+            <div class="lg:col-span-8 text-white">
+              <p class="text-xs sm:text-sm font-extrabold uppercase tracking-[0.25em] text-pink-300 mb-3">
+                WHEN THE CITY LIGHTS FADE, THE SOUNDSTAGE WAKES UP
+              </p>
+              <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[0.98] text-white">
+                ZOZI:<br />
+                <span class="bg-gradient-to-r from-purple-200 via-pink-200 to-sky-200 bg-clip-text text-transparent">
+                  AFTER DARK SERIES
+                </span>
+              </h1>
+              <p class="mt-4 sm:mt-5 text-sm sm:text-base lg:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-medium">
+                Step past the velvet curtain into a pastel-lit midnight dreamscape. Seven collectible vinyl musicians—armed with translucent synth guitars, pixel angel wings, and pocket-sized feline companions—turn sleepless hours into an electric after-hours concert.
+              </p>
+
+              <div class="mt-7 flex flex-wrap items-center gap-3.5">
+                <a
+                  href="#experimental-popnow"
+                  class="btn-pop-red px-7 py-4 rounded-xl font-extrabold text-xs sm:text-sm uppercase tracking-wider inline-flex items-center gap-2.5 shadow-lg"
+                >
+                  <span>Unbox on POP NOW • $14.99</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
+                <a
+                  href="#collection-lineup"
+                  class="bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/35 px-6 py-4 rounded-xl font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all"
+                >
+                  Explore Full Lineup ↓
+                </a>
+              </div>
+            </div>
+
+            <!-- Moodboard Sensory Notes Card -->
+            <div class="lg:col-span-4 bg-white/12 backdrop-blur-md border border-white/20 rounded-2xl p-5 text-white">
+              <div class="text-[10px] font-black uppercase tracking-widest text-sky-200 mb-2">
+                CAMPAIGN WORLD-BUILDING // MOODBOARD NOTES
+              </div>
+              <p class="text-xs sm:text-[13px] text-white/90 leading-relaxed">
+                Blending <strong class="text-pink-200">iridescent dreamcore textures</strong> with <strong class="text-purple-200">street-level midnight subculture</strong>, ZOZI: After Dark translates the feeling of 2:00 AM headphones-on daydreaming into tactile designer vinyl.
+              </p>
+              <div class="mt-4 pt-3 border-t border-white/15 flex items-center justify-between text-[11px] font-bold text-purple-200">
+                <span>SET NO. 1555</span>
+                <span>NOVEMBER 2026 RELEASE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANIMATED CAMPAIGN TICKER MARQUEE -->
+    <div class="bg-[#111111] text-white py-3 overflow-hidden border-y border-purple-400/30 select-none">
+      <div class="marquee-track flex items-center gap-8 text-xs font-black uppercase tracking-[0.2em]">
+        <span>✦ ZOZI: AFTER DARK SERIES</span>
+        <span class="text-pink-300">•</span>
+        <span>6 REGULAR DESIGNS + 1 SECRET EDITION (1:72)</span>
+        <span class="text-sky-300">•</span>
+        <span>GLOBAL OUT-OF-HOME &amp; DIGITAL LAUNCH</span>
+        <span class="text-purple-300">•</span>
+        <span>SHAKE TO REVEAL ON POP NOW™</span>
+        <span class="text-emerald-300">•</span>
+        <span>DESIGNER VINYL COLLECTIBLES BY POP MART</span>
+        <span class="text-pink-300">•</span>
+        <span>✦ ZOZI: AFTER DARK SERIES</span>
+        <span class="text-pink-300">•</span>
+        <span>6 REGULAR DESIGNS + 1 SECRET EDITION (1:72)</span>
+        <span class="text-sky-300">•</span>
+        <span>GLOBAL OUT-OF-HOME &amp; DIGITAL LAUNCH</span>
+        <span class="text-purple-300">•</span>
+        <span>SHAKE TO REVEAL ON POP NOW™</span>
+        <span class="text-emerald-300">•</span>
+        <span>DESIGNER VINYL COLLECTIBLES BY POP MART</span>
+        <span class="text-pink-300">•</span>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 2: LINEUP OF THE COLLECTION (./campaign_assets/zozi_lineup.jpeg) -->
+    <!-- ===================================================================== -->
+    <section id="collection-lineup" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20">
+      <!-- Editorial Section Header -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-8">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 bg-purple-100 text-purple-950 text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+            02 // THE COMPLETE ROSTER
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-[#111111] leading-tight">
+            Seven Midnight Personas.<br />One Dreamcore Band.
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-sm sm:text-base text-[#555555] leading-relaxed">
+            Every blind box conceals one member of the <strong class="text-[#111111]">After Dark</strong> ensemble—each sculpted with pearlescent finishes, translucent instruments, and miniature cat or bunny sidekicks. Will you pull a regular stage-mate or unlock the elusive <strong class="text-purple-800">1:72 Secret Edition</strong>?
+          </p>
+        </div>
+      </div>
+
+      <!-- Full-Width Lineup Showcase Card linked to ./campaign_assets/zozi_lineup.jpeg -->
+      <div class="campaign-card rounded-3xl overflow-hidden p-4 sm:p-7">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-gray-100">
+          <div class="flex items-center gap-2.5">
+            <span class="bg-[#111111] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">
+              OFFICIAL SERIES SHEET
+            </span>
+            <span class="text-xs sm:text-sm font-extrabold text-[#111111]">
+              ZOZI: After Dark — Complete 7-Figure Collection Lineup
+            </span>
+          </div>
+          <span class="font-mono text-xs font-bold text-purple-900 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full">
+            ./campaign_assets/zozi_lineup.jpeg
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onclick="openLightbox('./campaign_assets/zozi_lineup.jpeg', 'ZOZI: After Dark — Official Collection Lineup', './campaign_assets/zozi_lineup.jpeg', 'Complete 7-figure collector lineup featuring 6 regular editions (1:6 ratio) and 1 iridescent Secret Edition (1:72 ratio).')"
+          class="group relative w-full bg-[#FFFFFF] rounded-2xl border border-purple-100 overflow-hidden cursor-zoom-in block focus:outline-none focus:ring-2 focus:ring-purple-400"
+        >
+          <img
+            src="./campaign_assets/zozi_lineup.jpeg"
+            alt="ZOZI After Dark Series Complete Collection Lineup"
+            class="w-full h-auto max-h-[720px] object-contain mx-auto transition-transform duration-500 group-hover:scale-[1.01]"
+            onerror="handleCampaignAssetFallback(this, './campaign_assets/zozi_lineup.jpeg', 'COLLECTION LINEUP SHEET', 'Full 7-Character Roster • ZOZI: After Dark Series', false)"
+          />
+          <span class="absolute bottom-4 right-4 bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-3.5 py-1.5 rounded-full opacity-90 group-hover:opacity-100 transition-opacity">
+            Click to Expand Full Resolution ⤢
+          </span>
+        </button>
+
+        <!-- Collector Highlights Strip -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-purple-50/70 border border-purple-200/70 rounded-2xl p-4">
+            <div class="text-[11px] font-black uppercase tracking-wider text-purple-900">Tactile Craftsmanship</div>
+            <p class="text-xs text-[#555555] mt-1 leading-relaxed">
+              Multi-layered matte vinyl paired with glossy pastel translucencies and metallic chrome accents.
+            </p>
+          </div>
+          <div class="bg-pink-50/70 border border-pink-200/70 rounded-2xl p-4">
+            <div class="text-[11px] font-black uppercase tracking-wider text-pink-900">Companion Sculpting</div>
+            <p class="text-xs text-[#555555] mt-1 leading-relaxed">
+              Every character includes a dedicated dreamcore plush bear, kitten, or celestial bunny partner.
+            </p>
+          </div>
+          <div class="secret-holo border border-purple-300/80 rounded-2xl p-4">
+            <div class="text-[11px] font-black uppercase tracking-wider text-purple-950">1:72 Secret Chase</div>
+            <p class="text-xs text-[#333333] mt-1 leading-relaxed">
+              Dual-winged asymmetry—feathered angel wing meets translucent pixel wing—in ultra-limited odds.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 3: PRINT ADS + CORRESPONDING MOCKUPS SIDE BY SIDE             -->
+    <!-- ad1.jpeg + mockup1.jpeg ... up to ad5.jpeg + mockup5.jpeg in ad_posters -->
+    <!-- Fit cleanly inside borders with zero cropping (object-contain, h-auto) -->
+    <!-- ===================================================================== -->
+    <section id="print-ooh-campaign" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20 border-t border-purple-200/60">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-10">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 bg-pink-100 text-pink-950 text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+            03 // PRINT &amp; OUT-OF-HOME PLACEMENTS
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-[#111111] leading-tight">
+            From Studio Poster to<br />Midnight Streetscape.
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-sm sm:text-base text-[#555555] leading-relaxed">
+            Our five-part print series pairs <strong class="text-[#111111]">high-contrast editorial key art</strong> directly beside its <strong class="text-[#111111]">real-world urban OOH installation</strong>—bringing ZOZI’s dreamcore palette into subway concourses, transit shelters, and flagship city billboards.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5 Paired Rows: Print Poster (adX.jpeg) Next To Environmental Mockup (mockupX.jpeg) -->
+      <div id="printMockupPairsContainer" class="space-y-8 sm:space-y-10">
+        <!-- Populated cleanly via semantic HTML + JS for crisp maintainability -->
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 4: DIGITAL ADS (digitalad_1.png up to digitalad_5.png)        -->
+    <!-- Fit cleanly inside borders with zero cropping (object-contain, h-auto) -->
+    <!-- ===================================================================== -->
+    <section id="digital-campaign" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20 border-t border-purple-200/60">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-10">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 bg-sky-100 text-sky-950 text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+            04 // SOCIAL &amp; DIGITAL CAMPAIGN SUITE
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-[#111111] leading-tight">
+            Built to Stop the<br />Late-Night Scroll.
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="text-sm sm:text-base text-[#555555] leading-relaxed">
+            Five native digital placements engineered for mobile-first discovery—teasing mystery silhouettes, drop countdowns, and one-tap blind box reservations across social feeds and digital display networks.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5 Digital Ads Grid (./ad_posters/digitalad_1.png to digitalad_5.png) -->
+      <div id="digitalAdsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 items-start">
+        <!-- Populated cleanly with all 5 digitalad_1.png .. digitalad_5.png assets -->
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 5: EXPERIMENTAL PIECE — INTERACTIVE POP MART POP NOW STORE    -->
+    <!-- (Preserving the full mockup POP MART purchase page & blind box pics)  -->
+    <!-- ===================================================================== -->
+    <section id="experimental-popnow" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 pt-14 sm:pt-20 pb-16 border-t border-purple-200/60">
+      <!-- Experimental Piece Intro Header -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-8">
+        <div class="lg:col-span-8">
+          <div class="inline-flex items-center gap-2 bg-red-100 text-[#e60012] text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+            05 // EXPERIMENTAL INTERACTIVE PIECE • POP NOW™ EXPERIENCE
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-[#111111] leading-tight">
+            Experience the Drop Live.<br />Shake, Inspect &amp; Collect.
+          </h2>
+        </div>
+        <div class="lg:col-span-4">
+          <p class="text-sm text-[#555555] leading-relaxed">
+            Our campaign culminates in a <strong class="text-[#111111]">live interactive POP MART POP NOW™ storefront prototype</strong>—letting collectors inspect both sealed display packaging formats, browse the 7-figure lineup, and reserve blind boxes directly on page.
+          </p>
+        </div>
+      </div>
+
+      <!-- Breadcrumb & Set Identifier -->
+      <nav aria-label="POP NOW Breadcrumb" class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <ol class="flex items-center gap-2 text-xs font-medium text-[#555555]">
+          <li><a href="#hero-launch" class="hover:text-[#111111] transition-colors">Campaign Home</a></li>
+          <li><span>/</span></li>
+          <li><a href="#packaging-showcase" class="hover:text-[#111111] transition-colors">POP NOW</a></li>
+          <li><span>/</span></li>
+          <li class="text-[#111111] font-bold">POPMART - After Dark Series</li>
+        </ol>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="inline-flex items-center gap-1.5 bg-white/95 border border-purple-200/90 text-[#111111] font-semibold px-3 py-1 rounded-full shadow-2xs">
+            <span class="w-2 h-2 rounded-full bg-[#e60012]"></span>
+            POP NOW EXCLUSIVE • SET NO. 1555
+          </span>
+        </div>
+      </nav>
+
+      <!-- MAIN SPLIT LAYOUT: Left/Center White Stage (8 cols) + Right Campaign & CTA Panel (4 cols) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+
+        <!-- LEFT / MAIN VISUAL AREA: Big Blind Box Packaging ON TOP + Single-Row 7-Figure Lineup BELOW -->
+        <div
+          id="lineup-showcase"
+          class="lg:col-span-8 bg-[#FFFFFF] rounded-2xl border border-purple-200/75 shadow-[0_12px_36px_rgba(168,85,247,0.08)] p-5 sm:p-7"
+        >
+          <!-- Top Header Controls: POP NOW Badge, Demo Preview Toggle & Edition Ratios -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-gray-100">
+            <div class="flex items-center gap-2.5">
+              <span class="bg-[#e60012] text-white text-[11px] font-black tracking-wider px-2.5 py-0.5 rounded-md uppercase">
+                POP NOW
+              </span>
+              <h3 class="text-sm sm:text-base font-black text-[#111111] tracking-tight uppercase">
+                AFTER DARK SERIES • PACKAGING &amp; LINEUP
+              </h3>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold">
+              <button
+                type="button"
+                id="demoPreviewBtn"
+                onclick="togglePreviewMode()"
+                aria-pressed="false"
+                class="px-3 py-1 rounded-full bg-purple-100 hover:bg-purple-200 text-purple-950 border border-purple-300 transition-colors cursor-pointer"
+              >
+                Demo Preview (Embedded Art): OFF
+              </button>
+              <span class="px-2.5 py-1 rounded-full bg-gray-100 text-[#111111]">6 Regular (1:6)</span>
+              <span class="px-2.5 py-1 rounded-full secret-holo text-purple-950 border border-purple-200">1 Secret (1:72)</span>
+            </div>
+          </div>
+
+          <!-- 1. LARGE PROMINENT BLIND BOX PACKAGING SHOWCASE (POSITIONED ON TOP OF FIGURES) -->
+          <div id="packaging-showcase" class="mb-7 pb-6 border-b border-gray-100">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div class="flex items-center gap-2">
+                <span class="bg-purple-100 text-purple-950 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full">
+                  PACKAGING
+                </span>
+                <h4 class="text-xs sm:text-sm font-extrabold text-[#111111] uppercase tracking-wide">
+                  BLIND BOX &amp; DISPLAY PACKAGING
+                </h4>
+              </div>
+
+              <!-- Interactive View Switcher Tabs -->
+              <div role="tablist" aria-label="Blind Box Packaging View Mode" class="inline-flex flex-wrap items-center bg-gray-100 p-1 rounded-xl border border-gray-200/80 gap-1">
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-whole"
+                  aria-selected="true"
+                  onclick="setPackagingTab('whole')"
+                  class="pkg-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#111111] text-white transition-all cursor-pointer"
+                >
+                  Whole Display Box
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-single"
+                  aria-selected="false"
+                  onclick="setPackagingTab('single')"
+                  class="pkg-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold text-[#555555] hover:text-[#111111] transition-all cursor-pointer"
+                >
+                  Single Box Design
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-both"
+                  aria-selected="false"
+                  onclick="setPackagingTab('both')"
+                  class="pkg-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold text-[#555555] hover:text-[#111111] transition-all cursor-pointer"
+                >
+                  Side-by-Side Big View
+                </button>
+              </div>
+            </div>
+
+            <!-- Packaging Stage: Whole Display Box (./campaign_assets/blindbox_whole.jpeg) & Single Box (./campaign_assets/blindbox_design.png) -->
+            <div id="packagingGrid" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
+              <!-- Whole Display Box Card: ./campaign_assets/blindbox_whole.jpeg -->
+              <div
+                id="pkg-card-whole"
+                class="md:col-span-8 bg-[#FFFFFF] rounded-2xl border border-purple-200/90 hover:border-purple-400 p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 shadow-2xs"
+              >
+                <button
+                  type="button"
+                  onclick="openPackagingModal('whole')"
+                  class="group w-full h-80 sm:h-96 lg:h-[420px] bg-[#FFFFFF] rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden p-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <img
+                    id="box-img-whole"
+                    src="./campaign_assets/blindbox_whole.jpeg"
+                    alt="After Dark Series whole display box packaging"
+                    class="w-full h-full object-contain figure-blend scale-110 group-hover:scale-115 transition-transform duration-300"
+                    onerror="handleAssetFallback(this, './campaign_assets/blindbox_whole.jpeg', 'WHOLE DISPLAY BOX', true)"
+                  />
+                </button>
+                <div class="mt-3.5 flex flex-wrap items-center justify-between gap-2 px-1">
+                  <span class="text-xs font-mono font-bold text-[#111111]">
+                    ./campaign_assets/blindbox_whole.jpeg
+                  </span>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-950 bg-purple-100 px-2.5 py-0.5 rounded-full">
+                    Whole Display Box • 6 Sealed Boxes
+                  </span>
+                </div>
+              </div>
+
+              <!-- Single Box Design Card: ./campaign_assets/blindbox_design.png -->
+              <div
+                id="pkg-card-single"
+                class="md:col-span-4 bg-[#FFFFFF] rounded-2xl border border-gray-200/90 hover:border-purple-300 p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 shadow-2xs"
+              >
+                <button
+                  type="button"
+                  onclick="openPackagingModal('single')"
+                  class="group w-full h-80 sm:h-96 lg:h-[420px] bg-[#FFFFFF] rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden p-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <img
+                    id="box-img-single"
+                    src="./campaign_assets/blindbox_design.png"
+                    alt="After Dark Series single blind box design packaging"
+                    class="w-full h-full object-contain figure-blend scale-110 group-hover:scale-115 transition-transform duration-300"
+                    onerror="handleAssetFallback(this, './campaign_assets/blindbox_design.png', 'SINGLE BOX DESIGN', false)"
+                  />
+                </button>
+                <div class="mt-3.5 flex flex-wrap items-center justify-between gap-2 px-1">
+                  <span class="text-xs font-mono font-bold text-[#111111] truncate">
+                    ./campaign_assets/blindbox_design.png
+                  </span>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#e60012] bg-red-50 px-2.5 py-0.5 rounded-full">
+                    Single Box • $14.99
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. DIRECTLY BELOW PACKAGING: 7-FIGURE LINEUP IN ONE SINGLE HORIZONTAL ROW -->
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3.5">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
+                CHARACTER LINEUP (7 FIGURES)
+              </span>
+              <span class="text-[11px] font-semibold text-[#555555]">
+                Secret on Far Right
+              </span>
+            </div>
+
+            <div class="overflow-x-auto lineup-scroll pb-2 bg-[#FFFFFF]">
+              <div class="grid grid-cols-7 gap-2.5 sm:gap-3 min-w-[920px] xl:min-w-0 bg-[#FFFFFF]">
+
+                <!-- 1. HAFU -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('hafu')"
+                  aria-label="Inspect figure 1"
+                  class="group bg-[#FFFFFF] rounded-xl border border-gray-100 hover:border-purple-300 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      id="fig-img-hafu"
+                      src="./campaign_assets/hafu.jpeg"
+                      alt="After Dark Series figure 1"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/hafu.jpeg', '01', false)"
+                    />
+                  </div>
+                </button>
+
+                <!-- 2. MIMI -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('mimi')"
+                  aria-label="Inspect figure 2"
+                  class="group bg-[#FFFFFF] rounded-xl border border-gray-100 hover:border-purple-300 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      id="fig-img-mimi"
+                      src="./campaign_assets/mimi.jpeg"
+                      alt="After Dark Series figure 2"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/mimi.jpeg', '02', false)"
+                    />
+                  </div>
+                </button>
+
+                <!-- 3. POPI -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('popi')"
+                  aria-label="Inspect figure 3"
+                  class="group bg-[#FFFFFF] rounded-xl border border-gray-100 hover:border-purple-300 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      id="fig-img-popi"
+                      src="./campaign_assets/popi.jpeg"
+                      alt="After Dark Series figure 3"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/popi.jpeg', '03', false)"
+                    />
+                  </div>
+                </button>
+
+                <!-- 4. MOKI -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('moki')"
+                  aria-label="Inspect figure 4"
+                  class="group bg-[#FFFFFF] rounded-xl border border-gray-100 hover:border-purple-300 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      id="fig-img-moki"
+                      src="./campaign_assets/moki.jpeg"
+                      alt="After Dark Series figure 4"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/moki.jpeg', '04', false)"
+                    />
+                  </div>
+                </button>
+
+                <!-- 5. ZUZU -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('zuzu')"
+                  aria-label="Inspect figure 5"
+                  class="group bg-[#FFFFFF] rounded-xl border border-gray-100 hover:border-purple-300 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      id="fig-img-zuzu"
+                      src="./campaign_assets/zuzu.jpeg"
+                      alt="After Dark Series figure 5"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/zuzu.jpeg', '05', false)"
+                    />
+                  </div>
+                </button>
+
+                <!-- 6. NORI -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('nori')"
+                  aria-label="Inspect figure 6"
+                  class="group bg-[#FFFFFF] rounded-xl border border-gray-100 hover:border-purple-300 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-300"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      id="fig-img-nori"
+                      src="./campaign_assets/nori.jpeg"
+                      alt="After Dark Series figure 6"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/nori.jpeg', '06', false)"
+                    />
+                  </div>
+                </button>
+
+                <!-- 7. AERI (SECRET — POSITIONED LAST ON THE FAR RIGHT) -->
+                <button
+                  type="button"
+                  onclick="openFigureModal('aeri')"
+                  aria-label="Inspect secret figure"
+                  class="group bg-[#FFFFFF] rounded-xl border border-purple-200 hover:border-purple-400 hover:-translate-y-1 transition-all duration-200 p-1 flex items-center justify-center relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-400"
+                >
+                  <div class="relative w-full h-64 sm:h-72 lg:h-80 bg-[#FFFFFF] rounded-lg flex items-center justify-center overflow-hidden">
+                    <span class="absolute top-1.5 right-1.5 z-10 secret-holo text-purple-950 border border-purple-300 text-[9px] font-black px-1.5 py-0.5 rounded-full tracking-tight shadow-2xs">
+                      SECRET
+                    </span>
+                    <img
+                      id="fig-img-aeri"
+                      src="./campaign_assets/aeri.jpeg"
+                      alt="After Dark Series secret figure"
+                      class="w-full h-full object-contain figure-blend figure-zoom transition-transform duration-300"
+                      onerror="handleAssetFallback(this, './campaign_assets/aeri.jpeg', 'SECRET', true)"
+                    />
+                  </div>
+                </button>
+
+              </div>
+            </div>
+
+            <!-- Mobile Scroll Helper -->
+            <p class="xl:hidden text-[11px] text-center text-gray-400 font-medium mt-2">
+              ← Swipe horizontally to view all 7 figures including the Secret figure →
+            </p>
+          </div>
+
+          <!-- Clean Visual Series Footer Strip -->
+          <div class="mt-6 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3 text-xs text-[#555555]">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-purple-100 text-purple-800 text-[11px] font-black">✦</span>
+              <span>Click any packaging visual or figure to inspect in detail</span>
+            </div>
+            <span class="text-[11px] font-semibold text-gray-400">© POP MART INTERNATIONAL GROUP</span>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR: CAMPAIGN NAME, $14.99 PRICE & POP NOW CTAs (4 cols) -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 flex flex-col gap-5">
+          <div class="bg-white/95 backdrop-blur-md rounded-2xl border border-gray-200/95 shadow-sm p-6">
+
+            <!-- Brand Tag -->
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <span class="text-xs font-extrabold uppercase tracking-widest text-[#e60012]">
+                POP MART • POP NOW
+              </span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                IN STOCK
+              </span>
+            </div>
+
+            <!-- Campaign Title -->
+            <h3 class="text-2xl sm:text-[26px] font-black text-[#111111] tracking-tight leading-tight">
+              POPMART - After Dark Series
+            </h3>
+
+            <!-- Rating & Series Meta -->
+            <div class="flex items-center gap-3 mt-2.5 text-xs text-[#555555] font-medium">
+              <div class="flex items-center text-amber-400">
+                <span>★★★★★</span>
+                <span class="text-[#111111] font-bold ml-1.5">4.9</span>
+              </div>
+              <span>•</span>
+              <span>Dreamcore Vinyl Collection</span>
+            </div>
+
+            <!-- Price Block ($14.99) -->
+            <div class="mt-5 pt-5 border-t border-gray-100">
+              <div class="flex items-baseline gap-2.5">
+                <span class="text-3xl font-black text-[#111111] tracking-tight">$14.99</span>
+                <span class="text-xs font-bold text-[#555555] uppercase tracking-wider">/ Single Box</span>
+              </div>
+              <p class="text-xs text-[#555555] mt-1">
+                Whole Set (6 Boxes): <strong class="text-[#111111]">$89.94</strong>
+              </p>
+            </div>
+
+            <!-- Series Specs Pill Row -->
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              <span class="text-[11px] font-semibold bg-gray-100 text-[#111111] px-2.5 py-1 rounded-full">
+                Height: ~3.1–3.9 in
+              </span>
+              <span class="text-[11px] font-semibold bg-gray-100 text-[#111111] px-2.5 py-1 rounded-full">
+                Material: PVC/ABS
+              </span>
+              <span class="text-[11px] font-semibold bg-purple-50 text-purple-950 border border-purple-200 px-2.5 py-1 rounded-full">
+                Edition: 6 Regular + 1 Secret
+              </span>
+            </div>
+
+            <!-- PRIMARY & SECONDARY POP NOW CTAs -->
+            <div class="mt-6 flex flex-col gap-3">
+              <!-- 1. Primary Bold Red CTA -->
+              <button
+                type="button"
+                onclick="openQuickDrawer('shake')"
+                class="btn-pop-red w-full py-3.5 px-5 rounded-xl font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Pick One to Shake</span>
+              </button>
+
+              <!-- 2. Secondary Sleek Black Outlined CTA -->
+              <button
+                type="button"
+                onclick="openQuickDrawer('multi')"
+                class="btn-pop-secondary w-full py-3.5 px-5 rounded-xl font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <span>Buy Multiple Boxes</span>
+              </button>
+            </div>
+
+            <!-- Product Specifications & Probability Notes -->
+            <div class="mt-6 pt-5 border-t border-gray-100 space-y-2.5 text-xs">
+              <div class="font-extrabold text-[#111111] uppercase tracking-wider mb-1">
+                Details &amp; Probability
+              </div>
+              <div class="flex justify-between text-[#555555]">
+                <span>Release Date:</span>
+                <span class="font-semibold text-[#111111]">November 2026</span>
+              </div>
+              <div class="flex justify-between text-[#555555]">
+                <span>Height:</span>
+                <span class="font-semibold text-[#111111]">~3.1–3.9 in (8–10 cm)</span>
+              </div>
+              <div class="flex justify-between text-[#555555]">
+                <span>Material:</span>
+                <span class="font-semibold text-[#111111]">PVC / ABS</span>
+              </div>
+              <div class="flex justify-between text-[#555555]">
+                <span>Regular Ratio:</span>
+                <span class="font-semibold text-[#111111]">1 : 6</span>
+              </div>
+              <div class="flex justify-between text-[#555555]">
+                <span>Secret (Aeri):</span>
+                <span class="font-extrabold text-purple-700">1 : 72</span>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CAMPAIGN EDITORIAL FOOTER -->
+  <footer class="relative z-10 bg-[#111111] text-white border-t border-white/10">
+    <div class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+      <div class="flex items-center gap-3">
+        <span class="bg-[#e60012] text-white font-black tracking-tighter text-sm px-2 py-0.5 rounded-xs uppercase">
+          POP MART
+        </span>
+        <span class="font-semibold text-white">ZOZI: AFTER DARK SERIES — OFFICIAL CAMPAIGN SHOWCASE</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-5 font-medium">
+        <a href="#hero-launch" class="hover:text-white transition-colors">Hero</a>
+        <a href="#collection-lineup" class="hover:text-white transition-colors">Lineup</a>
+        <a href="#print-ooh-campaign" class="hover:text-white transition-colors">Print &amp; Mockups</a>
+        <a href="#digital-campaign" class="hover:text-white transition-colors">Digital Ads</a>
+        <a href="#experimental-popnow" class="hover:text-white transition-colors">POP NOW Drop</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CHARACTER & PACKAGING DETAIL MODAL -->
+  <div id="figureModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/55 backdrop-blur-xs p-4" onclick="closeFigureModal(event)">
+    <div class="bg-[#FFFFFF] rounded-2xl max-w-md w-full p-6 shadow-2xl border border-purple-200 relative" onclick="event.stopPropagation()">
+      <button
+        type="button"
+        onclick="closeFigureModal()"
+        aria-label="Close detail modal"
+        class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-[#111111] font-bold cursor-pointer"
+      >
+        ✕
+      </button>
+
+      <div class="flex items-center gap-2 mb-1">
+        <span id="modalRarityBadge" class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-gray-100 text-[#111111]">
+          REGULAR • 1/6
+        </span>
+      </div>
+      <h3 id="modalCharName" class="text-2xl font-black text-[#111111]">After Dark Series</h3>
+      <p id="modalAssetPath" class="text-[11px] font-mono text-gray-500 mt-0.5">./campaign_assets/hafu.jpeg</p>
+
+      <div class="my-4 bg-[#FFFFFF] rounded-xl border border-gray-100 p-4 flex items-center justify-center h-72">
+        <img
+          id="modalCharImg"
+          src=""
+          alt="Detail preview"
+          class="max-h-full w-auto object-contain figure-blend"
+        />
+      </div>
+
+      <p id="modalCharLore" class="text-xs sm:text-sm text-[#555555] leading-relaxed">
+        Detail description goes here.
+      </p>
+
+      <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-bold text-gray-400 uppercase">Single Blind Box</div>
+          <div class="text-lg font-black text-[#111111]">$14.99</div>
+        </div>
+        <button
+          type="button"
+          onclick="closeFigureModal(); openQuickDrawer('shake');"
+          class="btn-pop-red px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider cursor-pointer"
+        >
+          Pick One to Shake
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN CAMPAIGN ASSET LIGHTBOX (FOR HERO, LINEUP, PRINT ADS, MOCKUPS & DIGITAL ADS) -->
+  <div id="campaignLightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 sm:p-8" onclick="closeLightbox(event)">
+    <div class="bg-[#FFFFFF] rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-2xl border border-purple-200 relative" onclick="event.stopPropagation()">
+      <button
+        type="button"
+        onclick="closeLightbox()"
+        aria-label="Close lightbox"
+        class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-[#111111] font-bold cursor-pointer"
+      >
+        ✕
+      </button>
+
+      <div class="pr-10">
+        <span class="text-[10px] font-black uppercase tracking-widest text-purple-800 bg-purple-100 px-2.5 py-0.5 rounded-full">
+          CAMPAIGN ASSET INSPECTOR
+        </span>
+        <h3 id="lightboxTitle" class="text-xl sm:text-2xl font-black text-[#111111] mt-1.5">Campaign Asset</h3>
+        <p id="lightboxPath" class="text-xs font-mono text-gray-500 mt-0.5">./ad_posters/ad1.jpeg</p>
+      </div>
+
+      <div class="my-4 bg-gray-50 rounded-2xl border border-gray-200/80 p-3 flex items-center justify-center max-h-[68vh] overflow-hidden">
+        <img
+          id="lightboxImg"
+          src=""
+          alt="Full Campaign Asset Preview"
+          class="max-h-[64vh] w-auto object-contain rounded-lg"
+        />
+      </div>
+
+      <p id="lightboxCaption" class="text-xs sm:text-sm text-[#555555] leading-relaxed">
+        Campaign asset description.
+      </p>
+    </div>
+  </div>
+
+  <!-- QUICK-SELECT DRAWER (Clean confirmation drawer for "Pick One to Shake" & "Buy Multiple Boxes") -->
+  <div id="quickDrawer" class="fixed inset-0 z-50 hidden justify-end bg-black/45 backdrop-blur-xs" onclick="closeQuickDrawer(event)">
+    <div class="bg-[#FFFFFF] w-full max-w-md h-full p-6 sm:p-7 flex flex-col justify-between shadow-2xl border-l border-gray-200" onclick="event.stopPropagation()">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#e60012]">POP NOW • SET #1555</span>
+            <h3 id="drawerTitle" class="text-lg font-black text-[#111111]">Pick One to Shake</h3>
+          </div>
+          <button
+            type="button"
+            onclick="closeQuickDrawer()"
+            aria-label="Close drawer"
+            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-[#111111] font-bold cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+
+        <p id="drawerSubtitle" class="text-xs text-[#555555] mt-3 leading-relaxed">
+          Reserve a sealed box from the POPMART - After Dark Series ($14.99 each).
+        </p>
+
+        <!-- Quantity Selector -->
+        <div class="mt-6 bg-purple-50/60 border border-purple-200/80 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-extrabold text-[#111111]">POPMART - After Dark Series</div>
+              <div class="text-[11px] text-[#555555] mt-0.5">$14.99 per box • Non-repeating guarantee up to 6</div>
+            </div>
+            <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-2 py-1">
+              <button type="button" onclick="adjustDrawerQty(-1)" class="w-6 h-6 font-black text-sm hover:bg-gray-100 rounded cursor-pointer">-</button>
+              <span id="drawerQty" class="text-sm font-black w-5 text-center">1</span>
+              <button type="button" onclick="adjustDrawerQty(1)" class="w-6 h-6 font-black text-sm hover:bg-gray-100 rounded cursor-pointer">+</button>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-purple-200/60 flex items-center justify-between text-xs">
+            <span class="font-semibold text-[#555555]">Estimated Total:</span>
+            <span id="drawerTotal" class="text-lg font-black text-[#111111]">$14.99</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-100 flex flex-col gap-2.5">
+        <button
+          type="button"
+          onclick="confirmDrawerAction()"
+          class="btn-pop-red w-full py-3.5 px-5 rounded-xl font-extrabold text-sm tracking-wide cursor-pointer"
+        >
+          Confirm &amp; Add to POP NOW Bag
+        </button>
+        <button
+          type="button"
+          onclick="closeQuickDrawer()"
+          class="w-full py-2.5 px-4 rounded-xl font-bold text-xs text-[#555555] hover:bg-gray-100 transition-colors cursor-pointer"
+        >
+          Continue Viewing Campaign
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING TOAST NOTIFICATION -->
+  <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-[#111111] text-white text-xs font-bold px-5 py-3 rounded-full shadow-xl border border-white/15">
+    Added to bag!
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. PRINT + CORRESPONDING OOH MOCKUPS DATA (./ad_posters/ad1..5 & mockup1..5)
+    // =========================================================================
+    const PRINT_MOCKUP_PAIRS = [
+      {
+        num: '01',
+        title: 'MIDNIGHT SOUNDCHECK',
+        copy: '“Plug into the dream frequency.” Neon-washed pastel chords meet late-night subway commuters—turning the daily platform wait into a backstage pass.',
+        printPath: './ad_posters/ad1.jpeg',
+        mockupPath: './ad_posters/mockup1.jpeg',
+        placementLabel: 'Transit Concourse & Subway Lightbox'
+      },
+      {
+        num: '02',
+        title: 'VELVET SHADOWS & LACE',
+        copy: '“Soft darkness, sharp silhouette.” High-contrast editorial framing spotlights gothic-pastel tailoring against rain-slicked downtown avenues.',
+        printPath: './ad_posters/ad2.jpeg',
+        mockupPath: './ad_posters/mockup2.jpeg',
+        placementLabel: 'Downtown Bus Shelter & Street Kiosk'
+      },
+      {
+        num: '03',
+        title: 'STARLIGHT SYNTHWAVE',
+        copy: '“Every blind box holds a different track.” Iridescent reflections and holographic typography command attention across flagship retail corridors.',
+        printPath: './ad_posters/ad3.jpeg',
+        mockupPath: './ad_posters/mockup3.jpeg',
+        placementLabel: 'Flagship Shopping District Wallscape'
+      },
+      {
+        num: '04',
+        title: '2:00 AM DAYDREAM',
+        copy: '“Unbox what happens after curfew.” Whimsical feline companions and floating cloud motifs soften harsh urban concrete with dreamcore nostalgia.',
+        printPath: './ad_posters/ad4.jpeg',
+        mockupPath: './ad_posters/mockup4.jpeg',
+        placementLabel: 'Urban Wheatpaste & Gallery Poster Wall'
+      },
+      {
+        num: '05',
+        title: 'THE 1:72 SECRET CHASE',
+        copy: '“One angel wing. One pixel wing. One in seventy-two.” The campaign’s collector crescendo teases the ultra-rare Secret Edition across prime city sightlines.',
+        printPath: './ad_posters/ad5.jpeg',
+        mockupPath: './ad_posters/mockup5.jpeg',
+        placementLabel: 'Metropolitan Landmark Billboard Placement'
+      }
+    ];
+
+    // =========================================================================
+    // 2. DIGITAL CAMPAIGN ADS DATA (./ad_posters/digitalad_1..5.png)
+    // =========================================================================
+    const DIGITAL_ADS = [
+      {
+        num: '01',
+        format: 'SOCIAL STORY // 9:16',
+        headline: 'AFTER DARK DROPS TONIGHT',
+        caption: 'High-impact launch teaser engineered for Instagram & TikTok Story countdown stickers.',
+        path: './ad_posters/digitalad_1.png'
+      },
+      {
+        num: '02',
+        format: 'FEED CAROUSEL // 4:5',
+        headline: 'MEET THE MIDNIGHT ENSEMBLE',
+        caption: 'Character spotlight creative highlighting tactile vinyl finishes and companion sculpts.',
+        path: './ad_posters/digitalad_2.png'
+      },
+      {
+        num: '03',
+        format: 'POP NOW TEASER // 4:5',
+        headline: 'SHAKE BEFORE YOU UNBOX',
+        caption: 'Interactive digital ad inviting collectors to test their luck on POP MART POP NOW™.',
+        path: './ad_posters/digitalad_3.png'
+      },
+      {
+        num: '04',
+        format: 'COLLECTOR EDITION // 4:5',
+        headline: 'COMPLETE THE 6-BOX SET',
+        caption: 'Non-repeating full-set showcase built for retargeting toy-art enthusiasts.',
+        path: './ad_posters/digitalad_4.png'
+      },
+      {
+        num: '05',
+        format: 'SECRET ALERT // 9:16',
+        headline: 'CHASE THE 1:72 SECRET',
+        caption: 'Holographic chase visual designed to spark community unboxing shares and live reactions.',
+        path: './ad_posters/digitalad_5.png'
+      }
+    ];
+
+    // Custom visual fallback for Hero, Lineup, Print Ads, Mockups, and Digital Ads if local files aren't loaded yet
+    function createCampaignFallbackDataUrl(filePath, title, subtitle, isDark) {
+      const bg = isDark ? '#1a1033' : '#faf5ff';
+      const cardBg = isDark ? '#26174a' : '#ffffff';
+      const titleColor = isDark ? '#ffffff' : '#111111';
+      const subColor = isDark ? '#f5d0fe' : '#6b21a8';
+      const borderCol = isDark ? '#7e22ce' : '#d8b4fe';
+
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e9d5ff" stop-opacity="0.45"/>
+            <stop offset="50%" stop-color="#fbcfe8" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.45"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="600" fill="${bg}"/>
+        <rect width="800" height="600" fill="url(#g)"/>
+        <rect x="48" y="48" width="704" height="504" rx="28" fill="${cardBg}" stroke="${borderCol}" stroke-width="3"/>
+        <text x="400" y="215" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" font-weight="800" letter-spacing="3" fill="${subColor}">ZOZI: AFTER DARK SERIES</text>
+        <text x="400" y="268" text-anchor="middle" font-family="Inter, sans-serif" font-size="34" font-weight="900" fill="${titleColor}">${title}</text>
+        <text x="400" y="312" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="${subColor}">${subtitle}</text>
+        <rect x="170" y="365" width="460" height="56" rx="14" fill="#111111"/>
+        <text x="400" y="399" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#ffffff">${filePath}</text>
+      </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    function handleCampaignAssetFallback(imgEl, filePath, title, subtitle, isDark) {
+      imgEl.onerror = null;
+      imgEl.classList.remove('hero-dynamic-motion');
+      imgEl.src = createCampaignFallbackDataUrl(filePath, title, subtitle, isDark);
+    }
+
+    function renderPrintAndMockupPairs() {
+      const container = document.getElementById('printMockupPairsContainer');
+      if (!container) return;
+
+      container.innerHTML = PRINT_MOCKUP_PAIRS.map((pair) => `
+        <article class="campaign-card rounded-3xl p-5 sm:p-7">
+          <!-- Pair Header -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+              <span class="bg-[#111111] text-white text-xs font-black px-3 py-1 rounded-lg">
+                SERIES ${pair.num} / 05
+              </span>
+              <h3 class="font-display text-lg sm:text-xl font-black text-[#111111] tracking-tight">
+                ${pair.title}
+              </h3>
+            </div>
+            <span class="text-xs font-bold text-purple-900 bg-purple-100/80 px-3 py-1 rounded-full">
+              ${pair.placementLabel}
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-[#555555] mb-6 max-w-3xl leading-relaxed">
+            ${pair.copy}
+          </p>
+
+          <!-- Side-by-Side Grid: Print Poster (Left) + Corresponding Mockup (Right) — Fit strictly to border without cropping -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start">
+            <!-- Print Ad Version -->
+            <div class="bg-[#FFFFFF] rounded-2xl border border-gray-200/90 hover:border-purple-400 p-4 flex flex-col justify-between transition-all">
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="text-[10px] font-black uppercase tracking-wider bg-gray-100 text-[#111111] px-2.5 py-1 rounded-md">
+                  PRINT POSTER ARTWORK • AD ${pair.num}
+                </span>
+                <span class="text-[11px] font-mono font-bold text-gray-500">${pair.printPath}</span>
+              </div>
+              <button
+                type="button"
+                onclick="openLightbox('${pair.printPath}', 'Print Ad ${pair.num}: ${pair.title}', '${pair.printPath}', '${pair.copy.replace(/'/g, "\\'")}')"
+                class="group relative w-full bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex items-center justify-center cursor-zoom-in p-2"
+              >
+                <img
+                  src="${pair.printPath}"
+                  alt="ZOZI After Dark Print Ad ${pair.num} - ${pair.title}"
+                  class="w-full h-auto max-h-[680px] object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                  onerror="handleCampaignAssetFallback(this, '${pair.printPath}', 'PRINT POSTER ${pair.num}', '${pair.title}', false)"
+                />
+                <span class="absolute bottom-3 right-3 bg-black/75 text-white text-[10px] font-bold px-2.5 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                  Zoom Print ⤢
+                </span>
+              </button>
+            </div>
+
+            <!-- Corresponding Environmental OOH Mockup -->
+            <div class="bg-[#FFFFFF] rounded-2xl border border-purple-200/90 hover:border-purple-500 p-4 flex flex-col justify-between transition-all">
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="text-[10px] font-black uppercase tracking-wider bg-purple-100 text-purple-950 px-2.5 py-1 rounded-md">
+                  IN-SITU OOH MOCKUP • MOCKUP ${pair.num}
+                </span>
+                <span class="text-[11px] font-mono font-bold text-purple-900">${pair.mockupPath}</span>
+              </div>
+              <button
+                type="button"
+                onclick="openLightbox('${pair.mockupPath}', 'OOH Mockup ${pair.num}: ${pair.placementLabel}', '${pair.mockupPath}', '${pair.copy.replace(/'/g, "\\'")}')"
+                class="group relative w-full bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex items-center justify-center cursor-zoom-in p-2"
+              >
+                <img
+                  src="${pair.mockupPath}"
+                  alt="ZOZI After Dark Environmental Mockup ${pair.num} - ${pair.placementLabel}"
+                  class="w-full h-auto max-h-[680px] object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                  onerror="handleCampaignAssetFallback(this, '${pair.mockupPath}', 'OOH MOCKUP ${pair.num}', '${pair.placementLabel}', true)"
+                />
+                <span class="absolute bottom-3 right-3 bg-black/75 text-white text-[10px] font-bold px-2.5 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                  Zoom Mockup ⤢
+                </span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderDigitalAds() {
+      const grid = document.getElementById('digitalAdsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = DIGITAL_ADS.map((ad) => `
+        <article class="campaign-card rounded-2xl p-4 flex flex-col justify-between hover:-translate-y-1 transition-all duration-200">
+          <div>
+            <div class="flex items-center justify-between gap-1.5 mb-2.5">
+              <span class="text-[10px] font-black uppercase tracking-wider bg-sky-100 text-sky-950 px-2 py-0.5 rounded-md">
+                DIGITAL ${ad.num}
+              </span>
+              <span class="text-[10px] font-bold text-gray-500">${ad.format}</span>
+            </div>
+
+            <button
+              type="button"
+              onclick="openLightbox('${ad.path}', 'Digital Ad ${ad.num}: ${ad.headline}', '${ad.path}', '${ad.caption.replace(/'/g, "\\'")}')"
+              class="group relative w-full bg-gray-50 rounded-xl border border-gray-200/80 overflow-hidden flex items-center justify-center cursor-zoom-in p-1.5"
+            >
+              <img
+                src="${ad.path}"
+                alt="ZOZI After Dark Digital Ad ${ad.num} - ${ad.headline}"
+                class="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                onerror="handleCampaignAssetFallback(this, '${ad.path}', 'DIGITAL AD ${ad.num}', '${ad.headline}', true)"
+              />
+            </button>
+
+            <h3 class="text-sm font-black text-[#111111] mt-3.5 tracking-tight">
+              ${ad.headline}
+            </h3>
+            <p class="text-xs text-[#555555] mt-1 leading-relaxed">
+              ${ad.caption}
+            </p>
+          </div>
+
+          <div class="mt-4 pt-2.5 border-t border-gray-100">
+            <span class="text-[10px] font-mono font-bold text-gray-500 block truncate">
+              ${ad.path}
+            </span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Subtle interactive mouse parallax on Hero image
+    function initHeroParallax() {
+      const stage = document.getElementById('heroInteractiveStage');
+      const heroImg = document.getElementById('hero-main-img');
+      if (!stage || !heroImg) return;
+
+      stage.addEventListener('mousemove', (e) => {
+        const rect = stage.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * -14;
+        const y = ((e.clientY - rect.top) / rect.height - 0.5) * -14;
+        heroImg.style.transform = `scale(1.05) translate(${x}px, ${y}px)`;
+      });
+
+      stage.addEventListener('mouseleave', () => {
+        heroImg.style.transform = '';
+      });
+    }
+
+    // =========================================================================
+    // 3. EXPERIMENTAL POP MART STOREFRONT DATA & LOGIC (PRESERVED FROM MOCKUP)
+    // =========================================================================
+    const SESSION_RENDER_URLS = {
+      hafu: 'https://storage.googleapis.com/generative-ai-preview-assets/image_5f83e4.jpg',
+      mimi: 'https://storage.googleapis.com/generative-ai-preview-assets/watermarked_img_2961086681766814068.jpg',
+      popi: 'https://storage.googleapis.com/generative-ai-preview-assets/watermarked_img_1160534073900008224.jpg',
+      moki: 'https://storage.googleapis.com/generative-ai-preview-assets/watermarked_img_3847719152531067082.jpg',
+      zuzu: 'https://storage.googleapis.com/generative-ai-preview-assets/watermarked_img_10453623614254461275.jpg',
+      nori: 'https://storage.googleapis.com/generative-ai-preview-assets/watermarked_img_5593499349225077156.jpg',
+      aeri: 'https://storage.googleapis.com/generative-ai-preview-assets/watermarked_img_8907335893654316399.jpg'
+    };
+
+    const CHARACTERS = {
+      hafu: {
+        name: 'Figure 01 • After Dark Series',
+        rarity: 'REGULAR • 1/6',
+        isSecret: false,
+        img: './campaign_assets/hafu.jpeg',
+        demoImg: SESSION_RENDER_URLS.hafu,
+        badgeLabel: '01',
+        lore: 'Split-tone twin buns, mint-striped socks, and a pastel cat-shaped electric guitar—opening the After Dark midnight set with dreamy synth-punk riffs.'
+      },
+      mimi: {
+        name: 'Figure 02 • After Dark Series',
+        rarity: 'REGULAR • 1/6',
+        isSecret: false,
+        img: './campaign_assets/mimi.jpeg',
+        demoImg: SESSION_RENDER_URLS.mimi,
+        badgeLabel: '02',
+        lore: 'Dressed in pastel-trimmed gothic lace with a lavender plush bear, flashing a peace sign beneath dreamcore neon streetlights.'
+      },
+      popi: {
+        name: 'Figure 03 • After Dark Series',
+        rarity: 'REGULAR • 1/6',
+        isSecret: false,
+        img: './campaign_assets/popi.jpeg',
+        demoImg: SESSION_RENDER_URLS.popi,
+        badgeLabel: '03',
+        lore: 'Styled in an iridescent metallic jacket with a golden pocket bear companion, bringing bright starlight energy to the After Dark lineup.'
+      },
+      moki: {
+        name: 'Figure 04 • After Dark Series',
+        rarity: 'REGULAR • 1/6',
+        isSecret: false,
+        img: './campaign_assets/moki.jpeg',
+        demoImg: SESSION_RENDER_URLS.moki,
+        badgeLabel: '04',
+        lore: 'Sporting pastel rainbow hair clips, iridescent ruffled layers, and a tiny grey kitty friend floating through dreamcore clouds.'
+      },
+      zuzu: {
+        name: 'Figure 05 • After Dark Series',
+        rarity: 'REGULAR • 1/6',
+        isSecret: false,
+        img: './campaign_assets/zuzu.jpeg',
+        demoImg: SESSION_RENDER_URLS.zuzu,
+        badgeLabel: '05',
+        lore: 'Equipped with silver aviator goggles and glowing cyan drumsticks, keeping the midnight tempo alongside a curious grey kitten.'
+      },
+      nori: {
+        name: 'Figure 06 • After Dark Series',
+        rarity: 'REGULAR • 1/6',
+        isSecret: false,
+        img: './campaign_assets/nori.jpeg',
+        demoImg: SESSION_RENDER_URLS.nori,
+        badgeLabel: '06',
+        lore: 'With mint-green hair, studio headphones, and a pastel keytar, composing late-night chillwave melodies alongside a mint kitty.'
+      },
+      aeri: {
+        name: 'Secret Edition • After Dark Series',
+        rarity: 'SECRET EDITION • 1/72',
+        isSecret: true,
+        img: './campaign_assets/aeri.jpeg',
+        demoImg: SESSION_RENDER_URLS.aeri,
+        badgeLabel: 'SECRET',
+        lore: 'The ultra-rare 1:72 Secret Edition! Suspended between an iridescent feathered angel wing and a translucent digital pixel wing while holding a glowing sky-blue bunny.'
+      }
+    };
+
+    const PACKAGING = {
+      single: {
+        name: 'Single Blind Box Design',
+        rarity: 'SINGLE BOX • $14.99',
+        isSecret: false,
+        img: './campaign_assets/blindbox_design.png',
+        badgeLabel: 'SINGLE BOX DESIGN',
+        lore: 'Individual sealed blind box packaging for POPMART - After Dark Series.'
+      },
+      whole: {
+        name: 'Whole Display Box',
+        rarity: 'WHOLE SET • 6 BOXES',
+        isSecret: true,
+        img: './campaign_assets/blindbox_whole.jpeg',
+        badgeLabel: 'WHOLE DISPLAY BOX',
+        lore: 'Complete display carton packaging featuring 6 non-repeating blind boxes from POPMART - After Dark Series.'
+      }
+    };
+
+    let demoPreviewEnabled = false;
+    let activePackagingTab = 'whole';
+
+    function createAssetFallbackDataUrl(filePath, tagLabel, isSecret) {
+      const accent = isSecret ? '#7e22ce' : '#4b5563';
+      const strokeCol = isSecret ? '#d8b4fe' : '#e5e7eb';
+      const softTint = isSecret ? '#f3e8ff' : '#f3f4f6';
+      const isBox = tagLabel.includes('BOX');
+
+      const artwork = isBox
+        ? `<g transform="translate(105, 86)">
+             <polygon points="55,6 110,34 55,62 0,34" fill="#fce7f3" stroke="#d8b4fe" stroke-width="2"/>
+             <polygon points="0,34 55,62 55,138 0,110" fill="#e9d5ff" stroke="#d8b4fe" stroke-width="2"/>
+             <polygon points="55,62 110,34 110,110 55,138" fill="#ddd6fe" stroke="#c4b5fd" stroke-width="2"/>
+             <circle cx="55" cy="86" r="14" fill="#ffffff" opacity="0.85"/>
+           </g>`
+        : `<g transform="translate(100, 68)">
+             <circle cx="60" cy="54" r="34" fill="#fce7f3" stroke="#e9d5ff" stroke-width="2"/>
+             <circle cx="30" cy="30" r="13" fill="#e9d5ff"/>
+             <circle cx="90" cy="30" r="13" fill="#e9d5ff"/>
+             <circle cx="48" cy="56" r="4" fill="#111827"/>
+             <circle cx="72" cy="56" r="4" fill="#111827"/>
+             <path d="M54 67q6 5 12 0" fill="none" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+             <path d="M28 158c0-26 14-48 32-48s32 22 32 48v16H28v-16z" fill="#e9d5ff" stroke="#d8b4fe" stroke-width="2"/>
+           </g>`;
+
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="360" viewBox="0 0 320 360">
+        <rect width="320" height="360" rx="16" fill="#ffffff" stroke="${strokeCol}" stroke-width="2"/>
+        <rect x="64" y="16" width="192" height="22" rx="11" fill="${softTint}"/>
+        <text x="160" y="31" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="800" fill="${accent}">${tagLabel} • LOCAL FILE</text>
+        ${artwork}
+        <rect x="16" y="284" width="288" height="54" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5"/>
+        <text x="160" y="305" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#6b7280">Linked asset path:</text>
+        <text x="160" y="324" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#111827">${filePath}</text>
+      </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    function handleAssetFallback(imgEl, filePath, tagLabel, isSecret) {
+      imgEl.onerror = null;
+      imgEl.classList.remove('figure-zoom', 'group-hover:figure-zoom', 'scale-110', 'group-hover:scale-115');
+      imgEl.src = createAssetFallbackDataUrl(filePath, tagLabel, isSecret);
+    }
+
+    function applySourceModeToAllImages() {
+      const figMap = [
+        { id: 'fig-img-hafu', item: CHARACTERS.hafu },
+        { id: 'fig-img-mimi', item: CHARACTERS.mimi },
+        { id: 'fig-img-popi', item: CHARACTERS.popi },
+        { id: 'fig-img-moki', item: CHARACTERS.moki },
+        { id: 'fig-img-zuzu', item: CHARACTERS.zuzu },
+        { id: 'fig-img-nori', item: CHARACTERS.nori },
+        { id: 'fig-img-aeri', item: CHARACTERS.aeri }
+      ];
+
+      figMap.forEach(({ id, item }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add('figure-zoom');
+        if (demoPreviewEnabled && item.demoImg) {
+          el.onerror = function () {
+            handleAssetFallback(el, item.img, item.badgeLabel, item.isSecret);
+          };
+          el.src = item.demoImg;
+        } else {
+          el.onerror = function () {
+            handleAssetFallback(el, item.img, item.badgeLabel, item.isSecret);
+          };
+          el.src = item.img;
+        }
+      });
+
+      const boxMap = [
+        { id: 'box-img-whole', item: PACKAGING.whole },
+        { id: 'box-img-single', item: PACKAGING.single }
+      ];
+
+      boxMap.forEach(({ id, item }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add('scale-110');
+        el.onerror = function () {
+          handleAssetFallback(el, item.img, item.badgeLabel, item.isSecret);
+        };
+        el.src = item.img;
+      });
+    }
+
+    function togglePreviewMode() {
+      demoPreviewEnabled = !demoPreviewEnabled;
+      const btn = document.getElementById('demoPreviewBtn');
+      btn.setAttribute('aria-pressed', String(demoPreviewEnabled));
+      if (demoPreviewEnabled) {
+        btn.textContent = 'Demo Preview (Embedded Art): ON';
+        showToast('Demo Preview ON — showing embedded session figure renders');
+      } else {
+        btn.textContent = 'Demo Preview (Embedded Art): OFF';
+        showToast('Demo Preview OFF — loading local files from ./campaign_assets/');
+      }
+      applySourceModeToAllImages();
+    }
+
+    function setPackagingTab(mode) {
+      activePackagingTab = mode;
+      const wholeCard = document.getElementById('pkg-card-whole');
+      const singleCard = document.getElementById('pkg-card-single');
+
+      const tabConfigs = {
+        whole: { id: 'tab-whole' },
+        single: { id: 'tab-single' },
+        both: { id: 'tab-both' }
+      };
+
+      Object.keys(tabConfigs).forEach((key) => {
+        const tabEl = document.getElementById(tabConfigs[key].id);
+        const isActive = key === mode;
+        tabEl.setAttribute('aria-selected', String(isActive));
+        if (isActive) {
+          tabEl.className = 'pkg-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#111111] text-white transition-all cursor-pointer';
+        } else {
+          tabEl.className = 'pkg-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold text-[#555555] hover:text-[#111111] transition-all cursor-pointer';
+        }
+      });
+
+      if (mode === 'whole') {
+        wholeCard.classList.remove('hidden', 'md:col-span-6');
+        wholeCard.classList.add('md:col-span-8');
+        singleCard.classList.remove('hidden', 'md:col-span-6');
+        singleCard.classList.add('md:col-span-4');
+      } else if (mode === 'single') {
+        singleCard.classList.remove('hidden', 'md:col-span-6');
+        singleCard.classList.add('md:col-span-8');
+        wholeCard.classList.remove('hidden', 'md:col-span-6');
+        wholeCard.classList.add('md:col-span-4');
+      } else {
+        wholeCard.classList.remove('hidden', 'md:col-span-8', 'md:col-span-4');
+        wholeCard.classList.add('md:col-span-6');
+        singleCard.classList.remove('hidden', 'md:col-span-8', 'md:col-span-4');
+        singleCard.classList.add('md:col-span-6');
+      }
+    }
+
+    let currentDrawerQty = 1;
+    let bagCount = 0;
+
+    function openFigureModal(key) {
+      const char = CHARACTERS[key];
+      if (!char) return;
+
+      const badge = document.getElementById('modalRarityBadge');
+      badge.textContent = char.rarity;
+      badge.className = char.isSecret
+        ? 'text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full secret-holo text-purple-950 border border-purple-300'
+        : 'text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-gray-100 text-[#111111]';
+
+      document.getElementById('modalCharName').textContent = char.name;
+      const activeSrc = (demoPreviewEnabled && char.demoImg) ? char.demoImg : char.img;
+      document.getElementById('modalAssetPath').textContent = char.img;
+      const modalImg = document.getElementById('modalCharImg');
+      modalImg.onerror = function () {
+        handleAssetFallback(modalImg, char.img, char.badgeLabel, char.isSecret);
+      };
+      modalImg.src = activeSrc;
+      document.getElementById('modalCharLore').textContent = char.lore;
+
+      const modal = document.getElementById('figureModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openPackagingModal(boxKey) {
+      const box = PACKAGING[boxKey];
+      if (!box) return;
+
+      const badge = document.getElementById('modalRarityBadge');
+      badge.textContent = box.rarity;
+      badge.className = box.isSecret
+        ? 'text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full secret-holo text-purple-950 border border-purple-300'
+        : 'text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-gray-100 text-[#111111]';
+
+      document.getElementById('modalCharName').textContent = box.name;
+      document.getElementById('modalAssetPath').textContent = box.img;
+      const modalImg = document.getElementById('modalCharImg');
+      modalImg.onerror = function () {
+        handleAssetFallback(modalImg, box.img, box.badgeLabel, box.isSecret);
+      };
+      modalImg.src = box.img;
+      document.getElementById('modalCharLore').textContent = box.lore;
+
+      const modal = document.getElementById('figureModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeFigureModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const modal = document.getElementById('figureModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function openLightbox(src, title, filePath, caption) {
+      document.getElementById('lightboxTitle').textContent = title;
+      document.getElementById('lightboxPath').textContent = filePath;
+      document.getElementById('lightboxCaption').textContent = caption;
+      const img = document.getElementById('lightboxImg');
+      img.onerror = function () {
+        handleCampaignAssetFallback(img, filePath, title, 'ZOZI: After Dark Series', false);
+      };
+      img.src = src;
+
+      const lb = document.getElementById('campaignLightbox');
+      lb.classList.remove('hidden');
+      lb.classList.add('flex');
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const lb = document.getElementById('campaignLightbox');
+      lb.classList.add('hidden');
+      lb.classList.remove('flex');
+    }
+
+    function openQuickDrawer(mode) {
+      const title = document.getElementById('drawerTitle');
+      const subtitle = document.getElementById('drawerSubtitle');
+
+      if (mode === 'multi') {
+        title.textContent = 'Buy Multiple Boxes';
+        subtitle.textContent = 'Select multiple non-repeating sealed boxes from Set #1555 ($14.99 each, or 6 boxes for a full set).';
+        currentDrawerQty = 6;
+      } else if (mode === 'bag') {
+        title.textContent = 'Your POP NOW Bag';
+        subtitle.textContent = 'Review your POPMART - After Dark Series box selection ($14.99 per box).';
+      } else {
+        title.textContent = 'Pick One to Shake';
+        subtitle.textContent = 'Reserve 1 sealed box from POPMART - After Dark Series ($14.99) for instant POP NOW reveal.';
+        currentDrawerQty = 1;
+      }
+
+      updateDrawerDisplay();
+      const drawer = document.getElementById('quickDrawer');
+      drawer.classList.remove('hidden');
+      drawer.classList.add('flex');
+    }
+
+    function closeQuickDrawer(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const drawer = document.getElementById('quickDrawer');
+      drawer.classList.add('hidden');
+      drawer.classList.remove('flex');
+    }
+
+    function adjustDrawerQty(delta) {
+      currentDrawerQty = Math.min(12, Math.max(1, currentDrawerQty + delta));
+      updateDrawerDisplay();
+    }
+
+    function updateDrawerDisplay() {
+      document.getElementById('drawerQty').textContent = currentDrawerQty;
+      document.getElementById('drawerTotal').textContent = '$' + (currentDrawerQty * 14.99).toFixed(2);
+    }
+
+    function confirmDrawerAction() {
+      bagCount += currentDrawerQty;
+      document.getElementById('bagCountBadge').textContent = bagCount;
+      closeQuickDrawer();
+      showToast(`Added ${currentDrawerQty} × After Dark Series Box ($${(currentDrawerQty * 14.99).toFixed(2)}) to Bag`);
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // Initialize sections on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPrintAndMockupPairs();
+      renderDigitalAds();
+      initHeroParallax();
+    });
+  </script>
+</body>
+</html>
