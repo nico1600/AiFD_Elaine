@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZOZI × POP MART | AI Campaign Prompt Builder</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Adobe Typekit for Digibop & Google Fonts: Audiowide, Space Grotesk, JetBrains Mono -->
+  <link rel="stylesheet" href="https://use.typekit.net/omn5lee.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bubblegum: '#FF5C8A',
+            cybermint: '#B4DCFF',
+            lavender: '#E2D4F0',
+            neonpink: '#FF2A85',
+            darkneonpurple: '#6B00D7',
+            neonblue: '#00D4FF',
+            surface: '#1F1B2E',
+            surfaceBorder: '#3B2D5E',
+            deepbase: '#161224'
+          },
+          fontFamily: {
+            audiowide: ['"Audiowide"', 'sans-serif'],
+            space: ['"Space Grotesk"', 'sans-serif'],
+            digibop: ['digibop', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background-color: #161224;
+      color: #E2D4F0;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .audiowide-regular {
+      font-family: "Audiowide", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    .digibop-font {
+      font-family: digibop, sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    /* Brutalist retro-futuristic grid & border accents matching styleguide.html */
+    .brutalist-border {
+      border: 2px solid #3B2D5E;
+      box-shadow: 4px 4px 0px 0px #00D4FF;
+      transition: all 0.2s ease-in-out;
+    }
+    .brutalist-border:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px #FF2A85;
+    }
+
+    .brutalist-card {
+      background: #1F1B2E;
+      border: 2px solid #3B2D5E;
+    }
+
+    .option-pill {
+      transition: all 0.18s ease;
+      border: 2px solid #3B2D5E;
+      background: #161224;
+    }
+    .option-pill:hover {
+      border-color: #00D4FF;
+      box-shadow: 2px 2px 0px 0px #6B00D7;
+    }
+    .option-pill.active {
+      border-color: #FF2A85;
+      background: rgba(107, 0, 215, 0.28);
+      box-shadow: 3px 3px 0px 0px #00D4FF;
+    }
+
+    .neon-btn {
+      background-color: #FF2A85;
+      color: #FFFFFF;
+      border: 2px solid #161224;
+      box-shadow: 4px 4px 0px 0px #00D4FF;
+      transition: all 0.18s ease;
+    }
+    .neon-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px #00D4FF;
+      background-color: #FF5C8A;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #161224;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #FF2A85;
+      border-radius: 4px;
+    }
+
+    /* Scanline overlay for Y2K cyber aesthetic */
+    .scanlines {
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0, 0, 0, 0.25) 50%,
+        rgba(0, 0, 0, 0.25)
+      );
+      background-size: 100% 4px;
+    }
+
+    /* Marquee ticker animation */
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-ticker {
+      display: flex;
+      width: max-content;
+      animation: ticker 25s linear infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans antialiased selection:bg-neonpink selection:text-white">
+
+  <!-- Subtle Scanlines Overlay -->
+  <div class="fixed inset-0 pointer-events-none scanlines z-50 opacity-40"></div>
+
+  <!-- Toast Notification Banner -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 translate-y-2 opacity-0">
+    <div class="brutalist-card rounded-lg px-4 py-3 flex items-center gap-3 audiowide-regular text-xs text-neonblue shadow-[4px_4px_0px_0px_#FF2A85]">
+      <span class="w-2.5 h-2.5 rounded-full bg-neonblue animate-ping"></span>
+      <span id="toast-msg">Copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Top Marquee Ticker -->
+  <div class="bg-neonpink text-white py-2 overflow-hidden border-b-2 border-deepbase audiowide-regular text-xs tracking-wider uppercase select-none">
+    <div class="animate-ticker flex gap-8 items-center whitespace-nowrap">
+      <span>✦ ZOZI × POP MART PROMPT STUDIO</span>
+      <span>•</span>
+      <span>ZOZI</span>
+      <span>•</span>
+      <span>DARK NEON PURPLE #6B00D7</span>
+      <span>•</span>
+      <span>NEON BLUE #00D4FF</span>
+      <span>•</span>
+      <span>DIGIBOP + AUDIOWIDE SPEC</span>
+      <span>•</span>
+      <span>✦ ZOZI × POP MART PROMPT STUDIO</span>
+      <span>•</span>
+      <span>ZOZI</span>
+      <span>•</span>
+      <span>DARK NEON PURPLE #6B00D7</span>
+      <span>•</span>
+      <span>NEON BLUE #00D4FF</span>
+      <span>•</span>
+      <span>DIGIBOP + AUDIOWIDE SPEC</span>
+      <span>•</span>
+    </div>
+  </div>
+
+  <!-- Top Navigation Header with Custom ZOZI Star-CD SVG Logo -->
+  <header class="sticky top-0 z-40 border-b-2 border-surfaceBorder bg-deepbase/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+      <!-- Brand Identity Lockup -->
+      <div class="flex items-center gap-3.5">
+        <div class="flex items-center select-none" aria-label="ZOZI Logo">
+          <svg class="w-12 h-12 sm:w-14 sm:h-14 -mr-1.5 drop-shadow-[0_0_10px_rgba(0,212,255,0.45)]" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="starHolo" x1="15" y1="15" x2="105" y2="105" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00D4FF" />
+                <stop offset="48%" stop-color="#6B00D7" />
+                <stop offset="100%" stop-color="#FF2A85" />
+              </linearGradient>
+              <linearGradient id="cdSheen" x1="30" y1="30" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.75" />
+                <stop offset="50%" stop-color="#00D4FF" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#FF2A85" stop-opacity="0.7" />
+              </linearGradient>
+            </defs>
+            <!-- Pixel Wings Left & Right -->
+            <path d="M12 52H18V56H10V60H16V64H12V68H20V52H12Z" fill="#00D4FF" opacity="0.9" />
+            <path d="M108 52H102V56H110V60H104V64H108V68H100V52H108Z" fill="#FF2A85" opacity="0.9" />
+            <!-- Circuit Traces -->
+            <path d="M36 28L28 20H20" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" />
+            <circle cx="19" cy="20" r="2.5" fill="#00D4FF" />
+            <path d="M84 28L92 20H100" stroke="#FF2A85" stroke-width="2" stroke-linecap="round" />
+            <circle cx="101" cy="20" r="2.5" fill="#FF2A85" />
+            <!-- Main Rounded 5-Point Star -->
+            <path d="M60 14L72.8 40.2L101.6 44.3L80.8 64.5L85.7 93.1L60 79.6L34.3 93.1L39.2 64.5L18.4 44.3L47.2 40.2L60 14Z" fill="url(#starHolo)" stroke="#161224" stroke-width="3.5" stroke-linejoin="round" />
+            <!-- Embedded CD Disc Inside Star -->
+            <circle cx="60" cy="58" r="21" fill="#1F1B2E" stroke="#00D4FF" stroke-width="1.5" />
+            <circle cx="60" cy="58" r="19" fill="url(#cdSheen)" opacity="0.65" />
+            <!-- Concentric CD Grooves -->
+            <path d="M46 50C49 44 55 41 62 42" stroke="#E2D4F0" stroke-width="1.4" stroke-linecap="round" />
+            <path d="M74 66C71 72 65 75 58 74" stroke="#FF5C8A" stroke-width="1.4" stroke-linecap="round" />
+            <!-- Center CD Spindle Hole -->
+            <circle cx="60" cy="58" r="7" fill="#161224" stroke="#FF2A85" stroke-width="2" />
+            <circle cx="60" cy="58" r="3" fill="#FFFFFF" />
+          </svg>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span class="digibop-font text-2xl sm:text-3xl tracking-tight text-white uppercase">
+                ZOZI
+              </span>
+              <span class="bg-neonpink text-white text-[10px] sm:text-xs audiowide-regular tracking-widest px-2 py-0.5 rounded uppercase border border-deepbase">
+                POP MART
+              </span>
+            </div>
+            <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-neonblue">
+              AI Campaign Prompt Studio
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode Tabs: Studio vs Brand-Skills.md Manual -->
+      <div class="flex flex-wrap items-center gap-2 bg-surface p-1.5 rounded-lg border-2 border-surfaceBorder">
+        <button id="tab-studio" onclick="switchView('studio')" class="px-3.5 py-1.5 rounded text-xs audiowide-regular bg-neonpink text-white transition cursor-pointer">
+          Prompt Builder
+        </button>
+        <button id="tab-skills" onclick="switchView('skills')" class="px-3.5 py-1.5 rounded text-xs audiowide-regular text-lavender hover:text-neonblue transition flex items-center gap-1.5 cursor-pointer">
+          <span>brand-skills.md</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-darkneonpurple text-white font-mono">GUIDE</span>
+        </button>
+        <a href="styleguide.html" class="px-3 py-1.5 rounded text-xs font-mono uppercase text-neonblue hover:text-neonpink transition">
+          Style Guide →
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+    <!-- Manifesto Banner -->
+    <section class="brutalist-card rounded-lg p-5 sm:p-6 mb-8 border-l-4 border-l-neonpink flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <span class="text-[11px] font-mono uppercase tracking-widest text-neonblue block">/// ZOZI MANIFESTO</span>
+        <p class="text-sm sm:text-base text-lavender italic font-light">
+          "ZOZI lives somewhere between fantasy and feeling, where peculiar little creatures, dreamy colors, and imperfect wonders find their place. A little out of place. A little out of this world. Welcome to ZOZI."
+        </p>
+      </div>
+      <span class="digibop-font text-2xl sm:text-3xl text-neonpink uppercase shrink-0">ZOZI</span>
+    </section>
+
+    <!-- VIEW 1: PROMPT BUILDER STUDIO -->
+    <div id="view-studio" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT COLUMN: CONFIGURATION CONTROLS (7 cols on lg) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Step 1: Character Roster Selector -->
+        <section class="brutalist-card rounded-lg p-5 sm:p-6">
+          <div class="flex items-center justify-between gap-2 mb-4 border-b border-surfaceBorder pb-3">
+            <div>
+              <span class="text-[11px] font-mono uppercase tracking-widest text-neonblue">01 // Character Cast</span>
+              <h2 class="text-lg audiowide-regular text-white mt-0.5">Select Blindbox Figure or Lineup</h2>
+            </div>
+            <span class="text-xs font-mono text-neonpink bg-deepbase px-2.5 py-1 rounded border border-surfaceBorder">
+              6 Regular + 1 Secret
+            </span>
+          </div>
+
+          <div id="character-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+
+        <!-- Step 2: Shot Type & Camera Angle -->
+        <section class="brutalist-card rounded-lg p-5 sm:p-6 space-y-5">
+          <div class="border-b border-surfaceBorder pb-3">
+            <span class="text-[11px] font-mono uppercase tracking-widest text-neonpink">02 // Visual Direction</span>
+            <h2 class="text-lg audiowide-regular text-white mt-0.5 mb-3">Ad Shot Type & Creative Concept</h2>
+            <div id="shot-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs audiowide-regular uppercase tracking-wider text-neonblue mb-2.5">
+              Camera Angle & Framing
+            </label>
+            <div id="angle-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 3: Ad Format Size Dropdown, Lighting Mood & Brand Lockup -->
+        <section class="brutalist-card rounded-lg p-5 sm:p-6 space-y-5">
+          <div class="border-b border-surfaceBorder pb-3">
+            <span class="text-[11px] font-mono uppercase tracking-widest text-neonblue">03 // Media Specs & Branding</span>
+            <h2 class="text-lg audiowide-regular text-white mt-0.5">Format Ratio, Atmosphere & Copy</h2>
+          </div>
+
+          <!-- Size / Aspect Ratio Dropdown -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="ad-format-select" class="block text-xs audiowide-regular uppercase tracking-wider text-neonblue mb-2">
+                Media Placement & Aspect Ratio
+              </label>
+              <select id="ad-format-select" class="w-full rounded-lg bg-deepbase border-2 border-surfaceBorder px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-neonblue">
+                <!-- Populated via JS -->
+              </select>
+            </div>
+
+            <div>
+              <label for="mood-select" class="block text-xs audiowide-regular uppercase tracking-wider text-neonpink mb-2">
+                Lighting & Color Luster
+              </label>
+              <select id="mood-select" class="w-full rounded-lg bg-deepbase border-2 border-surfaceBorder px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-neonpink">
+                <!-- Populated via JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Logo & Copy Integration Controls -->
+          <div class="pt-4 border-t border-surfaceBorder space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <label class="text-xs audiowide-regular uppercase tracking-wider text-lavender">
+                Brand Lockup & Campaign Tagline
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-neonblue font-medium">
+                <input type="checkbox" id="toggle-branding" checked class="rounded border-surfaceBorder bg-deepbase text-neonpink focus:ring-neonblue" />
+                <span>Embed ZOZI Star-CD Logo & POP MART Badge</span>
+              </label>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="tagline-presets">
+              <button type="button" data-tagline="A LITTLE OUT OF PLACE. A LITTLE OUT OF THIS WORLD." class="tagline-btn option-pill active rounded-lg px-3 py-2 text-left text-xs text-lavender">
+                "A LITTLE OUT OF PLACE. A LITTLE OUT OF THIS WORLD."
+              </button>
+              <button type="button" data-tagline="WELCOME TO ZOZI" class="tagline-btn option-pill rounded-lg px-3 py-2 text-left text-xs text-lavender">
+                "WELCOME TO ZOZI"
+              </button>
+              <button type="button" data-tagline="ZOZI COLLECTIBLES OUT NOW" class="tagline-btn option-pill rounded-lg px-3 py-2 text-left text-xs text-lavender">
+                "ZOZI COLLECTIBLES OUT NOW"
+              </button>
+            </div>
+
+            <input
+              type="text"
+              id="custom-tagline"
+              value="A LITTLE OUT OF PLACE. A LITTLE OUT OF THIS WORLD."
+              placeholder="Or type custom editorial headline..."
+              class="w-full rounded-lg bg-deepbase border-2 border-surfaceBorder px-3.5 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-neonblue"
+            />
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN: LIVE PROMPT TERMINAL & SAVED DECK (5 cols on lg) -->
+      <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+
+        <!-- Live Generated Prompt Output Card -->
+        <section class="brutalist-border rounded-lg p-5 sm:p-6 bg-surface">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-neonblue"></span>
+              <h2 class="text-base audiowide-regular text-white tracking-wide">Generated AI Image Prompt</h2>
+            </div>
+            <span id="ratio-badge" class="font-mono text-xs px-2.5 py-0.5 rounded bg-deepbase text-neonblue border border-surfaceBorder">
+              --ar 9:16
+            </span>
+          </div>
+
+          <!-- Active Selection Summary Pills -->
+          <div id="active-tags" class="flex flex-wrap gap-1.5 mb-3">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Positive Prompt Monospace Box -->
+          <div class="relative rounded-lg bg-deepbase border-2 border-surfaceBorder p-4 mb-3">
+            <div class="flex items-center justify-between text-[11px] font-mono text-gray-400 mb-2">
+              <span>POSITIVE PROMPT (ON-BRAND)</span>
+              <span id="char-count">0 chars</span>
+            </div>
+            <p id="prompt-output" class="font-mono text-xs sm:text-[13px] leading-relaxed text-lavender select-all whitespace-pre-wrap"></p>
+          </div>
+
+          <!-- Negative Guardrail Prompt Box -->
+          <div class="rounded-lg bg-deepbase border border-neonpink/40 p-3.5 mb-4">
+            <div class="flex items-center justify-between text-[11px] font-mono text-neonpink mb-1.5">
+              <span>OFF-BRAND GUARDRAILS (NEGATIVE PROMPT)</span>
+              <button onclick="copyNegativePrompt()" class="underline hover:text-white cursor-pointer">Copy Negative</button>
+            </div>
+            <p id="negative-output" class="font-mono text-[11px] leading-relaxed text-gray-400 select-all"></p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="copyFullPrompt()" class="col-span-2 neon-btn audiowide-regular py-3 px-4 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+              <span>Copy Full Prompt</span>
+            </button>
+
+            <button onclick="randomizePrompt()" class="option-pill rounded-lg py-2.5 px-3 text-xs audiowide-regular text-neonblue flex items-center justify-center gap-1.5 cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              <span>Randomize</span>
+            </button>
+
+            <button onclick="saveToDeck()" class="option-pill rounded-lg py-2.5 px-3 text-xs audiowide-regular text-bubblegum flex items-center justify-center gap-1.5 cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+              <span>Save to Deck</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Saved Prompts Deck -->
+        <section class="brutalist-card rounded-lg p-5">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-sm audiowide-regular text-white">Saved Ad Prompt Deck</h3>
+              <p class="text-[11px] text-gray-400">Build a batch of print & social prompts</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="exportDeckMarkdown()" class="text-xs font-mono px-2.5 py-1 rounded bg-darkneonpurple text-white border border-surfaceBorder hover:border-neonblue transition cursor-pointer">
+                Export .MD
+              </button>
+              <button onclick="clearDeck()" class="text-xs font-mono px-2 py-1 rounded text-gray-400 hover:text-neonpink transition cursor-pointer">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div id="saved-deck-list" class="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- VIEW 2: BRAND-SKILLS.MD MANUAL & VISUAL TOKENS -->
+    <div id="view-skills" class="hidden space-y-6">
+      <div class="brutalist-border rounded-lg p-6 sm:p-8 bg-surface">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b-2 border-surfaceBorder">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-neonblue">Campaign Source of Truth</span>
+            <h1 class="text-2xl sm:text-3xl audiowide-regular text-white mt-1">brand-skills.md — ZOZI (by POP MART)</h1>
+            <p class="text-sm text-lavender mt-1">ZOZI lives somewhere between fantasy and feeling, where peculiar little creatures, dreamy colors, and imperfect wonders find their place.</p>
+          </div>
+          <button onclick="copyBrandSkills()" class="neon-btn audiowide-regular px-4 py-2.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            <span>Copy brand-skills.md</span>
+          </button>
+        </div>
+
+        <!-- Color Swatches Strip -->
+        <div class="py-6 border-b-2 border-surfaceBorder">
+          <h3 class="text-xs audiowide-regular uppercase tracking-wider text-neonblue mb-3">Approved ZOZI Campaign Palette</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div class="rounded-lg p-3 bg-deepbase border-2 border-surfaceBorder">
+              <div class="h-10 rounded mb-2" style="background: #FF5C8A;"></div>
+              <div class="text-xs audiowide-regular text-white">Electric Bubblegum</div>
+              <div class="text-[11px] font-mono text-gray-400">#FF5C8A</div>
+            </div>
+            <div class="rounded-lg p-3 bg-deepbase border-2 border-surfaceBorder">
+              <div class="h-10 rounded mb-2" style="background: #FF2A85;"></div>
+              <div class="text-xs audiowide-regular text-white">Neon Pink</div>
+              <div class="text-[11px] font-mono text-gray-400">#FF2A85</div>
+            </div>
+            <div class="rounded-lg p-3 bg-deepbase border-2 border-surfaceBorder">
+              <div class="h-10 rounded mb-2" style="background: #B4DCFF;"></div>
+              <div class="text-xs audiowide-regular text-white">Cyber Mint</div>
+              <div class="text-[11px] font-mono text-gray-400">#B4DCFF</div>
+            </div>
+            <div class="rounded-lg p-3 bg-deepbase border-2 border-surfaceBorder">
+              <div class="h-10 rounded mb-2" style="background: #E2D4F0;"></div>
+              <div class="text-xs audiowide-regular text-white">Dream Lavender</div>
+              <div class="text-[11px] font-mono text-gray-400">#E2D4F0</div>
+            </div>
+            <div class="rounded-lg p-3 bg-deepbase border-2 border-surfaceBorder">
+              <div class="h-10 rounded mb-2" style="background: #6B00D7;"></div>
+              <div class="text-xs audiowide-regular text-white">Dark Neon Purple</div>
+              <div class="text-[11px] font-mono text-gray-400">#6B00D7</div>
+            </div>
+            <div class="rounded-lg p-3 bg-deepbase border-2 border-surfaceBorder">
+              <div class="h-10 rounded mb-2" style="background: #00D4FF;"></div>
+              <div class="text-xs audiowide-regular text-white">Neon Blue</div>
+              <div class="text-[11px] font-mono text-gray-400">#00D4FF</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Markdown Document Display -->
+        <div class="mt-6">
+          <pre id="brand-skills-raw" class="font-mono text-xs sm:text-sm leading-relaxed text-lavender bg-deepbase p-5 rounded-lg border-2 border-surfaceBorder overflow-x-auto whitespace-pre-wrap"></pre>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t-2 border-surfaceBorder bg-deepbase py-10 px-6 mt-20">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-neonpink rounded flex items-center justify-center audiowide-regular text-white text-sm">ZZ</div>
+        <span class="audiowide-regular text-sm text-white tracking-wider">ZOZI // PROMPT BUILDER</span>
+      </div>
+      <p class="text-xs text-gray-400 font-mono">
+        BUILT WITH TAILWIND CSS, DIGIBOP & AUDIOWIDE • CAMPAIGN: ZOZI
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. BRAND-SKILLS.MD SOURCE DATA
+    // =========================================================================
+    const BRAND_SKILLS_MD = `# BRAND-SKILLS.MD: ZOZI (by POP MART)
+## Campaign Identity & Prompt Generation Engine
+
+### 1. MANIFESTO & IDENTITY (What is ZOZI?)
+ZOZI lives somewhere between fantasy and feeling, where peculiar little creatures, dreamy colors, and imperfect wonders find their place.
+
+A little out of place. A little out of this world.
+
+Welcome to ZOZI.
+
+ZOZI is a limited-edition designer toy collaboration with POP MART exploring the intersection of Japanese cyberpunk subculture, J-rock street idols, and kawaii retro-futurism.
+
+### 2. CHARACTER CAST (7 FIGURES)
+- **01 — Hafu:** Split half-pink/half-black space buns, winking electric guitarist with pastel cat plushie.
+- **02 — Mimi:** Gothic-cyber maid vocalist in black-and-pink harness with purple teddy bear plushie.
+- **03 — Popi:** Iridescent visor DJ/producer in pastel puffer hugging a chubby yellow bear plushie.
+- **04 — Moki:** Blue-haired dual-saber percussionist with forehead goggles and grey cat plushie.
+- **05 — Zuzu:** Pastel synth-pop idol with twin buns, holographic visor, and mint creature plushie.
+- **06 — Nori:** Keytar street rebel in layered Y2K streetwear with headphones and mint creature plushie.
+- **★ SECRET (1/72) — Aeri:** Seraphic Glitch Angel with half-pearl/half-pixel wings, one-eye visor, and glowing bunny plushie.
+
+### 3. VISUAL DNA & STYLE PRINCIPLES
+- **Proportions & Sculpt:** Signature POP MART vinyl collectible chibi proportions—oversized sculpted heads, glossy anime-inspired eyes, tactile matte-and-chrome PVC finishes.
+- **Interactive Companion Plushies:** Every character is paired with a fluffy, non-robotic chubby companion plushie (pastel cat, purple punk teddy, yellow bear, mint creature, glowing bunny) actively held or floating beside them.
+- **Avant-Garde Fashion:** Layered NewJeans "OMG"-inspired Y2K streetwear, asymmetrical harnesses, split-tone punk-maid silhouettes, holographic puffers, Miu Iruma-style forehead goggles, and sleek Gentle Monster-style futuristic visors.
+- **Color Luster:** Dreamy colors, dark neon purple (#6B00D7), neon blue (#00D4FF), neon pink (#FF2A85), electric bubblegum (#FF5C8A), cyber mint (#B4DCFF), and dream lavender (#E2D4F0).
+- **Signature Logomark:** The "ZOZI" wordmark and iridescent star-shaped CD emblem with concentric grooves, flanked by pixel wings and circuit traces, paired with the red-and-white POP MART badge.
+
+### 4. CAMERA & LIGHTING RULES
+- **Photography:** High-end 3D designer toy studio macro & editorial campaign composite with anamorphic bokeh, floating translucent bubbles, and pastel star particles.
+- **Lighting:** Diffused nocturnal street-market rim lighting catching vinyl seams, chrome accessories, and iridescent fabrics.
+
+### 5. ON-BRAND VS. OFF-BRAND GUARDRAILS
+- **ON-BRAND:** Airborne/dynamic floating poses, interactive plushies, musical instruments, half-and-half experimental outfits, dreamy pastel-cyber cityscapes.
+- **OFF-BRAND:** Static stiff standing poses, robotic/mechanical pets, overly dark grimdark tones, hyper-saturated harsh neon, realistic human proportions.`;
+
+    // =========================================================================
+    // 2. COLLECTION ROSTER, SHOT TYPES, ANGLES, FORMATS & MOODS
+    // =========================================================================
+    const CHARACTERS = [
+      {
+        id: 'full-band',
+        name: 'Full Band Lineup (All 7 Figures)',
+        tag: 'HERO CAST',
+        desc: 'Hafu, Mimi, Popi, Moki, Zuzu, Nori + Secret Aeri in formation',
+        promptSnippet: 'all 7 POP MART ZOZI vinyl collectible chibi figures floating dynamically in mid-air together as a cyber-kawaii street band: Hafu (split-hair electric guitarist with pastel cat plushie), Mimi (gothic-cyber maid vocalist with purple teddy bear), Popi (iridescent visor DJ hugging a chubby yellow bear), Moki (blue-haired dual-saber percussionist with grey cat plushie), Zuzu (pastel synth-pop idol with mint creature plushie), Nori (keytar street rebel), and the elevated Secret Aeri (Seraphic Glitch Angel) in the center'
+      },
+      {
+        id: 'hafu',
+        name: 'Hafu — Split-Hair Electric Guitarist',
+        tag: '01 // HAFU',
+        desc: 'Half-pink/half-black buns, winking, pastel cat plushie, electric guitar',
+        promptSnippet: 'Hafu, a cute nonchalant POP MART ZOZI vinyl chibi girl figure with split half-pastel-pink and half-black space buns, winking playfully with glossy anime eyes, wearing a split-tone punk-kawaii pleated skirt and striped thigh-highs, dynamically mid-jump strumming a pastel-blue electric guitar while a chubby winking pink cat plushie clings to the guitar body, perched above a translucent splashing water-wave base'
+      },
+      {
+        id: 'mimi',
+        name: 'Mimi — Gothic-Cyber Maid Vocalist',
+        tag: '02 // MIMI',
+        desc: 'Black/pink frills & harness, holding purple teddy bear plushie, peace sign',
+        promptSnippet: 'Mimi, a cool nonchalant POP MART ZOZI vinyl chibi girl figure with dark twin pigtails, pink-and-white lace maid headpiece, and black-and-pink leather harness dress with chunky platform boots, floating mid-air flashing a peace sign while hugging a chubby stitched purple teddy bear plushie under her arm'
+      },
+      {
+        id: 'popi',
+        name: 'Popi — Iridescent Visor DJ / Producer',
+        tag: '03 // POPI',
+        desc: 'Pastel puffer, Gentle Monster visor, hugging chubby yellow bear plushie',
+        promptSnippet: 'Popi, a stylish POP MART ZOZI vinyl chibi figure wearing sleek iridescent Gentle Monster-style wraparound visor goggles, an oversized pastel pink-and-cyan metallic puffer jacket, and cybernetic leg accents, floating dynamically over a translucent crescent moon and cloud trail while tightly hugging a squishy chubby yellow bear plushie'
+      },
+      {
+        id: 'moki',
+        name: 'Moki — Dual-Saber Percussionist',
+        tag: '04 // MOKI',
+        desc: 'Blue spiky K-pop hair, forehead goggles, glowing drumsticks, grey cat plushie',
+        promptSnippet: 'Moki, an energetic POP MART ZOZI vinyl chibi boy figure with tousled pastel-blue K-pop hair, Miu Iruma-style metallic forehead goggles, wireless earbuds, and layered NewJeans-inspired patterned streetwear vest with chain belt, dynamically lunging over a pastel cloud swirl while wielding glowing cyan-and-pink lightstick drumsticks alongside a floating chubby grey cat plushie'
+      },
+      {
+        id: 'zuzu',
+        name: 'Zuzu — Pastel Synth-Pop Idol',
+        tag: '05 // ZUZU',
+        desc: 'Twin buns, holographic visor, tiered pastel dress, tiny mint creature plushie',
+        promptSnippet: 'Zuzu, a sweet nonchalant POP MART ZOZI vinyl chibi girl figure with lavender-brown twin buns, translucent holographic visor sunglasses, and an iridescent tiered pastel-gradient dress with silver bead necklaces, floating mid-air winking while holding up a tiny chubby mint-blue dragon plushie on her palm'
+      },
+      {
+        id: 'nori',
+        name: 'Nori — Keytar Street Rebel',
+        tag: '06 // NORI',
+        desc: 'Mint spiky hair, headphones, NewJeans layered streetwear, keytar & plushie',
+        promptSnippet: 'Nori, a cool POP MART ZOZI vinyl chibi boy figure with messy sage-mint K-pop hair, chunky metallic neck headphones, and oversized asymmetrical olive-and-cream NewJeans-style layered streetwear, mid-air dynamic kick pose playing a futuristic pastel keytar with a tiny winged mint creature plushie hovering by his shoulder'
+      },
+      {
+        id: 'aeri',
+        name: 'SECRET: Aeri — Seraphic Glitch Angel',
+        tag: '★ 1/72 AERI',
+        desc: 'Half-pearl wing & half Ghost-in-the-Shell pixel code wing, one-eye visor, glowing bunny',
+        promptSnippet: 'the ultra-rare SECRET Aeri POP MART ZOZI vinyl figure: a celestial silver-lavender haired boy floating majestically in mid-air with asymmetrical wings—a luminous pearlescent feathered wing on the left and a fragmented blue-green Ghost in the Shell digital pixel-code wing on the right—wearing a futuristic one-eye holographic visor headset, sleek half-and-half liquid-chrome and translucent cyber-armor outfit, surrounded by floating pastel stars while cradling a softly glowing cyan bunny plushie'
+      }
+    ];
+
+    const SHOT_TYPES = [
+      {
+        id: 'print-ad',
+        name: 'Editorial Print Ad Campaign',
+        desc: 'Full poster composite with clean typographic negative space & brand lockup',
+        snippet: 'high-fashion POP MART editorial print advertisement campaign poster, dynamic multi-layered composition with clean upper and lower negative space for editorial typography'
+      },
+      {
+        id: 'product-hero',
+        name: 'Designer Toy Studio Showcase',
+        desc: 'Crisp collectible vinyl hero shot with tactile PVC sheen & floating stage',
+        snippet: 'ultra-detailed POP MART blindbox collectible vinyl figure hero product showcase, tactile matte PVC and iridescent chrome toy textures, hovering above a sleek pastel-cyber display plinth'
+      },
+      {
+        id: 'mystery-silhouette',
+        name: 'Mystery Silhouette Teaser',
+        desc: 'Dramatic backlit rim-lit silhouette revealing glowing eyes & plushie outline',
+        snippet: 'mysterious "coming soon" blindbox teaser poster featuring the dramatic dark indigo backlit silhouette of the character and their chubby plushie companion, illuminated by crisp iridescent neon-blue and neon-pink rim lighting, glowing glossy anime eyes peeking through shadow, and floating digital star particles'
+      },
+      {
+        id: 'macro-detail',
+        name: 'Macro Face & Texture Close-Up',
+        desc: 'Anamorphic close-up on glossy anime eyes, vinyl seams & chrome accessories',
+        snippet: 'extreme macro close-up portrait focusing on the vinyl figure’s expressive glossy anime eyes, subtle cyber-cheek decals, iridescent visor reflections, and the fuzzy plush texture of their companion toy'
+      },
+      {
+        id: 'street-lifestyle',
+        name: 'Nocturnal Tokyo/NYC Street Scene',
+        desc: 'Floating amidst dreamy night-market neon bokeh & rain reflections',
+        snippet: 'cinematic street-level fantasy scene floating in a dreamy nocturnal Tokyo Shibuya meets NYC alleyway after dark, surrounded by soft pastel neon signage bokeh, iridescent floating soap bubbles, and wet pavement reflections'
+      }
+    ];
+
+    const CAMERA_ANGLES = [
+      {
+        id: 'dutch-airborne',
+        name: 'Dynamic Dutch Tilt / Airborne Low Angle',
+        snippet: 'dynamic low-angle shot with a slight energetic Dutch tilt looking up at the airborne floating pose'
+      },
+      {
+        id: 'eye-level',
+        name: 'Eye-Level Floating Mid-Shot',
+        snippet: 'balanced eye-level mid-shot capturing full-body dynamic mid-air silhouette and outfit details'
+      },
+      {
+        id: 'macro-angle',
+        name: 'Anamorphic 85mm Portrait Angle',
+        snippet: '85mm anamorphic lens perspective with creamy shallow depth-of-field and soft foreground bubble bokeh'
+      },
+      {
+        id: 'wide-panorama',
+        name: 'Wide Stage & Metropolis Panorama',
+        snippet: 'expansive wide-angle stage perspective showcasing floating characters across foreground, midground, and dreamy neon skyline'
+      }
+    ];
+
+    const AD_FORMATS = [
+      {
+        id: 'ig-reel',
+        label: 'Instagram Story / Reel Ad (9:16 Vertical)',
+        ratio: '9:16',
+        directive: 'vertical 9:16 full-bleed mobile campaign layout with vertical framing and breathing room at top and bottom for UI overlays --ar 9:16'
+      },
+      {
+        id: 'subway-billboard',
+        label: 'Subway Terminal Billboard (2:1 Ultra-Wide)',
+        ratio: '2:1',
+        directive: 'panoramic 2:1 horizontal subway terminal light-box billboard composition with sweeping horizontal flow --ar 2:1'
+      },
+      {
+        id: 'magazine-spread',
+        label: 'Magazine Double-Page Spread (4:3 Editorial)',
+        ratio: '4:3',
+        directive: '4:3 luxury streetwear magazine double-page editorial spread layout with balanced studio framing --ar 4:3'
+      },
+      {
+        id: 'nyc-poster',
+        label: 'NYC Street Poster / Transit Ad (3:4 Vertical)',
+        ratio: '3:4',
+        directive: '3:4 vertical NYC transit shelter print poster composition with bold central character hierarchy --ar 3:4'
+      },
+      {
+        id: 'square-social',
+        label: 'Instagram Carousel / Vinyl Box Art (1:1)',
+        ratio: '1:1',
+        directive: '1:1 symmetrical square designer toy packaging and social carousel composition --ar 1:1'
+      }
+    ];
+
+    const LIGHTING_MOODS = [
+      {
+        id: 'candy-night',
+        label: 'Candy-Night Pastel Glow (Signature Balanced)',
+        snippet: 'illuminated by diffused candy-night pastel-cyber lighting in dream lavender, cyber mint, neon pink, dark neon purple, and neon blue, balanced saturation without harsh clipping, soft iridescent vinyl luster'
+      },
+      {
+        id: 'chrome-dream',
+        label: 'Iridescent Chrome & Bubble Dream',
+        snippet: 'bathed in ethereal pearlescent studio rim lights with liquid-chrome specular highlights, floating translucent iridescent soap bubbles, and pastel star sparkles'
+      },
+      {
+        id: 'midnight-afterdark',
+        label: 'Midnight Neon Reflection (Moody Afterdark)',
+        snippet: 'set against a deep dark-neon-purple backdrop with glowing neon-blue and neon-pink street reflections, crisp rim lighting outlining every vinyl seam and metallic accessory'
+      }
+    ];
+
+    const NEGATIVE_PROMPT = 'static stiff standing pose, robotic or mechanical pets, hyper-saturated oversaturated neon burns, dull monochrome gray, scary or angry glare, realistic human anatomy, flat 2D illustration, blurry low-res textures, cluttered messy text, watermark artifacts';
+
+    // =========================================================================
+    // 3. APPLICATION STATE
+    // =========================================================================
+    let state = {
+      characterId: 'full-band',
+      shotId: 'print-ad',
+      angleId: 'dutch-airborne',
+      formatId: 'ig-reel',
+      moodId: 'candy-night',
+      includeBranding: true,
+      tagline: 'A LITTLE OUT OF PLACE. A LITTLE OUT OF THIS WORLD.',
+      savedDeck: [
+        {
+          id: 1,
+          title: 'Full Band Lineup • Editorial Print Ad (4:3)',
+          ratio: '4:3',
+          prompt: 'high-fashion POP MART editorial print advertisement campaign poster, dynamic multi-layered composition with clean upper and lower negative space for editorial typography, featuring all 7 POP MART ZOZI vinyl collectible chibi figures floating dynamically in mid-air together as a cyber-kawaii street band, dynamic low-angle shot with a slight energetic Dutch tilt looking up at the airborne floating pose, illuminated by diffused candy-night pastel-cyber lighting in dream lavender, cyber mint, neon pink, dark neon purple, and neon blue, balanced saturation without harsh clipping, soft iridescent vinyl luster, integrating the crisp red-and-white POP MART badge and the ZOZI logomark where the star-shaped CD with concentric grooves and pixel wings pairs with bold "ZOZI" typography, accompanied by sleek futuristic campaign typography reading "A LITTLE OUT OF PLACE. A LITTLE OUT OF THIS WORLD.", 4:3 luxury streetwear magazine double-page editorial spread layout --ar 4:3'
+        }
+      ]
+    };
+
+    // =========================================================================
+    // 4. INITIALIZATION & RENDERING
+    // =========================================================================
+    function init() {
+      document.getElementById('brand-skills-raw').textContent = BRAND_SKILLS_MD;
+      document.getElementById('negative-output').textContent = NEGATIVE_PROMPT;
+
+      renderCharacterGrid();
+      renderShotGrid();
+      renderAngleGrid();
+      renderSelectOptions();
+      bindEvents();
+      updatePrompt();
+      renderSavedDeck();
+    }
+
+    function renderCharacterGrid() {
+      const container = document.getElementById('character-grid');
+      container.innerHTML = CHARACTERS.map(char => {
+        const isActive = char.id === state.characterId;
+        const isSecret = char.id === 'secret-angel';
+        return `
+          <button
+            type="button"
+            onclick="selectCharacter('${char.id}')"
+            class="option-pill ${isActive ? 'active' : ''} text-left rounded-lg p-3 flex flex-col justify-between gap-1 cursor-pointer"
+          >
+            <div class="flex items-center justify-between gap-2 w-full">
+              <span class="text-xs font-bold ${isSecret ? 'text-neonblue' : 'text-white'} truncate">${char.name}</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded ${isSecret ? 'bg-neonpink text-white' : 'bg-surface text-lavender border border-surfaceBorder'} shrink-0">
+                ${char.tag}
+              </span>
+            </div>
+            <p class="text-[11px] text-gray-400 line-clamp-2 leading-snug">${char.desc}</p>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderShotGrid() {
+      const container = document.getElementById('shot-grid');
+      container.innerHTML = SHOT_TYPES.map(shot => {
+        const isActive = shot.id === state.shotId;
+        return `
+          <button
+            type="button"
+            onclick="selectShot('${shot.id}')"
+            class="option-pill ${isActive ? 'active' : ''} text-left rounded-lg p-3 cursor-pointer"
+          >
+            <div class="text-xs font-bold text-white mb-0.5">${shot.name}</div>
+            <p class="text-[11px] text-gray-400 leading-snug">${shot.desc}</p>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderAngleGrid() {
+      const container = document.getElementById('angle-grid');
+      container.innerHTML = CAMERA_ANGLES.map(angle => {
+        const isActive = angle.id === state.angleId;
+        return `
+          <button
+            type="button"
+            onclick="selectAngle('${angle.id}')"
+            class="option-pill ${isActive ? 'active' : ''} text-left rounded-lg px-3 py-2.5 cursor-pointer"
+          >
+            <div class="text-xs font-semibold text-lavender">${angle.name}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderSelectOptions() {
+      const formatSelect = document.getElementById('ad-format-select');
+      formatSelect.innerHTML = AD_FORMATS.map(f =>
+        `<option value="${f.id}" ${f.id === state.formatId ? 'selected' : ''}>${f.label}</option>`
+      ).join('');
+
+      const moodSelect = document.getElementById('mood-select');
+      moodSelect.innerHTML = LIGHTING_MOODS.map(m =>
+        `<option value="${m.id}" ${m.id === state.moodId ? 'selected' : ''}>${m.label}</option>`
+      ).join('');
+    }
+
+    function bindEvents() {
+      document.getElementById('ad-format-select').addEventListener('change', (e) => {
+        state.formatId = e.target.value;
+        updatePrompt();
+      });
+
+      document.getElementById('mood-select').addEventListener('change', (e) => {
+        state.moodId = e.target.value;
+        updatePrompt();
+      });
+
+      document.getElementById('toggle-branding').addEventListener('change', (e) => {
+        state.includeBranding = e.target.checked;
+        updatePrompt();
+      });
+
+      document.getElementById('custom-tagline').addEventListener('input', (e) => {
+        state.tagline = e.target.value;
+        document.querySelectorAll('.tagline-btn').forEach(btn => btn.classList.remove('active'));
+        updatePrompt();
+      });
+
+      document.querySelectorAll('.tagline-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tagline-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const val = btn.getAttribute('data-tagline');
+          state.tagline = val;
+          document.getElementById('custom-tagline').value = val;
+          updatePrompt();
+        });
+      });
+    }
+
+    // =========================================================================
+    // 5. SELECTION HANDLERS & PROMPT ASSEMBLY
+    // =========================================================================
+    function selectCharacter(id) {
+      state.characterId = id;
+      renderCharacterGrid();
+      updatePrompt();
+    }
+
+    function selectShot(id) {
+      state.shotId = id;
+      renderShotGrid();
+      updatePrompt();
+    }
+
+    function selectAngle(id) {
+      state.angleId = id;
+      renderAngleGrid();
+      updatePrompt();
+    }
+
+    function buildPromptString() {
+      const char = CHARACTERS.find(c => c.id === state.characterId);
+      const shot = SHOT_TYPES.find(s => s.id === state.shotId);
+      const angle = CAMERA_ANGLES.find(a => a.id === state.angleId);
+      const format = AD_FORMATS.find(f => f.id === state.formatId);
+      const mood = LIGHTING_MOODS.find(m => m.id === state.moodId);
+
+      let parts = [
+        shot.snippet,
+        `featuring ${char.promptSnippet}`,
+        angle.snippet,
+        mood.snippet,
+        'aesthetic inspired by ZOZI worldbuilding, dreamy colors, and Y2K cyber-street fashion, tactile vinyl collectible sheen, floating translucent bubbles and pastel star accents, 8k octane render photography'
+      ];
+
+      if (state.includeBranding) {
+        const cleanTagline = state.tagline.trim();
+        let brandClause = 'integrating the crisp red-and-white POP MART brand badge and the ZOZI logomark (iridescent star-shaped CD with concentric grooves, pixel wings, and bold "ZOZI" typography)';
+        if (cleanTagline) {
+          brandClause += `, accompanied by sleek futuristic campaign typography reading "${cleanTagline}"`;
+        }
+        parts.push(brandClause);
+      }
+
+      parts.push(format.directive);
+      return parts.join(', ');
+    }
+
+    function updatePrompt() {
+      const promptText = buildPromptString();
+      const char = CHARACTERS.find(c => c.id === state.characterId);
+      const shot = SHOT_TYPES.find(s => s.id === state.shotId);
+      const format = AD_FORMATS.find(f => f.id === state.formatId);
+
+      document.getElementById('prompt-output').textContent = promptText;
+      document.getElementById('char-count').textContent = `${promptText.length} chars`;
+      document.getElementById('ratio-badge').textContent = `--ar ${format.ratio}`;
+
+      document.getElementById('active-tags').innerHTML = `
+        <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-deepbase text-neonblue border border-surfaceBorder">${char.name}</span>
+        <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-deepbase text-neonpink border border-surfaceBorder">${shot.name}</span>
+        <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-deepbase text-lavender border border-surfaceBorder">${format.ratio}</span>
+      `;
+    }
+
+    function randomizePrompt() {
+      state.characterId = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)].id;
+      state.shotId = SHOT_TYPES[Math.floor(Math.random() * SHOT_TYPES.length)].id;
+      state.angleId = CAMERA_ANGLES[Math.floor(Math.random() * CAMERA_ANGLES.length)].id;
+      state.formatId = AD_FORMATS[Math.floor(Math.random() * AD_FORMATS.length)].id;
+      state.moodId = LIGHTING_MOODS[Math.floor(Math.random() * LIGHTING_MOODS.length)].id;
+
+      renderCharacterGrid();
+      renderShotGrid();
+      renderAngleGrid();
+      renderSelectOptions();
+      updatePrompt();
+      showToast('Generated fresh ZOZI combination!');
+    }
+
+    // =========================================================================
+    // 6. SAVED PROMPT DECK & EXPORT
+    // =========================================================================
+    function saveToDeck() {
+      const char = CHARACTERS.find(c => c.id === state.characterId);
+      const shot = SHOT_TYPES.find(s => s.id === state.shotId);
+      const format = AD_FORMATS.find(f => f.id === state.formatId);
+      const promptText = buildPromptString();
+
+      state.savedDeck.unshift({
+        id: Date.now(),
+        title: `${char.name} • ${shot.name} (${format.ratio})`,
+        ratio: format.ratio,
+        prompt: promptText
+      });
+
+      renderSavedDeck();
+      showToast('Saved prompt to your ZOZI Campaign Deck!');
+    }
+
+    function renderSavedDeck() {
+      const container = document.getElementById('saved-deck-list');
+      if (state.savedDeck.length === 0) {
+        container.innerHTML = `<div class="text-xs text-gray-500 text-center py-6 border border-dashed border-surfaceBorder rounded-lg">No saved prompts yet. Click "Save to Deck" to collect campaign variants.</div>`;
+        return;
+      }
+
+      container.innerHTML = state.savedDeck.map((item, idx) => `
+        <div class="rounded-lg bg-deepbase border border-surfaceBorder p-3 hover:border-neonblue transition">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <span class="text-xs font-bold text-neonblue truncate">#${state.savedDeck.length - idx} ${item.title}</span>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="copySavedItem(${item.id})" class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-white border border-surfaceBorder hover:border-neonblue cursor-pointer">Copy</button>
+              <button onclick="deleteSavedItem(${item.id})" class="text-[11px] font-mono px-1.5 py-0.5 rounded text-gray-400 hover:text-neonpink cursor-pointer">×</button>
+            </div>
+          </div>
+          <p class="font-mono text-[11px] text-gray-400 line-clamp-2">${item.prompt}</p>
+        </div>
+      `).join('');
+    }
+
+    function copySavedItem(id) {
+      const item = state.savedDeck.find(i => i.id === id);
+      if (item) {
+        copyTextToClipboard(item.prompt, 'Saved prompt copied!');
+      }
+    }
+
+    function deleteSavedItem(id) {
+      state.savedDeck = state.savedDeck.filter(i => i.id !== id);
+      renderSavedDeck();
+    }
+
+    function clearDeck() {
+      state.savedDeck = [];
+      renderSavedDeck();
+      showToast('Prompt deck cleared.');
+    }
+
+    function exportDeckMarkdown() {
+      if (state.savedDeck.length === 0) {
+        showToast('Save at least one prompt before exporting!');
+        return;
+      }
+      let mdContent = `# ZOZI (by POP MART) — Campaign Ad Prompts
+
+`;
+      state.savedDeck.forEach((item, index) => {
+        mdContent += `## ${index + 1}. ${item.title}
+\`\`\`text
+${item.prompt}
+\`\`\`
+
+`;
+      });
+      mdContent += `## Negative Prompt Guardrails
+\`\`\`text
+${NEGATIVE_PROMPT}
+\`\`\`
+`;
+
+      const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'zozi-popmart-ad-prompts.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Exported zozi-popmart-ad-prompts.md!');
+    }
+
+    // =========================================================================
+    // 7. VIEW SWITCHING & CLIPBOARD HELPERS
+    // =========================================================================
+    function switchView(view) {
+      const studioEl = document.getElementById('view-studio');
+      const skillsEl = document.getElementById('view-skills');
+      const tabStudio = document.getElementById('tab-studio');
+      const tabSkills = document.getElementById('tab-skills');
+
+      if (view === 'studio') {
+        studioEl.classList.remove('hidden');
+        skillsEl.classList.add('hidden');
+        tabStudio.className = 'px-3.5 py-1.5 rounded text-xs audiowide-regular bg-neonpink text-white transition cursor-pointer';
+        tabSkills.className = 'px-3.5 py-1.5 rounded text-xs audiowide-regular text-lavender hover:text-neonblue transition flex items-center gap-1.5 cursor-pointer';
+      } else {
+        studioEl.classList.add('hidden');
+        skillsEl.classList.remove('hidden');
+        tabSkills.className = 'px-3.5 py-1.5 rounded text-xs audiowide-regular bg-neonpink text-white transition flex items-center gap-1.5 cursor-pointer';
+        tabStudio.className = 'px-3.5 py-1.5 rounded text-xs audiowide-regular text-lavender hover:text-neonblue transition cursor-pointer';
+      }
+    }
+
+    function copyFullPrompt() {
+      const text = document.getElementById('prompt-output').textContent;
+      copyTextToClipboard(text, 'Full on-brand prompt copied!');
+    }
+
+    function copyNegativePrompt() {
+      copyTextToClipboard(NEGATIVE_PROMPT, 'Off-brand negative guardrails copied!');
+    }
+
+    function copyBrandSkills() {
+      copyTextToClipboard(BRAND_SKILLS_MD, 'brand-skills.md copied to clipboard!');
+    }
+
+    function copyTextToClipboard(text, message) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(message);
+      } catch (err) {
+        showToast('Unable to copy—please select text manually.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.classList.add('hidden'), 300);
+      }, 2400);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
