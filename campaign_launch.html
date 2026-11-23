@@ -62,7 +62,6 @@
 
     /* ===================================================================== */
     /* FUN MULTI-DIRECTIONAL SLIDESHOW & SCROLL ENTRANCE CHOREOGRAPHY        */
-    /* (Left, Right, Bottom-Up, Drop-Down, Pop-Zoom, Diagonal & Flip-Tilt)   */
     /* ===================================================================== */
     .reveal-on-scroll {
       opacity: 0;
@@ -109,15 +108,73 @@
         transition: none !important;
       }
       .hero-dynamic-motion,
+      .hero-shimmer-sweep,
       .marquee-track,
+      .infinite-ads-track,
       .star-twinkle,
       .moon-float,
-      .box-shake-anim {
+      .box-shake-hover {
         animation: none !important;
       }
     }
 
-    /* Fun Blind-Box Shake Animation when hovering or clicking Shake */
+    /* ===================================================================== */
+    /* CONTINUOUS SEAMLESS INFINITE PRINT + MOCKUP CAROUSEL (NO BORDERS)     */
+    /* ===================================================================== */
+    @keyframes infiniteAdsMarquee {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+
+    .infinite-ads-viewport {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .infinite-ads-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      gap: 1.5rem;
+      padding: 0.75rem 0;
+      animation: infiniteAdsMarquee 42s linear infinite;
+      will-change: transform;
+    }
+
+    .infinite-ads-viewport:hover .infinite-ads-track {
+      animation-play-state: paused;
+    }
+
+    .infinite-ad-img {
+      height: 360px;
+      width: auto;
+      max-width: none;
+      display: block;
+      object-fit: contain;
+      cursor: zoom-in;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (min-width: 640px) {
+      .infinite-ad-img {
+        height: 460px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .infinite-ad-img {
+        height: 540px;
+      }
+    }
+    .infinite-ad-img:hover {
+      transform: scale(1.03);
+    }
+
+    /* Fun Blind-Box Shake Animation when hovering */
     @keyframes blindBoxShake {
       0%, 100% { transform: rotate(0deg) scale(1.06); }
       20% { transform: rotate(-4deg) scale(1.08); }
@@ -150,15 +207,25 @@
       }
     }
 
+    /* Dynamic Hero Image Breathing + Gentle Pan & Light Sweep */
     @keyframes heroKenBurns {
       0% {
-        transform: scale(1.01) translate(0px, 0px);
+        transform: scale(1.0) translate(0px, 0px);
       }
       50% {
-        transform: scale(1.06) translate(-6px, -4px);
+        transform: scale(1.05) translate(-6px, -4px);
       }
       100% {
-        transform: scale(1.01) translate(0px, 0px);
+        transform: scale(1.0) translate(0px, 0px);
+      }
+    }
+
+    @keyframes heroShimmerSweep {
+      0% {
+        transform: translateX(-120%) skewX(-20deg);
+      }
+      55%, 100% {
+        transform: translateX(220%) skewX(-20deg);
       }
     }
 
@@ -182,8 +249,13 @@
     }
 
     .hero-dynamic-motion {
-      animation: heroKenBurns 18s ease-in-out infinite;
+      animation: heroKenBurns 14s ease-in-out infinite;
       will-change: transform;
+    }
+
+    .hero-shimmer-sweep {
+      animation: heroShimmerSweep 7.5s ease-in-out infinite;
+      pointer-events: none;
     }
 
     .marquee-track {
@@ -263,6 +335,29 @@
       border: 1px solid rgba(216, 180, 254, 0.65);
       box-shadow: 0 14px 38px rgba(168, 85, 247, 0.08);
     }
+
+    /* Sleek Smartphone Mockup Chassis for Digital Ads */
+    .phone-chassis {
+      background: linear-gradient(145deg, #27272a 0%, #09090b 100%);
+      border-radius: 2.35rem;
+      padding: 10px;
+      box-shadow:
+        0 20px 38px -12px rgba(17, 17, 17, 0.28),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
+    }
+    .phone-card-group:hover .phone-chassis {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow:
+        0 26px 46px -12px rgba(168, 85, 247, 0.26),
+        0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+    }
+    .phone-screen {
+      background: #111111;
+      border-radius: 1.85rem;
+      overflow: hidden;
+      position: relative;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col relative selection:bg-pink-200 selection:text-black">
@@ -309,8 +404,8 @@
   <nav aria-label="Slide Deck Navigator" class="hidden xl:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col gap-3 bg-white/90 backdrop-blur-md border border-purple-200/80 px-2.5 py-3.5 rounded-full shadow-lg">
     <a href="#hero-launch" title="Slide 01: Hero" class="slide-dot w-2.5 h-2.5 rounded-full bg-[#e60012] transition-transform hover:scale-150"></a>
     <a href="#collection-lineup" title="Slide 02: Lineup" class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#e60012] transition-transform hover:scale-150"></a>
-    <a href="#print-ooh-campaign" title="Slide 03: Print & OOH" class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#e60012] transition-transform hover:scale-150"></a>
-    <a href="#digital-campaign" title="Slide 04: Digital Ads" class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#e60012] transition-transform hover:scale-150"></a>
+    <a href="#print-ooh-campaign" title="Slide 03: Print & OOH Carousel" class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#e60012] transition-transform hover:scale-150"></a>
+    <a href="#digital-campaign" title="Slide 04: Mobile Phone Mockups" class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#e60012] transition-transform hover:scale-150"></a>
     <a href="#experimental-popnow" title="Slide 05: POP NOW Drop" class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#e60012] transition-transform hover:scale-150"></a>
   </nav>
 
@@ -337,7 +432,7 @@
           <a href="#hero-launch" class="hover:text-[#e60012] transition-colors">01. HERO</a>
           <a href="#collection-lineup" class="hover:text-[#e60012] transition-colors">02. LINEUP</a>
           <a href="#print-ooh-campaign" class="hover:text-[#e60012] transition-colors">03. PRINT &amp; OOH</a>
-          <a href="#digital-campaign" class="hover:text-[#e60012] transition-colors">04. DIGITAL</a>
+          <a href="#digital-campaign" class="hover:text-[#e60012] transition-colors">04. PHONE ADS</a>
           <a href="#experimental-popnow" class="text-[#e60012] relative py-5 after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-[#e60012] after:rounded-t-full">
             05. POP NOW DROP
           </a>
@@ -375,99 +470,31 @@
   <main class="relative z-10 flex-1">
 
     <!-- ===================================================================== -->
-    <!-- SECTION 1: DYNAMIC HERO IMAGE (./campaign_assets/heroimage.jpeg)      -->
+    <!-- SECTION 1: FULL-BLEED EDGE-TO-EDGE HERO IMAGE (heroimage.jpeg)        -->
+    <!-- Occupies 100% horizontal viewport width on both mobile & desktop      -->
     <!-- ===================================================================== -->
-    <section id="hero-launch" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 pt-6 sm:pt-10 pb-12">
-      <div class="campaign-card rounded-3xl overflow-hidden relative reveal-on-scroll pop-zoom">
-        <!-- Editorial Top Strip -->
-        <div class="flex flex-wrap items-center justify-between gap-2 px-5 sm:px-8 py-3.5 bg-white/95 border-b border-gray-200/80 text-[11px] font-extrabold uppercase tracking-widest text-[#555555]">
-          <div class="flex items-center gap-2.5">
-            <span class="bg-[#e60012] text-white px-2 py-0.5 rounded-xs text-[10px] font-black tracking-tight">SLIDE 01</span>
-            <span class="text-[#111111]">CAMPAIGN LAUNCH // VISUAL INTRODUCTION</span>
-          </div>
-          <span class="font-mono text-[11px] text-purple-900 bg-purple-100/80 px-2.5 py-0.5 rounded-full">
-            ./campaign_assets/heroimage.jpeg
-          </span>
-        </div>
+    <section id="hero-launch" class="w-full relative overflow-hidden">
+      <div
+        id="heroInteractiveStage"
+        class="relative w-full bg-[#120c24] overflow-hidden cursor-zoom-in"
+        onclick="openLightbox('./campaign_assets/heroimage.jpeg', 'ZOZI: After Dark — Official Campaign Key Visual', './campaign_assets/heroimage.jpeg', 'Dynamic full-bleed campaign visual introduction for ZOZI: After Dark Series.')"
+      >
+        <img
+          id="hero-main-img"
+          src="./campaign_assets/heroimage.jpeg"
+          alt="ZOZI: After Dark Series Official Campaign Hero Visual"
+          class="hero-dynamic-motion w-full h-[54vh] sm:h-[70vh] lg:h-[84vh] max-h-[920px] object-cover object-center block transition-transform duration-300 ease-out"
+          onerror="handleCampaignAssetFallback(this, './campaign_assets/heroimage.jpeg', 'CAMPAIGN HERO KEY VISUAL', 'Full-Width Key Art • ZOZI: After Dark Series', true)"
+        />
 
-        <!-- Interactive Parallax + Ken Burns Hero Stage -->
-        <div
-          id="heroInteractiveStage"
-          class="relative w-full min-h-[540px] sm:min-h-[640px] lg:min-h-[720px] bg-[#120c24] overflow-hidden flex items-end"
-        >
-          <!-- Hero Image Linked to ./campaign_assets/heroimage.jpeg -->
-          <img
-            id="hero-main-img"
-            src="./campaign_assets/heroimage.jpeg"
-            alt="ZOZI: After Dark Series Official Campaign Hero Visual"
-            class="hero-dynamic-motion absolute inset-0 w-full h-full object-cover object-center transition-transform duration-300 ease-out"
-            onerror="handleCampaignAssetFallback(this, './campaign_assets/heroimage.jpeg', 'CAMPAIGN HERO KEY VISUAL', '16:9 Key Art • ZOZI: After Dark Series', true)"
-          />
-
-          <!-- Atmospheric Dreamcore Vignette Overlays for High-Contrast Typography -->
-          <div class="absolute inset-0 bg-gradient-to-t from-[#0d081a]/95 via-[#120c24]/45 to-transparent pointer-events-none"></div>
-          <div class="absolute inset-0 bg-gradient-to-r from-[#0d081a]/80 via-transparent to-transparent pointer-events-none"></div>
-
-          <!-- Top Floating Moodboard Pill Badges -->
-          <div class="absolute top-6 left-6 sm:left-10 right-6 sm:right-10 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
-            <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/25 text-white text-[11px] font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full">
-              ✦ MIDNIGHT DREAMCORE EDITION
-            </span>
-            <span class="inline-flex items-center gap-2 bg-black/45 backdrop-blur-md border border-white/20 text-pink-200 text-[11px] font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full">
-              6 REGULARS + 1 ULTRA-RARE SECRET (1:72)
-            </span>
-          </div>
-
-          <!-- Hero Editorial Copy & Primary Launch CTAs -->
-          <div class="relative z-10 w-full p-6 sm:p-10 lg:p-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-            <div class="lg:col-span-8 text-white">
-              <p class="text-xs sm:text-sm font-extrabold uppercase tracking-[0.25em] text-pink-300 mb-3">
-                WHEN THE CITY LIGHTS FADE, THE SOUNDSTAGE WAKES UP
-              </p>
-              <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[0.98] text-white">
-                ZOZI:<br />
-                <span class="bg-gradient-to-r from-purple-200 via-pink-200 to-sky-200 bg-clip-text text-transparent">
-                  AFTER DARK SERIES
-                </span>
-              </h1>
-              <p class="mt-4 sm:mt-5 text-sm sm:text-base lg:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-medium">
-                Step past the velvet curtain into a pastel-lit midnight dreamscape. Seven collectible vinyl musicians—armed with translucent synth guitars, pixel angel wings, and pocket-sized feline companions—turn sleepless hours into an electric after-hours concert.
-              </p>
-
-              <div class="mt-7 flex flex-wrap items-center gap-3.5">
-                <a
-                  href="#experimental-popnow"
-                  class="btn-pop-red px-7 py-4 rounded-xl font-extrabold text-xs sm:text-sm uppercase tracking-wider inline-flex items-center gap-2.5 shadow-lg"
-                >
-                  <span>Unbox on POP NOW • $14.99</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </a>
-                <a
-                  href="#collection-lineup"
-                  class="bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/35 px-6 py-4 rounded-xl font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all"
-                >
-                  Explore Full Lineup ↓
-                </a>
-              </div>
-            </div>
-
-            <!-- Moodboard Sensory Notes Card -->
-            <div class="lg:col-span-4 bg-white/12 backdrop-blur-md border border-white/20 rounded-2xl p-5 text-white">
-              <div class="text-[10px] font-black uppercase tracking-widest text-sky-200 mb-2">
-                CAMPAIGN WORLD-BUILDING // MOODBOARD NOTES
-              </div>
-              <p class="text-xs sm:text-[13px] text-white/90 leading-relaxed">
-                Blending <strong class="text-pink-200">iridescent dreamcore textures</strong> with <strong class="text-purple-200">street-level midnight subculture</strong>, ZOZI: After Dark translates the feeling of 2:00 AM headphones-on daydreaming into tactile designer vinyl.
-              </p>
-              <div class="mt-4 pt-3 border-t border-white/15 flex items-center justify-between text-[11px] font-bold text-purple-200">
-                <span>SET NO. 1555</span>
-                <span>NOVEMBER 2026 RELEASE</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Subtle Iridescent Light Shimmer Sweep & Ambient Twinkling Stars -->
+        <div aria-hidden="true" class="hero-shimmer-sweep absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+        <svg aria-hidden="true" class="star-twinkle absolute top-6 left-6 sm:top-10 sm:left-12 w-7 h-7 text-white/80 drop-shadow" style="animation-delay: 0.3s;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+        </svg>
+        <svg aria-hidden="true" class="star-twinkle absolute bottom-8 right-6 sm:bottom-12 sm:right-12 w-8 h-8 text-pink-200/90 drop-shadow" style="animation-delay: 1.5s;" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z"/>
+        </svg>
       </div>
     </section>
 
@@ -501,7 +528,6 @@
     <!-- SECTION 2: LINEUP OF THE COLLECTION (./campaign_assets/zozi_lineup.jpeg) -->
     <!-- ===================================================================== -->
     <section id="collection-lineup" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20">
-      <!-- Editorial Section Header (Drops down smoothly) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-8 reveal-on-scroll slide-down">
         <div class="lg:col-span-7">
           <div class="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#111111] text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3 shadow-2xs">
@@ -519,7 +545,6 @@
         </div>
       </div>
 
-      <!-- Full-Width Lineup Showcase Card (3D Flip-Tilt entrance) -->
       <div class="campaign-card rounded-3xl overflow-hidden p-4 sm:p-7 reveal-on-scroll flip-tilt">
         <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-gray-100">
           <div class="flex items-center gap-2.5">
@@ -551,7 +576,6 @@
           </span>
         </button>
 
-        <!-- Collector Highlights Strip (Staggered Pop-Zoom Cards) -->
         <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div style="transition-delay: 60ms;" class="bg-purple-50/70 border border-purple-200/70 rounded-2xl p-4 reveal-on-scroll pop-zoom">
             <div class="text-[11px] font-black uppercase tracking-wider text-purple-900">Tactile Craftsmanship</div>
@@ -576,15 +600,15 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- SECTION 3: PRINT ADS + CORRESPONDING MOCKUPS SIDE BY SIDE             -->
-    <!-- ad1.jpeg + mockup1.jpeg ... up to ad5.jpeg + mockup5.jpeg in ad_posters -->
+    <!-- SECTION 3: INFINITE AUTO-SCROLLING PRINT & MOCKUP CAROUSEL            -->
+    <!-- Pure borderless sliding images (ad1+mockup1 ... ad5+mockup5)          -->
     <!-- ===================================================================== -->
-    <section id="print-ooh-campaign" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20 border-t border-purple-200/60">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-10 reveal-on-scroll slide-up">
+    <section id="print-ooh-campaign" class="py-14 sm:py-20 border-t border-purple-200/60">
+      <div class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-10 reveal-on-scroll slide-up">
         <div class="lg:col-span-7">
           <div class="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#111111] text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3 shadow-2xs">
             <span class="w-2 h-2 rounded-full bg-[#e60012]"></span>
-            SLIDE 03 // PRINT &amp; OUT-OF-HOME PLACEMENTS
+            SLIDE 03 // PRINT &amp; OUT-OF-HOME INFINITE REEL
           </div>
           <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-[#111111] leading-tight">
             From Studio Poster to<br />Midnight Streetscape.
@@ -592,26 +616,29 @@
         </div>
         <div class="lg:col-span-5">
           <p class="text-sm sm:text-base text-[#555555] leading-relaxed">
-            Our five-part print series pairs <strong class="text-[#111111]">high-contrast editorial key art</strong> directly beside its <strong class="text-[#111111]">real-world urban OOH installation</strong>—bringing ZOZI’s dreamcore palette into subway concourses, transit shelters, and flagship city billboards.
+            An endless visual reel pairing each <strong class="text-[#111111]">Print Poster</strong> (<code class="text-xs font-mono">ad1–ad5</code>) directly beside its <strong class="text-[#111111]">In-Situ OOH Mockup</strong> (<code class="text-xs font-mono">mockup1–mockup5</code>). Hover to pause or click any image to inspect full-screen.
           </p>
         </div>
       </div>
 
-      <!-- 5 Paired Rows: Print Poster (adX.jpeg) Next To Environmental Mockup (mockupX.jpeg) -->
-      <div id="printMockupPairsContainer" class="space-y-8 sm:space-y-10">
-        <!-- Populated cleanly via JS with varied slide directions (left, right, diagonal-left, diagonal-right, flip-tilt) -->
+      <!-- Full-Bleed Borderless Infinite Auto-Scrolling Carousel -->
+      <div class="infinite-ads-viewport" aria-label="Infinite Print Ads and Mockups Carousel">
+        <div id="infinitePrintAdsTrack" class="infinite-ads-track">
+          <!-- Populated via JS with duplicated paired ad + mockup sequence for seamless infinite looping -->
+        </div>
       </div>
     </section>
 
     <!-- ===================================================================== -->
-    <!-- SECTION 4: DIGITAL ADS (digitalad_1.png up to digitalad_5.png)        -->
+    <!-- SECTION 4: DIGITAL ADS IN MOBILE PHONE MOCKUPS                        -->
+    <!-- Linked to ./ad_posters/digitalad_1.png up to digitalad_5.png          -->
     <!-- ===================================================================== -->
     <section id="digital-campaign" class="max-w-[1460px] mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20 border-t border-purple-200/60">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-10 reveal-on-scroll slide-down">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end mb-12 reveal-on-scroll slide-down">
         <div class="lg:col-span-7">
           <div class="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#111111] text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3 shadow-2xs">
             <span class="w-2 h-2 rounded-full bg-[#e60012]"></span>
-            SLIDE 04 // SOCIAL &amp; DIGITAL CAMPAIGN SUITE
+            SLIDE 04 // SOCIAL &amp; MOBILE PHONE MOCKUPS
           </div>
           <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-[#111111] leading-tight">
             Built to Stop the<br />Late-Night Scroll.
@@ -619,14 +646,14 @@
         </div>
         <div class="lg:col-span-5">
           <p class="text-sm sm:text-base text-[#555555] leading-relaxed">
-            Five native digital placements engineered for mobile-first discovery—teasing mystery silhouettes, drop countdowns, and one-tap blind box reservations across social feeds and digital display networks.
+            Each digital placement (<code class="text-xs font-mono">digitalad_1.png</code> – <code class="text-xs font-mono">digitalad_5.png</code>) is framed inside a <strong class="text-[#111111]">live mobile phone mockup</strong> with status bar, social story chrome, and full zero-crop creative visibility.
           </p>
         </div>
       </div>
 
-      <!-- 5 Digital Ads Grid (./ad_posters/digitalad_1.png to digitalad_5.png) -->
-      <div id="digitalAdsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 items-start">
-        <!-- Populated cleanly with all 5 digitalad_1.png .. digitalad_5.png assets -->
+      <!-- 5 Smartphone Mockup Cards (./ad_posters/digitalad_1.png to digitalad_5.png) -->
+      <div id="digitalAdsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 items-start">
+        <!-- Populated cleanly with 5 realistic smartphone mockups -->
       </div>
     </section>
 
@@ -751,7 +778,7 @@
               </div>
             </div>
 
-            <!-- Packaging Grid: Defaults to Clean Single Box Centerpiece (matching POP MART reference), plus Whole Set option -->
+            <!-- Packaging Grid -->
             <div id="packagingGrid" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
               <!-- Single Box Card: ./campaign_assets/blindbox_design.png (Default Full Width) -->
               <div
@@ -812,7 +839,6 @@
           </div>
 
           <!-- 2. DIRECTLY BELOW PACKAGING: 7-FIGURE LINEUP IN ONE SINGLE HORIZONTAL ROW -->
-          <!-- Linked to exact character names: hafu.jpeg, mimi.jpeg, popi.jpeg, moki.jpeg, zuzu.jpeg, nori.jpeg, aeri.jpeg -->
           <div>
             <div class="flex items-center justify-between gap-2 mb-3.5">
               <span class="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
@@ -1141,7 +1167,7 @@
         <a href="#hero-launch" class="hover:text-white transition-colors">01. Hero</a>
         <a href="#collection-lineup" class="hover:text-white transition-colors">02. Lineup</a>
         <a href="#print-ooh-campaign" class="hover:text-white transition-colors">03. Print &amp; Mockups</a>
-        <a href="#digital-campaign" class="hover:text-white transition-colors">04. Digital Ads</a>
+        <a href="#digital-campaign" class="hover:text-white transition-colors">04. Phone Ads</a>
         <a href="#experimental-popnow" class="hover:text-white transition-colors">05. POP NOW Drop</a>
       </div>
     </div>
@@ -1196,7 +1222,7 @@
     </div>
   </div>
 
-  <!-- FULLSCREEN CAMPAIGN ASSET LIGHTBOX (FOR HERO, LINEUP, PRINT ADS, MOCKUPS & DIGITAL ADS) -->
+  <!-- FULLSCREEN CAMPAIGN ASSET LIGHTBOX -->
   <div id="campaignLightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 sm:p-8" onclick="closeLightbox(event)">
     <div class="bg-[#FFFFFF] rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-2xl border border-purple-200 relative" onclick="event.stopPropagation()">
       <button
@@ -1231,7 +1257,7 @@
     </div>
   </div>
 
-  <!-- QUICK-SELECT DRAWER (Clean confirmation drawer for "Pick One to Shake" & "Buy Whole Set / Multiple") -->
+  <!-- QUICK-SELECT DRAWER -->
   <div id="quickDrawer" class="fixed inset-0 z-50 hidden justify-end bg-black/45 backdrop-blur-xs" onclick="closeQuickDrawer(event)">
     <div class="bg-[#FFFFFF] w-full max-w-md h-full p-6 sm:p-7 flex flex-col justify-between shadow-2xl border-l border-gray-200" onclick="event.stopPropagation()">
       <div>
@@ -1301,63 +1327,92 @@
 
   <script>
     // =========================================================================
-    // 1. PRINT + CORRESPONDING OOH MOCKUPS DATA (./ad_posters/ad1..5 & mockup1..5)
+    // 1. PRINT + CORRESPONDING OOH MOCKUPS INFINITE REEL (ad1..5 & mockup1..5)
+    //    Pure borderless sliding images (paired ad1+mockup1 ... ad5+mockup5)
     // =========================================================================
-    const PRINT_MOCKUP_PAIRS = [
+    const PRINT_MOCKUP_ITEMS = [
       {
-        num: '01',
-        title: 'MIDNIGHT SOUNDCHECK',
-        copy: '“Plug into the dream frequency.” Neon-washed pastel chords meet late-night subway commuters—turning the daily platform wait into a backstage pass.',
-        printPath: './ad_posters/ad1.jpeg',
-        mockupPath: './ad_posters/mockup1.jpeg',
-        placementLabel: 'Transit Concourse & Subway Lightbox',
-        animClass: 'slide-left'
+        src: './ad_posters/ad1.jpeg',
+        title: 'Print Ad 01 — Midnight Soundcheck',
+        caption: 'Print poster artwork from ./ad_posters/ad1.jpeg paired alongside its subway lightbox mockup.'
       },
       {
-        num: '02',
-        title: 'VELVET SHADOWS & LACE',
-        copy: '“Soft darkness, sharp silhouette.” High-contrast editorial framing spotlights gothic-pastel tailoring against rain-slicked downtown avenues.',
-        printPath: './ad_posters/ad2.jpeg',
-        mockupPath: './ad_posters/mockup2.jpeg',
-        placementLabel: 'Downtown Bus Shelter & Street Kiosk',
-        animClass: 'diag-right'
+        src: './ad_posters/mockup1.jpeg',
+        title: 'OOH Mockup 01 — Transit Concourse Lightbox',
+        caption: 'In-situ transit concourse mockup from ./ad_posters/mockup1.jpeg.'
       },
       {
-        num: '03',
-        title: 'STARLIGHT SYNTHWAVE',
-        copy: '“Every blind box holds a different track.” Iridescent reflections and holographic typography command attention across flagship retail corridors.',
-        printPath: './ad_posters/ad3.jpeg',
-        mockupPath: './ad_posters/mockup3.jpeg',
-        placementLabel: 'Flagship Shopping District Wallscape',
-        animClass: 'flip-tilt'
+        src: './ad_posters/ad2.jpeg',
+        title: 'Print Ad 02 — Velvet Shadows & Lace',
+        caption: 'Print poster artwork from ./ad_posters/ad2.jpeg paired alongside its downtown street kiosk mockup.'
       },
       {
-        num: '04',
-        title: '2:00 AM DAYDREAM',
-        copy: '“Unbox what happens after curfew.” Whimsical feline companions and floating cloud motifs soften harsh urban concrete with dreamcore nostalgia.',
-        printPath: './ad_posters/ad4.jpeg',
-        mockupPath: './ad_posters/mockup4.jpeg',
-        placementLabel: 'Urban Wheatpaste & Gallery Poster Wall',
-        animClass: 'diag-left'
+        src: './ad_posters/mockup2.jpeg',
+        title: 'OOH Mockup 02 — Downtown Bus Shelter',
+        caption: 'In-situ bus shelter mockup from ./ad_posters/mockup2.jpeg.'
       },
       {
-        num: '05',
-        title: 'THE 1:72 SECRET CHASE',
-        copy: '“One angel wing. One pixel wing. One in seventy-two.” The campaign’s collector crescendo teases the ultra-rare Secret Edition across prime city sightlines.',
-        printPath: './ad_posters/ad5.jpeg',
-        mockupPath: './ad_posters/mockup5.jpeg',
-        placementLabel: 'Metropolitan Landmark Billboard Placement',
-        animClass: 'pop-zoom'
+        src: './ad_posters/ad3.jpeg',
+        title: 'Print Ad 03 — Starlight Synthwave',
+        caption: 'Print poster artwork from ./ad_posters/ad3.jpeg paired alongside its flagship wallscape mockup.'
+      },
+      {
+        src: './ad_posters/mockup3.jpeg',
+        title: 'OOH Mockup 03 — Flagship Shopping District',
+        caption: 'In-situ retail corridor wallscape mockup from ./ad_posters/mockup3.jpeg.'
+      },
+      {
+        src: './ad_posters/ad4.jpeg',
+        title: 'Print Ad 04 — 2:00 AM Daydream',
+        caption: 'Print poster artwork from ./ad_posters/ad4.jpeg paired alongside its urban gallery wall mockup.'
+      },
+      {
+        src: './ad_posters/mockup4.jpeg',
+        title: 'OOH Mockup 04 — Urban Wheatpaste Wall',
+        caption: 'In-situ urban poster wall mockup from ./ad_posters/mockup4.jpeg.'
+      },
+      {
+        src: './ad_posters/ad5.jpeg',
+        title: 'Print Ad 05 — The 1:72 Secret Chase',
+        caption: 'Print poster artwork from ./ad_posters/ad5.jpeg paired alongside its landmark billboard mockup.'
+      },
+      {
+        src: './ad_posters/mockup5.jpeg',
+        title: 'OOH Mockup 05 — Metropolitan Billboard',
+        caption: 'In-situ metropolitan billboard mockup from ./ad_posters/mockup5.jpeg.'
       }
     ];
 
+    function renderInfinitePrintCarousel() {
+      const track = document.getElementById('infinitePrintAdsTrack');
+      if (!track) return;
+
+      // Duplicate the full 10-image sequence (ad1, mockup1 ... ad5, mockup5) twice for seamless -50% infinite loop
+      const fullLoopItems = [...PRINT_MOCKUP_ITEMS, ...PRINT_MOCKUP_ITEMS];
+
+      track.innerHTML = fullLoopItems.map((item, idx) => {
+        const isClone = idx >= PRINT_MOCKUP_ITEMS.length;
+        return `
+          <img
+            src="${item.src}"
+            alt="${isClone ? '' : item.title}"
+            ${isClone ? 'aria-hidden="true"' : ''}
+            onclick="openLightbox('${item.src}', '${item.title.replace(/'/g, "\\'")}', '${item.src}', '${item.caption.replace(/'/g, "\\'")}')"
+            class="infinite-ad-img shrink-0 select-none"
+            onerror="handleCampaignAssetFallback(this, '${item.src}', '${item.title.replace(/'/g, "\\'")}', 'ZOZI: After Dark Series', false)"
+          />
+        `;
+      }).join('');
+    }
+
     // =========================================================================
-    // 2. DIGITAL CAMPAIGN ADS DATA (./ad_posters/digitalad_1..5.png)
+    // 2. DIGITAL CAMPAIGN ADS IN MOBILE PHONE MOCKUPS (digitalad_1..5.png)
     // =========================================================================
     const DIGITAL_ADS = [
       {
         num: '01',
-        format: 'SOCIAL STORY // 9:16',
+        handle: '@popmart_us',
+        format: 'STORY • 9:16',
         headline: 'AFTER DARK DROPS TONIGHT',
         caption: 'High-impact launch teaser engineered for Instagram & TikTok Story countdown stickers.',
         path: './ad_posters/digitalad_1.png',
@@ -1365,7 +1420,8 @@
       },
       {
         num: '02',
-        format: 'FEED CAROUSEL // 4:5',
+        handle: '@popmart_us',
+        format: 'FEED • 4:5',
         headline: 'MEET THE MIDNIGHT ENSEMBLE',
         caption: 'Character spotlight creative highlighting tactile vinyl finishes and companion sculpts.',
         path: './ad_posters/digitalad_2.png',
@@ -1373,7 +1429,8 @@
       },
       {
         num: '03',
-        format: 'POP NOW TEASER // 4:5',
+        handle: '@popmart_popnow',
+        format: 'POP NOW • 4:5',
         headline: 'SHAKE BEFORE YOU UNBOX',
         caption: 'Interactive digital ad inviting collectors to test their luck on POP MART POP NOW™.',
         path: './ad_posters/digitalad_3.png',
@@ -1381,7 +1438,8 @@
       },
       {
         num: '04',
-        format: 'COLLECTOR EDITION // 4:5',
+        handle: '@popmart_us',
+        format: 'DROP • 4:5',
         headline: 'COMPLETE THE 6-BOX SET',
         caption: 'Non-repeating full-set showcase built for retargeting toy-art enthusiasts.',
         path: './ad_posters/digitalad_4.png',
@@ -1389,13 +1447,95 @@
       },
       {
         num: '05',
-        format: 'SECRET ALERT // 9:16',
+        handle: '@popmart_secret',
+        format: 'SECRET • 9:16',
         headline: 'CHASE THE 1:72 SECRET',
         caption: 'Holographic chase visual designed to spark community unboxing shares and live reactions.',
         path: './ad_posters/digitalad_5.png',
         animClass: 'diag-right'
       }
     ];
+
+    function renderDigitalAds() {
+      const grid = document.getElementById('digitalAdsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = DIGITAL_ADS.map((ad, idx) => `
+        <article style="transition-delay: ${idx * 85}ms;" class="phone-card-group flex flex-col justify-between reveal-on-scroll ${ad.animClass}">
+          <!-- Sleek Smartphone Mockup Frame -->
+          <div class="phone-chassis">
+            <div class="phone-screen flex flex-col">
+              <!-- Phone Status Bar & Dynamic Island Notch -->
+              <div class="bg-[#0e0e11] text-white px-4 pt-2.5 pb-2 flex items-center justify-between text-[10px] font-bold select-none">
+                <span>9:41</span>
+                <div class="w-16 h-3.5 bg-black rounded-full border border-white/10 flex items-center justify-end px-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400/70"></span>
+                </div>
+                <div class="flex items-center gap-1 text-[9px] text-gray-300">
+                  <span>5G</span>
+                  <span class="inline-block w-3.5 h-2 border border-white/60 rounded-[2px] p-[1px]">
+                    <span class="block w-full h-full bg-white"></span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Social App Story / Feed Header inside Phone Screen -->
+              <div class="bg-[#141418] text-white px-3.5 py-2 flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-5 h-5 rounded-full bg-[#e60012] text-white text-[8px] font-black flex items-center justify-center shrink-0">
+                    PM
+                  </span>
+                  <span class="text-[10px] font-bold truncate">${ad.handle}</span>
+                  <span class="text-[9px] text-gray-400">Sponsored</span>
+                </div>
+                <span class="text-[9px] font-extrabold text-pink-300 bg-white/10 px-1.5 py-0.5 rounded">
+                  ${ad.num}
+                </span>
+              </div>
+
+              <!-- Full Uncropped Digital Ad Creative Inside Phone Screen -->
+              <button
+                type="button"
+                onclick="openLightbox('${ad.path}', 'Mobile Ad ${ad.num}: ${ad.headline}', '${ad.path}', '${ad.caption.replace(/'/g, "\\'")}')"
+                class="group relative w-full bg-[#18181b] flex items-center justify-center overflow-hidden cursor-zoom-in focus:outline-none"
+              >
+                <img
+                  src="${ad.path}"
+                  alt="ZOZI After Dark Mobile Digital Ad ${ad.num} - ${ad.headline}"
+                  class="w-full h-auto object-contain block transition-transform duration-300 group-hover:scale-[1.02]"
+                  onerror="handleCampaignAssetFallback(this, '${ad.path}', 'MOBILE AD ${ad.num}', '${ad.headline}', true)"
+                />
+                <span class="absolute bottom-2.5 right-2.5 bg-black/75 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                  Expand ⤢
+                </span>
+              </button>
+
+              <!-- Minimal Phone Home Indicator Bar -->
+              <div class="bg-[#141418] py-2.5 flex justify-center border-t border-white/10">
+                <span class="w-20 h-1 rounded-full bg-white/35"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Editorial Caption Below Phone Mockup -->
+          <div class="mt-4 px-1.5">
+            <div class="flex items-center justify-between gap-1 text-[10px] font-bold text-gray-500">
+              <span class="text-purple-900 font-extrabold">PHONE MOCKUP ${ad.num}</span>
+              <span>${ad.format}</span>
+            </div>
+            <h3 class="text-sm font-black text-[#111111] mt-1 tracking-tight">
+              ${ad.headline}
+            </h3>
+            <p class="text-xs text-[#555555] mt-1 leading-relaxed">
+              ${ad.caption}
+            </p>
+            <span class="text-[10px] font-mono font-bold text-gray-400 block truncate mt-2">
+              ${ad.path}
+            </span>
+          </div>
+        </article>
+      `).join('');
+    }
 
     // Custom visual fallback for Hero, Lineup, Print Ads, Mockups, and Digital Ads if local files aren't loaded yet
     function createCampaignFallbackDataUrl(filePath, title, subtitle, isDark) {
@@ -1429,131 +1569,6 @@
       imgEl.onerror = null;
       imgEl.classList.remove('hero-dynamic-motion');
       imgEl.src = createCampaignFallbackDataUrl(filePath, title, subtitle, isDark);
-    }
-
-    function renderPrintAndMockupPairs() {
-      const container = document.getElementById('printMockupPairsContainer');
-      if (!container) return;
-
-      container.innerHTML = PRINT_MOCKUP_PAIRS.map((pair) => `
-        <article class="campaign-card rounded-3xl p-5 sm:p-7 reveal-on-scroll ${pair.animClass}">
-          <!-- Pair Header -->
-          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-              <span class="bg-[#e60012] text-white text-xs font-black px-3 py-1 rounded-xs">
-                AD ${pair.num} / 05
-              </span>
-              <h3 class="font-display text-lg sm:text-xl font-black text-[#111111] tracking-tight">
-                ${pair.title}
-              </h3>
-            </div>
-            <span class="text-xs font-bold text-purple-900 bg-purple-100/80 px-3 py-1 rounded-full">
-              ${pair.placementLabel}
-            </span>
-          </div>
-
-          <p class="text-xs sm:text-sm text-[#555555] mb-6 max-w-3xl leading-relaxed">
-            ${pair.copy}
-          </p>
-
-          <!-- Side-by-Side Grid: Print Poster (Left) + Corresponding Mockup (Right) — Fit strictly to border without cropping -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start">
-            <!-- Print Ad Version -->
-            <div class="bg-[#FFFFFF] rounded-2xl border border-gray-200/90 hover:border-purple-400 p-4 flex flex-col justify-between transition-all">
-              <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="text-[10px] font-black uppercase tracking-wider bg-gray-100 text-[#111111] px-2.5 py-1 rounded-md">
-                  PRINT POSTER ARTWORK • AD ${pair.num}
-                </span>
-                <span class="text-[11px] font-mono font-bold text-gray-500">${pair.printPath}</span>
-              </div>
-              <button
-                type="button"
-                onclick="openLightbox('${pair.printPath}', 'Print Ad ${pair.num}: ${pair.title}', '${pair.printPath}', '${pair.copy.replace(/'/g, "\\'")}')"
-                class="group relative w-full bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex items-center justify-center cursor-zoom-in p-2"
-              >
-                <img
-                  src="${pair.printPath}"
-                  alt="ZOZI After Dark Print Ad ${pair.num} - ${pair.title}"
-                  class="w-full h-auto max-h-[680px] object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
-                  onerror="handleCampaignAssetFallback(this, '${pair.printPath}', 'PRINT POSTER ${pair.num}', '${pair.title}', false)"
-                />
-                <span class="absolute bottom-3 right-3 bg-black/75 text-white text-[10px] font-bold px-2.5 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                  Zoom Print ⤢
-                </span>
-              </button>
-            </div>
-
-            <!-- Corresponding Environmental OOH Mockup -->
-            <div class="bg-[#FFFFFF] rounded-2xl border border-purple-200/90 hover:border-purple-500 p-4 flex flex-col justify-between transition-all">
-              <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="text-[10px] font-black uppercase tracking-wider bg-purple-100 text-purple-950 px-2.5 py-1 rounded-md">
-                  IN-SITU OOH MOCKUP • MOCKUP ${pair.num}
-                </span>
-                <span class="text-[11px] font-mono font-bold text-purple-900">${pair.mockupPath}</span>
-              </div>
-              <button
-                type="button"
-                onclick="openLightbox('${pair.mockupPath}', 'OOH Mockup ${pair.num}: ${pair.placementLabel}', '${pair.mockupPath}', '${pair.copy.replace(/'/g, "\\'")}')"
-                class="group relative w-full bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex items-center justify-center cursor-zoom-in p-2"
-              >
-                <img
-                  src="${pair.mockupPath}"
-                  alt="ZOZI After Dark Environmental Mockup ${pair.num} - ${pair.placementLabel}"
-                  class="w-full h-auto max-h-[680px] object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
-                  onerror="handleCampaignAssetFallback(this, '${pair.mockupPath}', 'OOH MOCKUP ${pair.num}', '${pair.placementLabel}', true)"
-                />
-                <span class="absolute bottom-3 right-3 bg-black/75 text-white text-[10px] font-bold px-2.5 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                  Zoom Mockup ⤢
-                </span>
-              </button>
-            </div>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    function renderDigitalAds() {
-      const grid = document.getElementById('digitalAdsGrid');
-      if (!grid) return;
-
-      grid.innerHTML = DIGITAL_ADS.map((ad, idx) => `
-        <article style="transition-delay: ${idx * 85}ms;" class="campaign-card rounded-2xl p-4 flex flex-col justify-between hover:-translate-y-1.5 transition-all duration-200 reveal-on-scroll ${ad.animClass}">
-          <div>
-            <div class="flex items-center justify-between gap-1.5 mb-2.5">
-              <span class="text-[10px] font-black uppercase tracking-wider bg-[#111111] text-white px-2 py-0.5 rounded-xs">
-                DIGITAL ${ad.num}
-              </span>
-              <span class="text-[10px] font-bold text-gray-500">${ad.format}</span>
-            </div>
-
-            <button
-              type="button"
-              onclick="openLightbox('${ad.path}', 'Digital Ad ${ad.num}: ${ad.headline}', '${ad.path}', '${ad.caption.replace(/'/g, "\\'")}')"
-              class="group relative w-full bg-gray-50 rounded-xl border border-gray-200/80 overflow-hidden flex items-center justify-center cursor-zoom-in p-1.5"
-            >
-              <img
-                src="${ad.path}"
-                alt="ZOZI After Dark Digital Ad ${ad.num} - ${ad.headline}"
-                class="w-full h-auto object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
-                onerror="handleCampaignAssetFallback(this, '${ad.path}', 'DIGITAL AD ${ad.num}', '${ad.headline}', true)"
-              />
-            </button>
-
-            <h3 class="text-sm font-black text-[#111111] mt-3.5 tracking-tight">
-              ${ad.headline}
-            </h3>
-            <p class="text-xs text-[#555555] mt-1 leading-relaxed">
-              ${ad.caption}
-            </p>
-          </div>
-
-          <div class="mt-4 pt-2.5 border-t border-gray-100">
-            <span class="text-[10px] font-mono font-bold text-gray-500 block truncate">
-              ${ad.path}
-            </span>
-          </div>
-        </article>
-      `).join('');
     }
 
     // IntersectionObserver for fun multi-directional slideshow reveal choreography
@@ -2029,7 +2044,7 @@
 
     // Initialize sections and scroll choreography on DOM ready
     document.addEventListener('DOMContentLoaded', () => {
-      renderPrintAndMockupPairs();
+      renderInfinitePrintCarousel();
       renderDigitalAds();
       initScrollAnimations();
       initPresentationProgress();
