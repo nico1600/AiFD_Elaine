@@ -1,270 +1,276 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Creative Director Pt. 2: Logo + Dynamic Hero — A.I. FOR DESIGNERS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Fredoka', Arial, sans-serif;
-      min-height: 100vh;
-      color: #222;
-      background: linear-gradient(135deg, #fffefc 0%, #fff9f0 20%, #f9efe4 45%, #f2e6d8 70%, #f7f3ec 100%);
-      overflow-x: hidden;
-      position: relative;
-    }
-    body:before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 15% 20%, rgba(255, 210, 230, .35), transparent 30%),
-                  radial-gradient(circle at 80% 25%, rgba(180, 220, 255, .25), transparent 30%),
-                  radial-gradient(circle at 75% 80%, rgba(255, 240, 180, .22), transparent 25%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .floating {
-      position: fixed;
-      color: #FFE566;
-      opacity: .7;
-      z-index: 1;
-      animation: float 18s linear infinite;
-      font-size: 2rem;
-      pointer-events: none;
-    }
-    .f1 { left: 8%; }
-    .f2 { left: 30%; animation-duration: 22s; }
-    .f3 { left: 55%; animation-duration: 16s; }
-    .f4 { left: 82%; animation-duration: 20s; }
-    .f5 { left: 18%; animation-duration: 25s; }
-    .f6 { left: 70%; animation-duration: 14s; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Director Pt. 2: Logo + Dynamic Hero — ZOZI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Adobe Typekit for Digibop & Google Fonts -->
+    <link rel="stylesheet" href="https://use.typekit.net/omn5lee.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bubblegum: '#FF5C8A',
+                        cybermint: '#B4DCFF',
+                        lavender: '#E2D4F0',
+                        neonpink: '#FF2A85',
+                        darkneonpurple: '#6B00D7',
+                        neonblue: '#00D4FF',
+                        surface: '#1F1B2E',
+                        surfaceBorder: '#3B2D5E',
+                        deepbase: '#161224'
+                    },
+                    fontFamily: {
+                        'audiowide': ['"Audiowide"', 'sans-serif'],
+                        'space': ['"Space Grotesk"', 'sans-serif'],
+                        'digibop': ['digibop', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #161224;
+            color: #E2D4F0;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
 
-    @keyframes float {
-      from { transform: translateY(110vh) rotate(0); }
-      to { transform: translateY(-120vh) rotate(360deg); }
-    }
+        .audiowide-regular {
+            font-family: "Audiowide", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
 
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 4rem 2rem 6rem;
-      position: relative;
-      z-index: 2;
-    }
+        .digibop-font {
+            font-family: digibop, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
 
-    .back-link {
-      display: inline-block;
-      margin-bottom: 2.5rem;
-      font-weight: 600;
-      color: #ff5c8a;
-      text-decoration: none;
-      font-size: 1.05rem;
-      transition: opacity 0.2s;
-    }
-    .back-link:hover {
-      opacity: 0.8;
-      text-decoration: underline;
-    }
+        /* Brutalist retro-futuristic grid & border accents */
+        .brutalist-border {
+            border: 2px solid #3B2D5E;
+            box-shadow: 4px 4px 0px 0px #00D4FF;
+            transition: all 0.2s ease-in-out;
+        }
+        .brutalist-border:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #FF2A85;
+        }
 
-    header {
-      margin-bottom: 3.5rem;
-    }
+        .brutalist-card {
+            background: #1F1B2E;
+            border: 2px solid #3B2D5E;
+        }
 
-    h1 {
-      font-size: clamp(2.8rem, 5vw, 5rem);
-      line-height: 0.95;
-      font-weight: 700;
-      color: #2b2d42;
-      margin-bottom: 0.8rem;
-    }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #161224;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF2A85;
+            border-radius: 4px;
+        }
 
-    .subtitle {
-      font-size: clamp(1.2rem, 2vw, 1.6rem);
-      font-weight: 500;
-      color: #6c757d;
-    }
+        /* Scanline overlay for Y2K cyber aesthetic */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.25) 50%,
+                rgba(0, 0, 0, 0.25)
+            );
+            background-size: 100% 4px;
+        }
 
-    .showcase-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 3rem;
-    }
-
-    .section-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.95);
-      border-radius: 28px;
-      padding: 2.5rem;
-      box-shadow: 0 16px 40px rgba(43, 45, 66, 0.06);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .section-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 22px 50px rgba(43, 45, 66, 0.1);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .label-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #ffb8dc;
-      color: #7b2cbf;
-      padding: 0.5rem 1.2rem;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .badge-icon {
-      font-size: 1.1rem;
-    }
-
-    .section-desc {
-      font-size: 1.05rem;
-      color: #555;
-      margin-bottom: 1.5rem;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .iframe-wrapper {
-      width: 100%;
-      height: 540px;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 2px solid rgba(255, 184, 220, 0.4);
-      background: #fff;
-      position: relative;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    .logomark-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #faf8f5;
-      border-radius: 20px;
-      padding: 3rem;
-      border: 2px solid rgba(199, 235, 255, 0.6);
-      min-height: 480px;
-    }
-
-    .logomark-container img {
-      max-width: 100%;
-      max-height: 420px;
-      object-fit: contain;
-      border-radius: 14px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .logomark-container img:hover {
-      transform: scale(1.03);
-    }
-
-    footer {
-      margin-top: 5rem;
-      text-align: center;
-      font-size: 0.95rem;
-      color: #6c757d;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 2rem 1rem 4rem;
-      }
-      .section-card {
-        padding: 1.5rem;
-      }
-      .iframe-wrapper {
-        height: 420px;
-      }
-      .logomark-container {
-        padding: 1.5rem;
-        min-height: 320px;
-      }
-    }
-  </style>
+        /* Marquee ticker animation */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-ticker {
+            display: flex;
+            width: max-content;
+            animation: ticker 25s linear infinite;
+        }
+    </style>
 </head>
-<body>
-  <div class="floating f1">✦</div>
-  <div class="floating f2">●</div>
-  <div class="floating f3">■</div>
-  <div class="floating f4">✦</div>
-  <div class="floating f5">■</div>
-  <div class="floating f6">●</div>
+<body class="selection:bg-neonpink selection:text-white">
 
-  <div class="container">
-    <a href="index.html" class="back-link">← Back to Index</a>
+    <!-- Subtle Scanlines Overlay -->
+    <div class="fixed inset-0 pointer-events-none scanlines z-50 opacity-40"></div>
 
-    <header>
-      <h1>Creative Director Pt. 2</h1>
-      <div class="subtitle">Logo + Dynamic Hero Showcase · Elaine Chen · ART 3041</div>
-    </header>
-
-    <div class="showcase-grid">
-      <!-- Hero Image Block -->
-      <section class="section-card">
-        <div class="section-header">
-          <div class="label-badge">
-            <span class="badge-icon">✨</span> Hero Image
-          </div>
-          <span class="section-desc" style="margin-bottom:0;">Embedded Interactive Three.js Experience</span>
+    <!-- Top Marquee Ticker -->
+    <div class="bg-neonpink text-white py-2 overflow-hidden border-b-2 border-deepbase audiowide-regular text-xs tracking-wider uppercase select-none">
+        <div class="animate-ticker flex gap-8 items-center whitespace-nowrap">
+            <span>✦ CREATIVE DIRECTOR PT. 2: LOGO + DYNAMIC HERO</span>
+            <span>•</span>
+            <span>ZOZI</span>
+            <span>•</span>
+            <span>DARK NEON PURPLE #6B00D7</span>
+            <span>•</span>
+            <span>NEON BLUE #00D4FF</span>
+            <span>•</span>
+            <span>DIGIBOP Y2K SPEC</span>
+            <span>•</span>
+            <span>✦ CREATIVE DIRECTOR PT. 2: LOGO + DYNAMIC HERO</span>
+            <span>•</span>
+            <span>ZOZI</span>
+            <span>•</span>
+            <span>DARK NEON PURPLE #6B00D7</span>
+            <span>•</span>
+            <span>NEON BLUE #00D4FF</span>
+            <span>•</span>
+            <span>DIGIBOP Y2K SPEC</span>
+            <span>•</span>
         </div>
-        <p class="section-desc">
-          Featuring "ODDINARY" — an interactive 3D pixel displacement collectible scene with floating Kawaii typography and dynamic lighting.
-        </p>
-        <div class="iframe-wrapper">
-          <iframe src="heroanimation.html" title="Hero Animation"></iframe>
-        </div>
-      </section>
-
-      <!-- Logomark Block -->
-      <section class="section-card">
-        <div class="section-header">
-          <div class="label-badge" style="background: #c7ebff; color: #0056b3;">
-            <span class="badge-icon">⭐</span> Logomark
-          </div>
-          <span class="section-desc" style="margin-bottom:0;">Brand Identity Asset</span>
-        </div>
-        <p class="section-desc">
-          Official Maruiji-inspired neon kawaii star logomark for the Pop Mart designer toy line campaign.
-        </p>
-        <div class="logomark-container">
-          <img src="logomark.png" alt="Logomark">
-        </div>
-      </section>
     </div>
 
-    <footer>
-      ART 3041 · A.I. for Designers · Fall 2026 · Baruch College
+    <!-- Navigation / Header -->
+    <header class="sticky top-0 z-40 bg-deepbase/90 backdrop-blur-md border-b-2 border-surfaceBorder px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="#top" class="w-10 h-10 bg-neonpink rounded flex items-center justify-center audiowide-regular text-white text-lg shadow-[2px_2px_0px_0px_#00D4FF]">ZZ</a>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neonblue font-bold block">Creative Director Pt. 2</span>
+                    <h1 class="text-lg audiowide-regular text-white tracking-wide">LOGO + DYNAMIC HERO</h1>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-4 md:gap-8 text-sm font-medium">
+                <a href="#hero-showcase" class="hover:text-neonpink transition-colors">Hero Visual</a>
+                <a href="#logomark-showcase" class="hover:text-neonblue transition-colors">Logomark</a>
+                <a href="styleguide.html" class="hover:text-lavender transition-colors">Style Guide</a>
+                <a href="index.html" class="px-3 py-1.5 bg-surface border border-surfaceBorder hover:border-neonblue rounded text-xs font-bold uppercase tracking-wider transition-all">← Portfolio Root</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="top" class="max-w-7xl mx-auto px-6 py-12 space-y-20">
+
+        <!-- Page Title Banner -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end pt-4">
+            <div class="lg:col-span-8 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-surface border border-surfaceBorder text-neonblue text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-neonblue animate-pulse"></span> Campaign Identity & Key Visual // ZOZI
+                </div>
+                <h2 class="digibop-font text-5xl sm:text-7xl tracking-tight text-white leading-none uppercase">
+                    ZO<span class="text-neonpink underline decoration-neonblue decoration-4 underline-offset-8">ZI</span> SHOWCASE
+                </h2>
+                <p class="text-base sm:text-lg text-gray-300 font-light leading-relaxed max-w-2xl">
+                    ZOZI lives somewhere between fantasy and feeling, where peculiar little creatures, dreamy colors, and imperfect wonders find their place. A little out of place. A little out of this world.
+                </p>
+            </div>
+            <div class="lg:col-span-4">
+                <div class="brutalist-card p-4 rounded-lg space-y-1">
+                    <span class="text-xs font-mono text-neonblue uppercase block">/// ASSET DIRECTORY</span>
+                    <p class="text-sm text-gray-300 font-mono">campaign_assets/heroimage.jpeg</p>
+                    <p class="text-sm text-gray-300 font-mono">campaign_assets/logomark.png</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Image Showcase Section -->
+        <section id="hero-showcase" class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neonpink font-bold">Key Campaign Visual</span>
+                    <h3 class="text-3xl audiowide-regular text-white mt-1">HERO IMAGE</h3>
+                </div>
+                <span class="text-xs font-mono text-neonblue uppercase">FILE: campaign_assets/heroimage.jpeg</span>
+            </div>
+
+            <div class="brutalist-border rounded-lg bg-surface p-6 sm:p-8 space-y-6">
+                <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                    Primary hero visual for the <strong class="text-white">ZOZI</strong> campaign—blending dreamy pastel-neon glow, surreal collectible worldbuilding, and retro-futuristic Y2K energy.
+                </p>
+
+                <div class="w-full rounded-lg overflow-hidden border-2 border-surfaceBorder bg-deepbase">
+                    <img src="campaign_assets/heroimage.jpeg"
+                         alt="ZOZI Campaign Hero Image"
+                         class="w-full h-auto max-h-[680px] object-cover block mx-auto"
+                         onerror="this.src='https://placehold.co/1280x720/1F1B2E/FF2A85?text=campaign_assets/heroimage.jpeg'">
+                </div>
+
+                <div class="pt-2 flex flex-wrap gap-3 text-xs font-mono text-gray-300">
+                    <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded">CAMPAIGN: ZOZI</span>
+                    <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded">PATH: campaign_assets/heroimage.jpeg</span>
+                    <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded text-neonblue">AESTHETIC: DREAMCORE × Y2K</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logomark Showcase Section -->
+        <section id="logomark-showcase" class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-surfaceBorder pb-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neonblue font-bold">Brand Identity Emblem</span>
+                    <h3 class="text-3xl audiowide-regular text-white mt-1">LOGOMARK: ZOZI STAR</h3>
+                </div>
+                <span class="text-xs font-mono text-neonpink uppercase">FILE: campaign_assets/logomark.png</span>
+            </div>
+
+            <div class="brutalist-border rounded-lg bg-surface p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-6 flex flex-col items-center justify-center p-6 sm:p-8 bg-deepbase rounded-lg border-2 border-surfaceBorder relative">
+                    <div class="absolute top-3 left-3 text-[10px] font-mono text-gray-400 uppercase">FIG 02.0 // ZOZI LOGOMARK</div>
+                    <div class="w-full max-w-md border-4 border-neonblue rounded-2xl overflow-hidden bg-[#FAF7EE] shadow-[0_0_30px_rgba(0,212,255,0.25)] group">
+                        <img src="campaign_assets/logomark.png"
+                             alt="ZOZI Campaign Logomark"
+                             class="w-full h-auto object-contain block group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/720x720/FAF7EE/6B00D7?text=campaign_assets/logomark.png'">
+                    </div>
+                    <span class="mt-4 text-xs font-mono text-neonblue tracking-widest uppercase">Primary Campaign Emblem</span>
+                </div>
+
+                <div class="lg:col-span-6 space-y-5">
+                    <h4 class="audiowide-regular text-2xl text-white">MARK ARCHITECTURE</h4>
+                    <p class="text-gray-300 leading-relaxed">
+                        Designed for <strong class="text-neonpink">ZOZI</strong>, pairing sharp star geometry and iridescent finishes with a dreamy, slightly-out-of-this-world personality across digital and collectible touchpoints.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-deepbase p-4 rounded border border-surfaceBorder">
+                            <span class="text-xs text-neonpink audiowide-regular uppercase block mb-1">✓ Clear Space</span>
+                            <p class="text-xs text-gray-400">Keep generous breathing room around the star silhouette on every placement.</p>
+                        </div>
+                        <div class="bg-deepbase p-4 rounded border border-surfaceBorder">
+                            <span class="text-xs text-neonblue audiowide-regular uppercase block mb-1">✓ Contrast</span>
+                            <p class="text-xs text-gray-400">Pair with deep ultraviolet (#161224) or soft archival cream (#FAF7EE).</p>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-surfaceBorder flex flex-wrap gap-3 text-xs font-mono text-gray-300">
+                        <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded">PATH: campaign_assets/logomark.png</span>
+                        <span class="px-3 py-1 bg-deepbase border border-surfaceBorder rounded text-neonpink">FONTS: DIGIBOP & AUDIOWIDE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t-2 border-surfaceBorder bg-deepbase py-12 px-6 mt-24">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-neonpink rounded flex items-center justify-center audiowide-regular text-white text-sm">ZZ</div>
+                <span class="audiowide-regular text-sm text-white tracking-wider">ZOZI // CREATIVE DIRECTOR PT. 2</span>
+            </div>
+            <p class="text-xs text-gray-400 font-mono">
+                BUILT WITH TAILWIND CSS, DIGIBOP & AUDIOWIDE • ASSETS IN campaign_assets/
+            </p>
+        </div>
     </footer>
-  </div>
+
 </body>
 </html>
